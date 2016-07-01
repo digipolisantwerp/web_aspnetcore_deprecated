@@ -1,0 +1,24 @@
+﻿{
+    "version": "1.0.0-*",
+    "description": "Web related tooling.",
+    "authors": [ "digipolis.be" ],
+    "packOptions": {
+        "tags": [ "Web", "Toolbox", "HTTP Headers" ],
+        "repository": {
+            "type": "git",
+            "url": "http://github.com/digipolisantwerp/web_aspnetcore"
+        },
+        "projectUrl": "http://github.com/digipolisantwerp/web_aspnetcore",
+        "licenseUrl": "http://github.com/digipolisantwerp/web_aspnetcore/LICENSE.txt"
+    },
+    "dependencies": {
+        "NETStandard.Library": "1.6.0",
+        "Microsoft.Extensions.Logging": "1.0.0",
+        "Microsoft.AspNetCore.Http.Abstractions": "1.0.0"
+    },
+    "frameworks": {
+        "netstandard1.6": {
+            "imports": "dnxcore50"
+        }
+    }
+}
