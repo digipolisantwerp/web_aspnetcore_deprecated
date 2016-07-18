@@ -1,6 +1,6 @@
 {
 	"version": "1.0.0",
-	"name": "web toolbox",
+	"name": "webtoolbox",
 	"private": true,
 	"devDependencies": {
 		"gulp": "3.9.0",
