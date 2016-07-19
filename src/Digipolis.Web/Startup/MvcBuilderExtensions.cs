@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Digipolis.Web.Versioning;
+using Microsoft.DotNet.InternalAbstractions;
 
 namespace Digipolis.Web
 {

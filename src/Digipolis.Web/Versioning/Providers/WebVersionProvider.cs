@@ -6,9 +6,14 @@ namespace Digipolis.Web.Versioning
 {
     public class WebVersionProvider : IVersionProvider
     {
-        private ApplicationEnvironment _appEnv;
+        private IApplicationEnvironment _appEnv;
 
-        public WebVersionProvider(ApplicationEnvironment appEnv)
+        public WebVersionProvider()
+        {
+            _appEnv = new WebApplicationEnvironment();
+        }
+
+        public WebVersionProvider(IApplicationEnvironment appEnv)
         {
             _appEnv = appEnv;
         }

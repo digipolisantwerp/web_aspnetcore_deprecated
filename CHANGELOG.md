@@ -14,3 +14,6 @@
 
 - renamed AddVersioning to AddVersionEndpoint
 
+## 2.0.2
+
+- fixed version endpoint error 
