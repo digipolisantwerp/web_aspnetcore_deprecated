@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Digipolis.Web.Headers
 {
@@ -10,7 +11,6 @@ namespace Digipolis.Web.Headers
     {
         private ILogger<HeadersMiddleware> _logger;
         private readonly RequestDelegate _next;
-        private IEnumerable<KeyValuePair<string, IHeaderHandler>> _handlers;
 
         public HeadersMiddleware(RequestDelegate next, ILogger<HeadersMiddleware> logger)
         {
@@ -21,11 +21,9 @@ namespace Digipolis.Web.Headers
             _logger = logger;
         }
 
-        public Task Invoke(HttpContext context)
+        public Task Invoke(HttpContext context, IOptions<HeaderOptions> options)
         {
-            // te verwerken headers aflopen
-
-            foreach ( var handler in _handlers )
+            foreach ( var handler in options.Value.Handlers )
             {
                 var key = handler.Key;
                 if ( context.Request.Headers.ContainsKey(key) )
@@ -34,15 +32,6 @@ namespace Digipolis.Web.Headers
                     handler.Value.Handle(values);
                 }
             }
-
-            
-
-
-
-
-
-
-
 
             return _next.Invoke(context);
         }

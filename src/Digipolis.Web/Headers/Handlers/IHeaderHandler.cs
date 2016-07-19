@@ -6,6 +6,6 @@ namespace Digipolis.Web.Headers
 {
     public interface IHeaderHandler
     {
-        Task Handle(StringValues values);
+        void Handle(StringValues values);
     }
 }

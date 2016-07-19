@@ -6,7 +6,7 @@ namespace Digipolis.Web.Headers
 {
     public class CorrelationHeaderHandler : IHeaderHandler
     {
-        public Task Handle(StringValues values)
+        public void Handle(StringValues values)
         {
             throw new NotImplementedException();
         }
