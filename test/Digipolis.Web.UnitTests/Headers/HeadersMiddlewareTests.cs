@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Digipolis.Web.UnitTests.Headers
 {
-    public class HeaderMiddlewareTests
+    public class HeadersMiddlewareTests
     {
         [Fact]
         void NextDelegateNullRaisesArgumentNullException()
