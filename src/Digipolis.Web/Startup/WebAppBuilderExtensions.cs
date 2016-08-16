@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Digipolis.Web.Swagger;
 
-namespace Toolbox.WebApi
+namespace Digipolis.Web
 {
     public static class WebAppBuilderExtensions
     {

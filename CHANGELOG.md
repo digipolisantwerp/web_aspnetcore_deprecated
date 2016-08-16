@@ -16,4 +16,8 @@
 
 ## 2.0.2
 
-- fixed version endpoint error 
+- fixed version endpoint error
+
+## 2.0.3
+
+- fixed namespace in WebAppBuilderExtensions
