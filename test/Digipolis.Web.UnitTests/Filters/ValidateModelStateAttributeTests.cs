@@ -3,7 +3,8 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 using Digipolis.Errors;
-using Digipolis.Web.Filters;
+using Digipolis.Web.Api;
+using Digipolis.Web.Api.Filters;
 
 namespace Digipolis.Web.UnitTests.Filters
 {

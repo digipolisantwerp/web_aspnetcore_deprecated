@@ -17,17 +17,6 @@ namespace Digipolis.Web
 
         public String BuildDate { get; set; }
 
-        public String FullVersion
-        {
-            get
-            {
-                return String.Format("{0}.{1}.{2}.{3}",
-                                     MajorVersion,
-                                     MinorVersion,
-                                     Revision,
-                                     BuildNumber);
-            }
-        }
-   
+        public String FullVersion => $"{MajorVersion}.{MinorVersion}.{Revision}.{BuildNumber}";
     }
 }
