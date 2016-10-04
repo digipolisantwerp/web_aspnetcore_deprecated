@@ -6,6 +6,7 @@ using Swashbuckle.SwaggerGen.Application;
 using System.Linq;
 using Digipolis.Web.Api;
 using Digipolis.Web.Swagger;
+using Microsoft.AspNetCore.Builder;
 
 namespace Digipolis.Web
 {
@@ -33,6 +34,16 @@ namespace Digipolis.Web
                 var versionAttribute = api.ActionDescriptor.ActionConstraints.OfType<VersionsAttribute>().FirstOrDefault();
                 return versionAttribute == null || versionAttribute.AcceptedVersions.Contains(version);
             });
+        }
+
+        public static IApplicationBuilder UseSwaggerUiRedirect(this IApplicationBuilder app, string url = null)
+        {
+            if (url == null)
+                app.UseMiddleware<SwaggerUiRedirectMiddleware>();
+            else
+                app.UseMiddleware<SwaggerUiRedirectMiddleware>(url);
+
+            return app;
         }
     }
 }

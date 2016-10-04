@@ -18,6 +18,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
     public class ExceptionHandlerTests
     {
         private TestLogger<ExceptionHandler> _logger = TestLogger<ExceptionHandler>.CreateLogger();
+
         private Mock<HttpResponse> _mockHttpResponse;
 
         [Fact]

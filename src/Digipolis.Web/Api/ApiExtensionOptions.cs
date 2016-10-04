@@ -7,7 +7,7 @@ namespace Digipolis.Web.Api
     {
         public bool EnableVersioning { get; set; }
 
-        public bool EnableGlobalErrorHandling { get; set; }
+        public bool DisableGlobalErrorHandling { get; set; }
 
         [JsonIgnore]
         public IExceptionMapper ExceptionMapper { get; set; }

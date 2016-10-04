@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Digipolis.Web.Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Digipolis.Web.Exceptions
 {
@@ -18,7 +20,13 @@ namespace Digipolis.Web.Exceptions
         public async Task Invoke(HttpContext context)
         {
             var handler = context.RequestServices.GetService<IExceptionHandler>();
-            if (handler == null) return;
+            var options = context.RequestServices.GetService<IOptions<ApiExtensionOptions>>();
+
+            if (handler == null || options?.Value?.DisableGlobalErrorHandling == true)
+            {
+                await this._next.Invoke(context);
+                return;
+            }
 
             try
             {

@@ -7,6 +7,7 @@ using Digipolis.Errors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Linq;
+using Digipolis.Web.Api;
 
 namespace Digipolis.Web.Exceptions
 {
@@ -15,17 +16,20 @@ namespace Digipolis.Web.Exceptions
         private readonly IExceptionMapper _mapper;
         private readonly ILogger<ExceptionHandler> _logger;
         private readonly IOptions<MvcJsonOptions> _options;
+        private readonly IOptions<ApiExtensionOptions> _apiExtensionOptions;
 
-        public ExceptionHandler(IExceptionMapper mapper, ILogger<ExceptionHandler> logger,
-            IOptions<MvcJsonOptions> options)
+        public ExceptionHandler(IExceptionMapper mapper, ILogger<ExceptionHandler> logger, IOptions<MvcJsonOptions> options, IOptions<ApiExtensionOptions> apiExtensionOptions)
         {
             _mapper = mapper;
             _logger = logger;
             _options = options;
+            _apiExtensionOptions = apiExtensionOptions;
         }
 
         public async Task HandleAsync(HttpContext context, Exception ex)
         {
+            if(_apiExtensionOptions?.Value?.DisableGlobalErrorHandling == true) return;
+
             var error = _mapper?.Resolve(ex);
             if (error == null) return;
             if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
@@ -41,6 +45,8 @@ namespace Digipolis.Web.Exceptions
 
         public void Handle(HttpContext context, Exception ex)
         {
+            if (_apiExtensionOptions?.Value?.DisableGlobalErrorHandling == true) return;
+
             var error = _mapper?.Resolve(ex);
             if (error == null) return;
             if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
