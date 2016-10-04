@@ -49,12 +49,19 @@ namespace Digipolis.Web
 
             #region Configuration from options
 
-            if (apiOptions.EnableVersioning)
+            if (!apiOptions.DisableGlobalErrorHandling)
+            {
+                builder.AddMvcOptions(options =>
+                {
+                    options.Filters.Add(typeof(GlobalExceptionFilter));
+                });
+            }
+
+            if (!apiOptions.DisableVersioning)
             {
                 builder.AddMvcOptions(options =>
                 {
                     options.Conventions.Insert(0, new RouteConvention(new RouteAttribute("{apiVersion}")));
-                    options.Filters.Add(typeof(GlobalExceptionFilter));
                 });
             }
 
@@ -82,7 +89,7 @@ namespace Digipolis.Web
 
         public static IMvcBuilder AddVersionEndpoint(this IMvcBuilder builder, Action<WebVersioningOptions> setupAction = null)
         {
-            if ( setupAction != null )
+            if (setupAction != null)
             {
                 builder.Services.Configure(setupAction);
             }

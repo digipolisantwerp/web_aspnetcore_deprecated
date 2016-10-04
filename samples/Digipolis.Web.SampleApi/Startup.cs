@@ -36,12 +36,12 @@ namespace Digipolis.Web.SampleApi
             {
                 //Override settings made by the appsettings.json
                 x.PageSize = 10;
-                x.ExceptionMapper = new ApiExceptionMapper();
             });
 
+            services.AddGlobalErrorHandling<ApiExceptionMapper>();
+
             // Add Swagger extensions
-            services.AddSwaggerGen();
-            services.ConfigureSwaggerGen<ApiExtensionSwaggerSettings>(x =>
+            services.AddSwaggerGen<ApiExtensionSwaggerSettings>(x =>
             {
                 //Specify Api Versions
                 x.MultipleApiVersions(new[] { new Info

@@ -15,6 +15,7 @@ namespace Digipolis.Web
         /// <summary>
         /// Configure Swagger completly to your need by inheriting from <see cref="SwaggerSettings{TResponseGuidelines}"/>
         /// </summary>
+        /// <typeparam name="TSwaggerSettings"></typeparam>
         /// <param name="services"></param>
         /// <param name="setupAction"></param>
         /// <returns></returns>
@@ -24,6 +25,18 @@ namespace Digipolis.Web
             services.Configure<SwaggerGenOptions>(settings.Configure);
             if (setupAction != null) services.ConfigureSwaggerGen(setupAction);
             return services;
+        }
+
+        /// <summary>
+        /// Add and configure Swagger completly to your need by inheriting from <see cref="SwaggerSettings{TResponseGuidelines}"/>
+        /// </summary>
+        /// <typeparam name="TSwaggerSettings"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="setupAction"></param>
+        public static void AddSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefinitions>, new()
+        {
+            services.AddSwaggerGen();
+            services.ConfigureSwaggerGen<TSwaggerSettings>(setupAction);
         }
 
         public static void MultipleApiVersions<TInfo>(this SwaggerGenOptions options, IEnumerable<TInfo> apiVersions)

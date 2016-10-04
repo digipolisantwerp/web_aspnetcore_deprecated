@@ -23,10 +23,10 @@ namespace Digipolis.Web
 {
     public static class ApiExtensionsBuilder
     {
-        public static IServiceCollection UseGlobalErrorHandling<TExceptionMapper>(this IServiceCollection services) where TExceptionMapper : ExceptionMapper
+        public static IServiceCollection AddGlobalErrorHandling<TExceptionMapper>(this IServiceCollection services) where TExceptionMapper : ExceptionMapper
         {
-            services.AddSingleton<IExceptionMapper, TExceptionMapper>();
-            services.AddSingleton<IExceptionHandler, ExceptionHandler>();
+            services.TryAddSingleton<IExceptionMapper, TExceptionMapper>();
+            services.TryAddSingleton<IExceptionHandler, ExceptionHandler>();
             return services;
         }
 
