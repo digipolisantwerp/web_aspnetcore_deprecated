@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.Extensions.Options;
 
@@ -9,11 +10,15 @@ namespace Digipolis.Web.Api.Constraints
         private readonly string[] _acceptedVersions;
         public VersionConstraint(string[] acceptedVersions)
         {
-            Order = -1;
+            if(acceptedVersions == null) throw new ArgumentNullException(nameof(acceptedVersions));
+            if (!acceptedVersions.Any()) throw new ArgumentOutOfRangeException(nameof(acceptedVersions), "There need to be one or more versions specified");
+            if (acceptedVersions.Any(string.IsNullOrWhiteSpace)) throw new ArgumentException("Parameter acceptedVersions cannot contain an empty string", nameof(acceptedVersions));
+
             _acceptedVersions = acceptedVersions;
+            Order = -1;
         }
 
-        public int Order { get; set; }
+        public int Order { get; private set; }
 
         public bool Accept(ActionConstraintContext context)
         {

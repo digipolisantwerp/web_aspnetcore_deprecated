@@ -14,6 +14,7 @@ namespace Digipolis.Web.Exceptions
 
         public ExceptionResponseMiddleware(RequestDelegate next)
         {
+            if (next == null) throw new ArgumentNullException(nameof(next), $"{nameof(next)} cannot be null.");
             this._next = next;
         }
 

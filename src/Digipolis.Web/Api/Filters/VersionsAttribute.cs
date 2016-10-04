@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Digipolis.Web.Api.Constraints;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 
@@ -8,6 +9,10 @@ namespace Digipolis.Web.Api
     {
         public VersionsAttribute(params string[] acceptedVersions)
         {
+            if (acceptedVersions == null) throw new ArgumentNullException(nameof(acceptedVersions));
+            if (!acceptedVersions.Any()) throw new ArgumentOutOfRangeException(nameof(acceptedVersions), "There need to be one or more versions specified");
+            if (acceptedVersions.Any(string.IsNullOrWhiteSpace)) throw new ArgumentException("Parameter acceptedVersions cannot contain an empty string", nameof(acceptedVersions));
+
             AcceptedVersions = acceptedVersions;
         }
 
@@ -17,6 +22,7 @@ namespace Digipolis.Web.Api
 
         public IActionConstraint CreateInstance(IServiceProvider services)
         {
+            //TODO: Register constraint with services and resolve??
             return new VersionConstraint(AcceptedVersions);
         }
     }

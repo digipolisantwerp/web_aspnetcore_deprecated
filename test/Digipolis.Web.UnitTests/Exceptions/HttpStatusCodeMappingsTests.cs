@@ -1,95 +1,95 @@
-﻿using System;
-using System.Collections.Generic;
-using Digipolis.Errors.Exceptions;
-using Digipolis.Web.Exceptions;
-using Xunit;
+﻿//using System;
+//using System.Collections.Generic;
+//using Digipolis.Errors.Exceptions;
+//using Digipolis.Web.Exceptions;
+//using Xunit;
 
-namespace Digipolis.Web.UnitTests.Exceptions
-{
-    public class HttpStatusCodeMappingsTests
-    {
-        [Fact]
-        public void InitializeDefaults()
-        {
-            var mappings = new HttpStatusCodeMappings();
+//namespace Digipolis.Web.UnitTests.Exceptions
+//{
+//    public class HttpStatusCodeMappingsTests
+//    {
+//        [Fact]
+//        public void InitializeDefaults()
+//        {
+//            var mappings = new HttpStatusCodeMappings();
 
-            Assert.Equal(404, mappings.GetStatusCode(typeof(NotFoundException)));
-            Assert.Equal(400, mappings.GetStatusCode(typeof(ValidationException)));
-            Assert.Equal(403, mappings.GetStatusCode(typeof(UnauthorizedException)));
-        }
+//            Assert.Equal(404, mappings.GetStatusCode(typeof(NotFoundException)));
+//            Assert.Equal(400, mappings.GetStatusCode(typeof(ValidationException)));
+//            Assert.Equal(403, mappings.GetStatusCode(typeof(UnauthorizedException)));
+//        }
 
-        [Fact]
-        public void OverrideExisting()
-        {
-            var mappings = new HttpStatusCodeMappings();
+//        [Fact]
+//        public void OverrideExisting()
+//        {
+//            var mappings = new HttpStatusCodeMappings();
 
-            mappings.Add(typeof(NotFoundException), 500);
+//            mappings.Add(typeof(NotFoundException), 500);
 
-            Assert.Equal(500, mappings.GetStatusCode(typeof(NotFoundException)));
-        }
+//            Assert.Equal(500, mappings.GetStatusCode(typeof(NotFoundException)));
+//        }
 
-        [Fact]
-        public void OverrideExistingGeneric()
-        {
-            var mappings = new HttpStatusCodeMappings();
+//        [Fact]
+//        public void OverrideExistingGeneric()
+//        {
+//            var mappings = new HttpStatusCodeMappings();
 
-            mappings.Add<NotFoundException>(500);
+//            mappings.Add<NotFoundException>(500);
 
-            Assert.Equal(500, mappings.GetStatusCode(typeof(NotFoundException)));
-        }
+//            Assert.Equal(500, mappings.GetStatusCode(typeof(NotFoundException)));
+//        }
 
-        [Fact]
-        public void ContainsKeyReturnsTrue()
-        {
-            var mappings = new HttpStatusCodeMappings();
+//        [Fact]
+//        public void ContainsKeyReturnsTrue()
+//        {
+//            var mappings = new HttpStatusCodeMappings();
 
-            Assert.True(mappings.ContainsKey(typeof(NotFoundException)));
-        }
+//            Assert.True(mappings.ContainsKey(typeof(NotFoundException)));
+//        }
 
-        [Fact]
-        public void ContainsKeyReturnsFalse()
-        {
-            var mappings = new HttpStatusCodeMappings();
+//        [Fact]
+//        public void ContainsKeyReturnsFalse()
+//        {
+//            var mappings = new HttpStatusCodeMappings();
 
-            Assert.False(mappings.ContainsKey(typeof(ArgumentNullException)));
-        }
+//            Assert.False(mappings.ContainsKey(typeof(ArgumentNullException)));
+//        }
 
-        [Fact]
-        public void AddNewMapping()
-        {
-            var mappings = new HttpStatusCodeMappings();
+//        [Fact]
+//        public void AddNewMapping()
+//        {
+//            var mappings = new HttpStatusCodeMappings();
 
-            mappings.Add(typeof(ArgumentNullException), 400);
+//            mappings.Add(typeof(ArgumentNullException), 400);
 
-            Assert.Equal(400, mappings.GetStatusCode(typeof(ArgumentNullException)));
-        }
+//            Assert.Equal(400, mappings.GetStatusCode(typeof(ArgumentNullException)));
+//        }
 
-        [Fact]
-        public void AddNewMappingGeneric()
-        {
-            var mappings = new HttpStatusCodeMappings();
+//        [Fact]
+//        public void AddNewMappingGeneric()
+//        {
+//            var mappings = new HttpStatusCodeMappings();
 
-            mappings.Add<ArgumentNullException>(400);
+//            mappings.Add<ArgumentNullException>(400);
 
-            Assert.Equal(400, mappings.GetStatusCode(typeof(ArgumentNullException)));
-        }
+//            Assert.Equal(400, mappings.GetStatusCode(typeof(ArgumentNullException)));
+//        }
 
-        [Fact]
-        public void AddNewMappingsRange()
-        {
-            var newRange = new Dictionary<Type, int>()
-            {
-                { typeof(ArgumentNullException), 400 },
-                { typeof(InvalidOperationException), 500 }
-            };
+//        [Fact]
+//        public void AddNewMappingsRange()
+//        {
+//            var newRange = new Dictionary<Type, int>()
+//            {
+//                { typeof(ArgumentNullException), 400 },
+//                { typeof(InvalidOperationException), 500 }
+//            };
 
-            var mappings = new HttpStatusCodeMappings();
+//            var mappings = new HttpStatusCodeMappings();
 
-            mappings.AddRange(newRange);
+//            mappings.AddRange(newRange);
 
-            Assert.Equal(400, mappings.GetStatusCode(typeof(ArgumentNullException)));
-            Assert.Equal(500, mappings.GetStatusCode(typeof(InvalidOperationException)));
-        }
+//            Assert.Equal(400, mappings.GetStatusCode(typeof(ArgumentNullException)));
+//            Assert.Equal(500, mappings.GetStatusCode(typeof(InvalidOperationException)));
+//        }
 
-    }
-}
+//    }
+//}
