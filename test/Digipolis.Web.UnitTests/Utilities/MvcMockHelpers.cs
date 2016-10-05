@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Digipolis.Web.Api;
+using Digipolis.Web.Exceptions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Digipolis.Web.UnitTests.Utilities
@@ -41,6 +45,19 @@ namespace Digipolis.Web.UnitTests.Utilities
                     }
                 }
             };
+        }
+
+        public static ExceptionHandler ExceptionHandler()
+        {
+            //var mapper = 
+            var logger = TestLogger<ExceptionHandler>.CreateLogger();
+            var mvcOptions = new Mock<IOptions<MvcJsonOptions>>();
+            var apiExtOptions = new Mock<IOptions<ApiExtensionOptions>>();
+
+            //return new ExceptionHandler();
+
+
+            return null;
         }
     }
 }

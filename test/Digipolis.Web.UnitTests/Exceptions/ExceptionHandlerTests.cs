@@ -13,8 +13,18 @@
 //using Digipolis.Web.UnitTests.Utilities;
 //using Xunit;
 
-//namespace Digipolis.Web.UnitTests.Exceptions
-//{
+using Digipolis.Web.Exceptions;
+using Digipolis.Web.UnitTests.Utilities;
+
+namespace Digipolis.Web.UnitTests.Exceptions
+{
+    public class ExceptionHandlerTests
+    {
+        private TestLogger<ExceptionHandler> _logger = TestLogger<ExceptionHandler>.CreateLogger();
+
+    }
+}
+
 //    public class ExceptionHandlerTests
 //    {
 //        private TestLogger<ExceptionHandler> _logger = TestLogger<ExceptionHandler>.CreateLogger();

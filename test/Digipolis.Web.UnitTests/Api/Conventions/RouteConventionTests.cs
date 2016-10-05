@@ -36,15 +36,16 @@ namespace Digipolis.Web.UnitTests.Api.Conventions
         }
 
         [Fact]
-        public void CtorErrorNullParameters2()
+        public void ApplyRoutePrefixOnExistingRouteSuccess()
         {
             Mock<IRouteTemplateProvider> rtp = new Mock<IRouteTemplateProvider>();
             rtp.SetupGet(x => x.Template).Returns("{apiVersion}");
             var rc = new RouteConvention(rtp.Object);
             var am = new ApplicationModel();
-            Mock<ControllerModel> cm = new Mock<ControllerModel>(typeof(Controller).GetTypeInfo(), 
-                new object[] { });
-            cm.Object.Selectors.Add(new SelectorModel { AttributeRouteModel = new AttributeRouteModel
+            Mock<ControllerModel> cm = new Mock<ControllerModel>(typeof(Controller).GetTypeInfo(), new object[] { });
+            cm.Object.Selectors.Add(new SelectorModel
+            {
+                AttributeRouteModel = new AttributeRouteModel
                 {
                     Template = "api/test"
                 }
@@ -56,17 +57,39 @@ namespace Digipolis.Web.UnitTests.Api.Conventions
         }
 
         [Fact]
-        public void AcceptFalseWhenDisableVersioningFalseAndInValid()
+        public void ApplyRoutePrefixOnNonExistingRouteSuccess()
         {
-            var acc = MvcMockHelpers.MoqHttpContext(ctx =>
+            Mock<IRouteTemplateProvider> rtp = new Mock<IRouteTemplateProvider>();
+            rtp.SetupGet(x => x.Template).Returns("{apiVersion}");
+            var rc = new RouteConvention(rtp.Object);
+            var am = new ApplicationModel();
+            Mock<ControllerModel> cm = new Mock<ControllerModel>(typeof(Controller).GetTypeInfo(), new object[] { });
+            cm.Object.Selectors.Add(new SelectorModel());
+
+            am.Controllers.Add(cm.Object);
+            rc.Apply(am);
+            Assert.Equal("{apiVersion}", am.Controllers.First().Selectors.First().AttributeRouteModel.Template);
+        }
+
+        [Fact]
+        public void ApplyIgnoreRoutePrefixOnNonExistingRouteSuccess()
+        {
+            Mock<IRouteTemplateProvider> rtp = new Mock<IRouteTemplateProvider>();
+            rtp.SetupGet(x => x.Template).Returns("{apiVersion}");
+            var rc = new RouteConvention(rtp.Object);
+            var am = new ApplicationModel();
+            Mock<ControllerModel> cm = new Mock<ControllerModel>(typeof(Controller).GetTypeInfo(), new object[] { new ApiExplorerSettingsAttribute { IgnoreApi = true } });
+            cm.Object.Selectors.Add(new SelectorModel
             {
-                ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => new TestApiExtensionOptions(new ApiExtensionOptions { DisableVersioning = false }));
-            }).MoqActionConstraintContext();
+                AttributeRouteModel = new AttributeRouteModel
+                {
+                    Template = "api/test"
+                }
+            });
 
-            acc.RouteContext.RouteData.Values["apiVersion"] = "v2";
-
-            var versions = new VersionConstraint(new string[] { "v1" });
-            Assert.False(versions.Accept(acc));
+            am.Controllers.Add(cm.Object);
+            rc.Apply(am);
+            Assert.Equal("api/test", am.Controllers.First().Selectors.First().AttributeRouteModel.Template);
         }
     }
 }
