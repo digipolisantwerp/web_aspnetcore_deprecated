@@ -73,5 +73,17 @@ namespace Digipolis.Web.UnitTests.Api.Constraints
             var versions = new VersionConstraint(new string[] { "v1" });
             Assert.True(versions.Accept(acc));
         }
+
+        [Fact]
+        public void AcceptTrueWhenNoOptionsSet()
+        {
+            var acc = MvcMockHelpers.MoqHttpContext(ctx =>
+            {
+                ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => null);
+            }).MoqActionConstraintContext();
+
+            var versions = new VersionConstraint(new string[] { "v1" });
+            Assert.True(versions.Accept(acc));
+        }
     }
 }

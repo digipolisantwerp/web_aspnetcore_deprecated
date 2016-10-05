@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -16,6 +17,8 @@ namespace Digipolis.Web.Api.Conventions
 
         public void Apply(ApplicationModel application)
         {
+            if (application == null) throw new ArgumentNullException(nameof(application));
+
             foreach (var controller in application.Controllers)
             {
                 if (controller.Attributes.OfType<ApiExplorerSettingsAttribute>().Any(x => x.IgnoreApi))
