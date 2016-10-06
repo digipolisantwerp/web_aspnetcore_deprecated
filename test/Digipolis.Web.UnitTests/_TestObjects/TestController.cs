@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Digipolis.Web.UnitTests
 {
-    public class TestController
+    public class TestController : Controller
     {
         [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Get()

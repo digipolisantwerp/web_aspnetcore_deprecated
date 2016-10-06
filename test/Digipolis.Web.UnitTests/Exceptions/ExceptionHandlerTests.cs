@@ -1,27 +1,108 @@
-﻿//using Microsoft.AspNetCore.Diagnostics;
-//using Microsoft.AspNetCore.Http;
-//using Microsoft.AspNetCore.Http.Features;
-//using Moq;
-//using Newtonsoft.Json;
-//using System;
-//using System.IO;
-//using System.Linq;
-//using System.Threading.Tasks;
-//using Digipolis.Errors;
-//using Digipolis.Errors.Exceptions;
-//using Digipolis.Web.Exceptions;
-//using Digipolis.Web.UnitTests.Utilities;
-//using Xunit;
-
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Digipolis.Errors;
 using Digipolis.Web.Exceptions;
 using Digipolis.Web.UnitTests.Utilities;
+using Digipolis.Web.UnitTests._TestObjects;
+using Xunit;
 
 namespace Digipolis.Web.UnitTests.Exceptions
 {
     public class ExceptionHandlerTests
     {
-        private TestLogger<ExceptionHandler> _logger = TestLogger<ExceptionHandler>.CreateLogger();
+        [Fact]
+        private void CtorMapperNullException()
+        {
+           Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(null, null, null, null));
+        }
 
+        [Fact]
+        private void CtorLoggerNullException()
+        {
+            var mapper = new ExceptionMapperTest();
+            Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(mapper, null, null, null));
+        }
+
+        [Fact]
+        private void CtorSuccesWithoutOptions()
+        {
+            var mapper = new ExceptionMapperTest();
+            var logger = new TestLogger<ExceptionHandler>();
+            Assert.NotNull(new ExceptionHandler(mapper, logger, null, null));
+        }
+
+        [Fact]
+        private void HandleErrorStatusCodeOnlyMapping()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            handler.Handle(ctx, new ArgumentNullException());
+            Assert.Equal(300, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private void HandleErrorMapping()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            handler.Handle(ctx, new AggregateException());
+            Assert.Equal(400, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private void HandleDefaultError()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            handler.Handle(ctx, new Exception());
+            Assert.Equal(500, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private void HandleNoErrorMappingEqualsDefaultError()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            handler.Handle(ctx, new AbandonedMutexException());
+            Assert.Equal(500, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private async Task HandleAsyncErrorStatusCodeOnlyMapping()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            await handler.HandleAsync(ctx, new ArgumentNullException());
+            Assert.Equal(300, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private async Task HandleAsyncErrorMapping()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            await handler.HandleAsync(ctx, new AggregateException());
+            Assert.Equal(400, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private async Task HandleAsyncDefaultError()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            await handler.HandleAsync(ctx, new Exception());
+            Assert.Equal(500, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private async Task HandleAsyncNoErrorMappingEqualsDefaultError()
+        {
+            var handler = MockHelpers.ExceptionHandler();
+            var ctx = MockHelpers.HttpContext();
+            await handler.HandleAsync(ctx, new AbandonedMutexException());
+            Assert.Equal(500, ctx.Response.StatusCode);
+        }
     }
 }
 

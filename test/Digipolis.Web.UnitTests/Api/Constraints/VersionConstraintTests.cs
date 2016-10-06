@@ -38,10 +38,10 @@ namespace Digipolis.Web.UnitTests.Api.Constraints
         [Fact]
         public void AcceptFalseWhenDisableVersioningFalseAndInValid()
         {
-            var acc = MvcMockHelpers.MoqHttpContext(ctx =>
+            var acc = MockHelpers.HttpContext(ctx =>
             {
                 ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => new TestApiExtensionOptions(new ApiExtensionOptions { DisableVersioning = false }));
-            }).MoqActionConstraintContext();
+            }).ActionConstraintContext();
 
             acc.RouteContext.RouteData.Values["apiVersion"] = "v2";
 
@@ -52,10 +52,10 @@ namespace Digipolis.Web.UnitTests.Api.Constraints
         [Fact]
         public void AcceptTrueWhenDisableVersioningTrue()
         {
-            var acc = MvcMockHelpers.MoqHttpContext(ctx =>
+            var acc = MockHelpers.HttpContext(ctx =>
             {
                 ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => new TestApiExtensionOptions(new ApiExtensionOptions { DisableVersioning = false }));
-            }).MoqActionConstraintContext();
+            }).ActionConstraintContext();
             var versions = new VersionConstraint(new string[] { "v1" });
             Assert.False(versions.Accept(acc));
         }
@@ -63,10 +63,10 @@ namespace Digipolis.Web.UnitTests.Api.Constraints
         [Fact]
         public void AcceptTrueWhenDisableVersioningFalseAndValid()
         {
-            var acc = MvcMockHelpers.MoqHttpContext(ctx =>
+            var acc = MockHelpers.HttpContext(ctx =>
             {
                 ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => new TestApiExtensionOptions(new ApiExtensionOptions { DisableVersioning = false }));
-            }).MoqActionConstraintContext();
+            }).ActionConstraintContext();
 
             acc.RouteContext.RouteData.Values["apiVersion"] = "v1";
 
@@ -77,10 +77,10 @@ namespace Digipolis.Web.UnitTests.Api.Constraints
         [Fact]
         public void AcceptTrueWhenNoOptionsSet()
         {
-            var acc = MvcMockHelpers.MoqHttpContext(ctx =>
+            var acc = MockHelpers.HttpContext(ctx =>
             {
                 ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => null);
-            }).MoqActionConstraintContext();
+            }).ActionConstraintContext();
 
             var versions = new VersionConstraint(new string[] { "v1" });
             Assert.True(versions.Accept(acc));

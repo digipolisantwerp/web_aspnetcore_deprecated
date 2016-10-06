@@ -20,6 +20,9 @@ namespace Digipolis.Web.Exceptions
 
         public ExceptionHandler(IExceptionMapper mapper, ILogger<ExceptionHandler> logger, IOptions<MvcJsonOptions> options, IOptions<ApiExtensionOptions> apiExtensionOptions)
         {
+            if(mapper == null) throw new ArgumentNullException(nameof(mapper));
+            if(logger == null) throw new ArgumentNullException(nameof(logger));
+
             _mapper = mapper;
             _logger = logger;
             _options = options;

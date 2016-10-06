@@ -13,17 +13,23 @@ namespace Digipolis.Web.Api.JsonConverters
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            var type = value.GetType().GetGenericArguments()[0];
+            var type = value?.GetType()?.GetGenericArguments()?[0];
             var generic = typeof(PagedResult<>).MakeGenericType(type);
             dynamic obj = Convert.ChangeType(value, generic) ;
 
-            var links = obj.Links as PagedResultLinks;
-            var data = obj.Data as IEnumerable;
-            var page = obj.Page as Page;
+            var links = obj?.Links as PagedResultLinks;
+            var data = obj?.Data as IEnumerable;
+            var page = obj?.Page as Page;
 
             writer.WriteStartObject();
+                if(links != null) { }
                 writer.WritePropertyName("_links");
-                serializer.Serialize(writer, links);
+                if (links != null) serializer.Serialize(writer, links);
+                else
+                {
+                    writer.WriteStartObject();
+                    writer.WriteEndObject();
+                }
                 writer.WritePropertyName("_embedded");
                     writer.WriteStartObject();
                         writer.WritePropertyName("resourceList");
@@ -35,7 +41,12 @@ namespace Digipolis.Web.Api.JsonConverters
                             writer.WriteEndArray();
                     writer.WriteEndObject();
                 writer.WritePropertyName("_page");
-                   serializer.Serialize(writer, page);
+                   if(page != null) serializer.Serialize(writer, page);
+                    else
+                    {
+                        writer.WriteStartObject();
+                        writer.WriteEndObject();
+                    }
             writer.WriteEndObject();
         }
 
