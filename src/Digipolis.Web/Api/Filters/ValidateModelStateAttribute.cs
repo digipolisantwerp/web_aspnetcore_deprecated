@@ -15,8 +15,12 @@ namespace Digipolis.Web.Api
 
         public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (context.ModelState.IsValid) await next();
-            else throw new ValidationException(messages: context.ModelState.ToDictionary(x => x.Key, x => x.Value.Errors.Select(e => e.ErrorMessage)));
+            if (context.ModelState.IsValid)
+            {
+                if (next != null) await next();
+            }
+            else
+                throw new ValidationException(messages: context.ModelState.ToDictionary(x => x.Key, x => x.Value.Errors.Select(e => e.ErrorMessage)));
         }
     }
 }

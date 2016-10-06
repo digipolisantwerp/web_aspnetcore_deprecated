@@ -11,10 +11,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using Moq;
+using Moq.Protected;
 
 namespace Digipolis.Web.UnitTests.Utilities
 {
@@ -55,6 +59,27 @@ namespace Digipolis.Web.UnitTests.Utilities
             {
                 RouteContext = new RouteContext(httpContext)
             };
+        }
+
+        public static ActionContext ActionContext(Action<Mock<ActionContext>> settings = null)
+        {
+            var routeData = new Mock<RouteData>();
+            var ad = new Mock<ActionDescriptor>();
+            var msd = new Mock<ModelStateDictionary>();
+            var ac = new Mock<ActionContext>(HttpContext(), routeData.Object, ad.Object, msd.Object);
+            return ac.Object;
+        }
+
+        public static ActionExecutingContext ActionExecutingContext(Action<Mock<ActionExecutingContext>> settings = null)
+        {
+            var ac = ActionContext();
+            var filters = new Mock<IList<IFilterMetadata>>();
+            var actionArguments = new Mock<IDictionary<string, object>>();
+            var controller = new Mock<Controller>();
+            var aec = new Mock<ActionExecutingContext>(ac, filters.Object, actionArguments.Object, controller.Object);
+            aec.SetupAllProperties();
+            settings?.Invoke(aec);
+            return aec.Object;
         }
 
         public static ExceptionHandler ExceptionHandler(Action<Mock<IOptions<MvcJsonOptions>>> mvcOptions = null, Action<Mock<IOptions<ApiExtensionOptions>>> apiOptions = null)

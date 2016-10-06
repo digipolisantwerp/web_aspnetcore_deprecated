@@ -22,7 +22,6 @@ namespace Digipolis.Web.Api
 
         public IActionConstraint CreateInstance(IServiceProvider services)
         {
-            //TODO: Register constraint with services and resolve??
             return new VersionConstraint(AcceptedVersions);
         }
     }
