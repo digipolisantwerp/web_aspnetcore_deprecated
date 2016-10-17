@@ -15,6 +15,11 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.Web.UnitTests", "
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.Web.SampleApi", "samples\Digipolis.Web.SampleApi\Digipolis.Web.SampleApi.xproj", "{3A1752C4-5D78-444A-A910-A38D03A05E5C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B3CA487-C8C4-4DF6-9ED5-9D2008B09E82}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

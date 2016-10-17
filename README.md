@@ -1,10 +1,15 @@
 # Web Toolbox  
 
 The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web projects:
-- version endpoint.
-- base classes that encapsulate common functionality.
-- action filters.
-- swagger extensions.
+- The enforcement of configurable API guideline.
+- Versioning of endpoints.
+- Paging with paging response object.
+- Dynamic sorting.
+- Global error handling with configuration of responses returning a standard error model.
+- Application version endpoint.
+- Base classes that encapsulate common functionality.
+- Action filters.
+- Swagger extensions.
 
 ## Table of Contents
 
@@ -30,7 +35,7 @@ To add the toolbox to a project, you add the package to the project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "2.0.3"
+    "Digipolis.Web":  "3.0.0"
  }
 ``` 
 
@@ -66,25 +71,50 @@ In case of an invalid ModelState a response with http status 400 (bad Request) i
 
 ``` json
 {
-  "Id": "c0fcec1c-07e0-4dd0-baf0-e6bd57da8fce",
-  "Messages": [
-    {
-      "Key": "FirstName",
-      "Message": "The field FirstName must be a string or array type with a minimum length of '2'."
-    },
-    {
-      "Key": "LastName",
-      "Message": "The LastName field is required."
-    },
-    {
-      "Key": "Email",
-      "Message": "The Email field is not a valid e-mail address."
-    }
+  "Identifier": "c0fcec1c-07e0-4dd0-baf0-e6bd57da8fce",
+  "Title": "Validation failed",
+  "Status": 400,
+  "Code": "UNVAL001"
+  "ExtraParameters": [
+    { "FirstName": [ "The field FirstName must be a string or array type with a minimum length of '2'." ] },
+    { "LastName": [ "The LastName field is required." ] },
+    { "Email": [ "The Email field is not a valid e-mail address." ] }
   ]
 }
 ```
+
+### Endpoint versioning
+You can restrict endpoints to specific versions by adding the **VersionsAttribute**. The toolbox will inject the version specified in the 
+constructor parameters passed to this attribute into the route.
+
+So if you add this attribute to an endpoint
+
+``` csharp 
+/// endpoint: POST api/Users
+[Versions("v1", "v2")]
+public IActionResult Post(MyModel model)
+{
+}
+```
+
+The framework will inject these versions and the endpoint will only be reachable at the following endpoints:
+- POST v1/api/Users
+- POST v2/api/Users
+
+NOTE: When versioning is enabled it can be disabled by configuration. in the appsettings set following section:
+
+``` json
+{
+  ...
+  "ApiExtensions": {
+    "DisableVersioning": true,
+    "DisableGlobalErrorHandling": true,
+    "PageSize": 10
+  }
+}
+``` 
    
-## Version Endpoint
+## Application version endpoint
 
 This framework adds an additional endpoint to the web site where the version number of the application can be requested via a GET request.  
 By default, this endpoint is provided at the url **_status/version_**, but this can be changed to another value during startup.
@@ -96,6 +126,35 @@ The versioning framework is added to the project in **ConfigureServices** method
   
   service.AddMvc().AddVersionEndpoint(options => options.Route = "myRoute");      // use custom route 
 ```
+
+## MVC Extensions
+These extensions will configure some standards for MVC and the JsonSerializer. It allows you to specify the default pagesize used in paging.
+You can pass in a configsection, a configuration lambda or both.
+The extensions will
+- set the mime-type to 'application/json'
+- Set Time handling to UTC
+- remove empty fields from the output
+- serialize Timespans according to guidelines
+
+``` csharp
+services.AddMvc().AddApiExtensions(Configuration.GetSection("ApiExtensions"), x =>
+{
+    //Override settings made by the appsettings.json
+    x.PageSize = 10;
+});
+```
+
+the configsection accepts below markup:
+``` json
+{
+  ...
+  "ApiExtensions": {
+    "DisableVersioning": true,
+    "DisableGlobalErrorHandling": true,
+    "PageSize": 10
+  }
+}
+``` 
 
 ## Swagger extensions
 
@@ -114,119 +173,109 @@ app.UseSwaggerUiRedirect("myUrl")
 
 **Don't** use this for a plain web project if you want to server your own HTML pages from the root uri.
 
-## Exception handling
+### Formatting Swagger responses
+You can configure some default responses by specifying a class as a generic when registering AddSwaggerGen
+
+``` csharp 
+// Add Swagger extensions
+services.AddSwaggerGen<ApiExtensionSwaggerSettings>(x =>
+{
+    //Specify Api Versions
+    x.MultipleApiVersions(new[] { new Info
+    {
+        //Add Inline version
+        Version = "v1",
+        Title = "API V1",
+        Description = "Description for V1 of the API",
+        Contact = new Contact { Email = "info@digipolis.be", Name = "Digipolis", Url = "https://www.digipolis.be" },
+        TermsOfService = "https://www.digipolis.be/tos",
+        License = new License
+        {
+            Name = "My License",
+            Url = "https://www.digipolis.be/licensing"
+        },
+    },
+    //Add version through configuration class
+    new Version2()});
+});
+```
+
+**ApiExtensionSwaggerSettings** is a class that incorperates all guidelines from Digipolis. But this can be
+overriden by inheriting from **SwaggerSettings**
+
+``` csharp 
+//custom settings
+
+public class CustomSettings : SwaggerSettings<SwaggerResponseDefinitions>
+{}
+
+//Also SwaggerResponseDefinitions can be overriden to override some defaults.
+
+```
+The defaults can be expanded by overriding the **ApiExtensionSwaggerSettings** class
+
+``` csharp 
+
+//additional settings
+
+public class AdditionalApiExtensionSwaggerSettings : ApiExtensionSwaggerSettings 
+{}
+
+```
+
+Then register Swagger with this class
+``` csharp 
+services.AddSwaggerGen<AdditionalApiExtensionSwaggerSettings>();
+```
+
+### Exclude certain responses from Swagger
+If you want to exclude certain you can do this by specifying on the endpoint.
+
+``` csharp 
+/// endpoint: POST api/Users
+[ExcludeSwaggerResponse((int)HttpStatusCode.NotFound)]
+public IActionResult Get(int id)
+{
+}
+```
+        
+## Global exception handling
 
 The toolbox provides a uniform way of exception handling.
 The best way to use this feature is to have you code throw exceptions that derive from the **BaseException** type defined in the [error toolbox](https://github.com/digipolisantwerp/errors_aspnetcore).
+But any exception can be used if properly mapped to an error model
 
 If an exception is thrown in the application, the exception handler will create a response with the correct http status code and a meaningful error object that the 
 api consumers can use to handle the error.
 
-For exceptions that derive from **BaseException** the **Error** property is used as the response error object.
-``` javascript
-{
-  "Id": "e4506b3e-1066-4f8e-bae2-336a0215e1a3",
-  "Messages": [
-    {
-      "Key": "125",
-      "Message": "VAT number invalid"
-    },
-    {
-      "Key": "356",
-      "Message": "Address invalid"
-    },
-    {
-      "Key": "698",
-      "Message": "Email invalid"
-    }
-  ]
-}
-```
+### Mapping exceptions to responses
 
-For other exceptions a simple error object is created, only exposing the exception type.
-``` javascript
-{
-  "Id": "e4506b3e-1066-4f8e-bae2-336a0215e1a3",
-  "Messages": [
-    {
-      "Key": "",
-      "Message": "Exception of type System.ArgumentNullException occurred. Check logs for more info."
-    }
-  ]
-}
-```
-
-### Http status code mappings
-
-It is possible to map exception types to specific http status codes. 
-The default code is 500.  
-
-Some exception types that are defined in the [error toolbox](https://github.com/digipolisantwerp/errors_aspnetcore) have default mappings predefined. For these exceptions it is not necessary to define the mappings in the configuration.
-
-Exception type              | Http status code
------------------- | ----------------------------------------------------------- | --------------------------------------
-NotFoundException              | 404 
-ValidationException | 400
-UnauthorizedException | 403  
-
-Important note!
-The default mappings will be overridden if you specify them in the mappings setup.
+To configure error models to exception you need to implement a new class that inherits from **ExceptionMapper** type defined in the [error toolbox](https://github.com/digipolisantwerp/errors_aspnetcore).
+How to configure the exceptions can be found in the documentation of the [error toolbox](https://github.com/digipolisantwerp/errors_aspnetcore).
 
 ### Usage
 
 To enable exception handling, call the **UseExceptionHandling** method on the **IApplicationBuilder** object in the **Configure** method of the **Startup** class.  
-
-Since the exception handler is a middleware it should be positioned as high as possible in the request pipeline in order to catch all exceptions from other middleware.
-So it is advised to place it as the first call on the **IApplicationBuilder** object in the **Configure** method.
-Only when enabling **Cors** via the **app.UseCors** method, that method must be placed before the **UseExceptionHanlding** method.
-
 ``` csharp
-    //Only cors placed above the ExceptionHandling
-    app.UseCors();
-
-    app.UseExceptionHandling(options => {
-        // add your custom exception mappings here
-    });
-    
-    // all other middleware
+public void ConfigureServices(IServiceCollection services)
+{
+    ...
+    /// ApiExceptionMapper is the derived class from ExceptionMapper
+    services.AddGlobalErrorHandling<ApiExceptionMapper>();
+    ...
+}
 ``` 
+NOTE: When versioning is enabled it can be disabled by configuration. in the appsettings set following section:
 
-To specify the mappings of exception types to http status codes you can use the **HttpStatusCodeMappings** object that is passed to the setupAction of the **UseExceptionHandling** method.
-
-To add a new mapping, call the Add method and pass the exception type the http status code.
-
-``` csharp
-    app.UseExceptionHandling(mappings =>
-    {
-        mappings.Add(typeof(NotFoundException), 404);
-    });
-``` 
-
-You can also use a generic method to specify the exception type.
-
-``` csharp
-    mappings.Add<NotFoundException>(404);
-``` 
-
-If you have a lot of mappings to configure and you don't want to place the code in the **Startup** code file you can use the **AddRange** method that accepts a mappings collection that will be added.
-
-
-Define a collection of mappings somewhere:
-``` csharp
-    var customMappings = new Dictionary<Type, int>()
-    {
-        { typeof(NotFoundException), 404 },
-        { typeof(ValidationException), 500 },
-        { typeof(UnauthorizedException), 401 }
-    };
-``` 
-
-and add it in the **setupAction**
-``` csharp
-    app.UseExceptionHandling(mappings =>
-    {
-        mappings.AddRange(customMappings);
-    });
+``` json
+{
+  ...
+  "ApiExtensions": {
+    "DisableVersioning": false,
+    "DisableGlobalErrorHandling": true,
+    "PageSize": 10
+  }
+}
 ``` 
 
 ### Logging
@@ -250,3 +299,35 @@ The logged message is a json with following structure:
 ```
 
 For exceptions that do not derive from **BaseException** the **Error** property will be empty. 
+
+### Using the API extensions
+
+To enable the api extensions defined in this toolbox, you need to enable them as high as possible in the pipeline. 
+Only when enabling **Cors** via the **app.UseCors** method, that method must be placed before the **UseApiExtensions** method.
+
+Call the **UseApiExtensions** method on the **IApplicationBuilder** object in the **Configure** method of the **Startup** class.  
+``` csharp
+    app.UseApiExtensions();
+``` 
+
+### Paging
+Paging has been made easy by using following code example
+
+On the controller endpoint:
+``` csharp
+public IActionResult Get([FromQuery]PageOptions queryOptions)
+{
+    try
+    {
+        int total;
+        var values = _valueLogic.GetAll(queryOptions, out total);
+        var result = queryOptions.ToPagedResult(values, total, "Get", "Values", new { });
+        return Ok(result);
+
+    }
+    catch (Exception ex)
+    {
+        return StatusCode((int)HttpStatusCode.InternalServerError);
+    }
+}
+``` 

@@ -101,7 +101,7 @@ namespace Digipolis.Web.Api.Models
             };
 
             var url = LinkProvider.AbsoluteAction(actionName, controllerName, values);
-            return new Link(url);
+            return new Link(url.ToLowerInvariant());
         }
 
         internal static Link GenerateLink(PageOptions pageOptions, int page, string routeName, object routeValues = null)
@@ -113,7 +113,7 @@ namespace Digipolis.Web.Api.Models
             };
 
             var url = LinkProvider.AbsoluteRoute(routeName, values);
-            return new Link(url);
+            return new Link(url.ToLowerInvariant());
         }
 
         internal static Link GenerateLink(PageSortOptions pageSortOptions, int page, string actionName, string controllerName, object routeValues = null)
@@ -126,7 +126,7 @@ namespace Digipolis.Web.Api.Models
             };
 
             var url = LinkProvider.AbsoluteAction(actionName, controllerName, values);
-            return new Link(url);
+            return new Link(url.ToLowerInvariant());
         }
 
         internal static Link GenerateLink(PageSortOptions pageSortOptions, int page, string routeName, object routeValues = null)
@@ -139,7 +139,7 @@ namespace Digipolis.Web.Api.Models
             };
 
             var url = LinkProvider.AbsoluteRoute(routeName, values);
-            return new Link(url);
+            return new Link(url.ToLowerInvariant());
         }
     }
 }

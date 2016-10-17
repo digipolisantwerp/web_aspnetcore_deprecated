@@ -27,6 +27,8 @@ namespace Digipolis.Web.SampleApi.Controllers
         // POST api/values
         [HttpPost]
         [Versions(Versions.V2)]
+        [ValidateModelState]
+        //[ExcludeSwaggerResponseAttribute] //TODO
         public void Post([FromBody]string value)
         {
         }

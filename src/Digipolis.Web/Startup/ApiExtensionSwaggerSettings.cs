@@ -10,10 +10,7 @@ namespace Digipolis.Web.Startup
         protected override void Configuration(SwaggerGenOptions options)
         {
             options.DescribeAllEnumsAsStrings();
-            options.OperationFilter<AddFileUploadParams>();
             options.DocumentFilter<EndPointPathsAndParamsToLower>();
-            options.DocumentFilter<SetVersionInPaths>();
-            options.SchemaFilter<PagedResultSchemaFilter>();
         }
     }
 }
