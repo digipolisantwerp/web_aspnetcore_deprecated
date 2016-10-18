@@ -14,6 +14,7 @@ namespace Digipolis.Web.Swagger
         }
 
         public RequestDelegate NextDelegate { get; private set; }
+
         public string Url { get; private set; }
 
         public async Task Invoke(HttpContext httpContext)

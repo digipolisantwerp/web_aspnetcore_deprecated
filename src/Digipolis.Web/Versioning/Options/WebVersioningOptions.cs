@@ -7,6 +7,6 @@ namespace Digipolis.Web
         /// <summary>
         /// The route wwhere the version can be requested (default = '/status/version').
         /// </summary>
-        public string Route { get; set; }
+        public string Route { get; set; } = "/status/version";
     }
 }

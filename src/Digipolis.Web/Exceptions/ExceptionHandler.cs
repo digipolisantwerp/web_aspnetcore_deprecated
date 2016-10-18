@@ -1,89 +1,84 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Threading.Tasks;
 using Digipolis.Errors;
-using Digipolis.Errors.Exceptions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using System.Linq;
+using Digipolis.Web.Api;
 
 namespace Digipolis.Web.Exceptions
 {
-    public class ExceptionHandler
+    public class ExceptionHandler : IExceptionHandler
     {
-        private HttpStatusCodeMappings _mappings;
-        private ILogger _logger;
+        private readonly IExceptionMapper _mapper;
+        private readonly ILogger<ExceptionHandler> _logger;
+        private readonly IOptions<MvcJsonOptions> _options;
+        private readonly IOptions<ApiExtensionOptions> _apiExtensionOptions;
 
-        public ExceptionHandler(HttpStatusCodeMappings mappings, ILogger<ExceptionHandler> logger)
+        public ExceptionHandler(IExceptionMapper mapper, ILogger<ExceptionHandler> logger, IOptions<MvcJsonOptions> options, IOptions<ApiExtensionOptions> apiExtensionOptions)
         {
-            if (mappings == null) throw new ArgumentNullException(nameof(mappings), $"{nameof(mappings)} cannot be null");
-            if (logger == null) throw new ArgumentNullException(nameof(logger), $"{nameof(logger)} cannot be null");
+            if(mapper == null) throw new ArgumentNullException(nameof(mapper));
+            if(logger == null) throw new ArgumentNullException(nameof(logger));
 
-            _mappings = mappings;
+            _mapper = mapper;
             _logger = logger;
+            _options = options;
+            _apiExtensionOptions = apiExtensionOptions;
         }
 
-        public async Task HandleAsync(HttpContext context)
+        public async Task HandleAsync(HttpContext context, Exception ex)
         {
-            try
+            if(_apiExtensionOptions?.Value?.DisableGlobalErrorHandling == true) return;
+
+            var error = _mapper?.Resolve(ex);
+            if (error == null) return;
+            if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
             {
-                var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
-                if (exceptionHandlerFeature == null)
-                    return;
-
-                var exception = exceptionHandlerFeature.Error;
-                var exceptionType = exception.GetType();
-
-                if (_mappings.ContainsKey(exceptionType))
-                    context.Response.StatusCode = _mappings.GetStatusCode(exceptionType);
-
-                Error error = null;
-
-                if (exception is BaseException)
-                {
-                    var baseException = exception as BaseException;
-                    error = baseException.Error;
-                }
-                else
-                {
-                    error = new Error(Guid.NewGuid().ToString());
-                    error.AddErrorMessage(new ErrorMessage("", $"Exception of type {exception.GetType()} occurred. Check logs for more info."));
-                }
-
+                context.Response.Clear();
                 context.Response.ContentType = "application/json";
-
-                var responseBody = JsonConvert.SerializeObject(error);
-                await context.Response.WriteAsync(responseBody);
-
-                LogException(context.Response.StatusCode, exception);
+                if (error.Status != default(int)) context.Response.StatusCode = error.Status;
+                var json = JsonConvert.SerializeObject(error, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
+                await context.Response.WriteAsync(json);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError("Exception occurred in the exception handler.", ex);
-            }
+            else if (error.Status != default(int)) context.Response.StatusCode = error.Status;
+            LogException(error, ex);
         }
-        
-        private void LogException(int httpStatusCode, Exception exception)
+
+        public void Handle(HttpContext context, Exception ex)
+        {
+            if (_apiExtensionOptions?.Value?.DisableGlobalErrorHandling == true) return;
+
+            var error = _mapper?.Resolve(ex);
+            if (error == null) return;
+            if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
+            {
+                context.Response.Clear();
+                context.Response.ContentType = "application/json";
+                if (error.Status != default(int)) context.Response.StatusCode = error.Status;
+                var json = JsonConvert.SerializeObject(error, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
+                context.Response.WriteAsync(json).Wait();
+            }
+            else if (error.Status != default(int)) context.Response.StatusCode = error.Status;
+            LogException(error, ex);
+        }
+
+        private void LogException(Error error, Exception exception)
         {
             var logMessage = new ExceptionLogMessage
             {
-                HttpStatusCode = httpStatusCode,
+                Error = error,
                 Exception = exception
             };
 
-            if (exception is BaseException)
-            {
-                var baseException = exception as BaseException;
-                logMessage.Error = baseException.Error;
-            }
-
-            var logAsJson = JsonConvert.SerializeObject(logMessage);
-
-            if (httpStatusCode >= 500 && httpStatusCode <= 599)
-                _logger.LogError(logAsJson);
-
-            if (httpStatusCode >= 400 && httpStatusCode <= 499)
-                _logger.LogDebug(logAsJson);
+            var logAsJson = JsonConvert.SerializeObject(logMessage, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
+            if (error.Status >= 500 && error.Status <= 599)
+                _logger?.LogError(logAsJson);
+            else if (error.Status >= 400 && error.Status <= 499)
+                _logger?.LogDebug(logAsJson);
+            else _logger?.LogInformation(logAsJson);
         }
     }
 }

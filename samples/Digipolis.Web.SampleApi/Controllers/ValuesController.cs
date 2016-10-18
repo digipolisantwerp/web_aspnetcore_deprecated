@@ -1,44 +1,106 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.Net;
+using Digipolis.Errors.Exceptions;
+using Digipolis.Web.Api;
+using Digipolis.Web.SampleApi.Configuration;
+using Digipolis.Web.SampleApi.Logic;
+using Digipolis.Web.SampleApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Digipolis.Web.Api.Models;
+using Digipolis.Web.Swagger;
 
 namespace Digipolis.Web.SampleApi.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     public class ValuesController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IValueLogic _valueLogic;
+
+        public ValuesController(IValueLogic valueLogic)
         {
-            return new string[] { "value1", "value2" };
+            _valueLogic = valueLogic;
         }
 
-        // GET api/values/5
+        /// <summary>
+        /// Get all values 
+        /// </summary>
+        /// <param name="queryOptions">Query options from uri</param>
+        /// <returns>An array of value objects</returns>
+        [HttpGet()]
+        [ProducesResponseType(typeof(PagedResult<ValueDto>), 200)]
+        [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
+        public IActionResult Get([FromQuery]PageOptions queryOptions)
+        {
+            int total;
+            var values = _valueLogic.GetAll(queryOptions, out total);
+            var result = queryOptions.ToPagedResult(values, total, "Get", "Values", new { test = 0 });
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Get a value by id
+        /// </summary>
+        /// <param name="id">The id of the value</param>
+        /// <returns>A value object</returns>
         [HttpGet("{id}")]
-        public string Get(int id)
+        [ProducesResponseType(typeof(ValueDto), 200)]
+        [ProducesResponseType(typeof(ValueDto), 401)]
+        [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
+        public IActionResult Get(int id)
         {
-            return "value";
+            var value = _valueLogic.GetById(id);
+            return Ok(value);
         }
 
-        // POST api/values
+        /// <summary>
+        /// Add a new value
+        /// </summary>
+        /// <param name="value">A value object</param>
+        /// <returns>The created value object</returns>
         [HttpPost]
-        public void Post([FromBody]string value)
+        [ValidateModelState]
+        [ProducesResponseType(typeof(ValueDto), 201)]
+        [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
+        public IActionResult Post([FromBody, Required] ValueDto value)
         {
+            value = _valueLogic.Add(value);
+            return CreatedAtAction("Get", new { id = value.Id }, value);
         }
 
-        // PUT api/values/5
+        /// <summary>
+        /// Update an existing value object
+        /// </summary>
+        /// <param name="id">The id of the value</param>
+        /// <param name="value">The updated value object</param>
+        /// <returns></returns>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        [ValidateModelState]
+        [Versions(Versions.V1, Versions.V2)]
+        [ExcludeSwaggerResonse((int)HttpStatusCode.NotFound)]
+        public IActionResult Put(int id, [FromBody, Required] ValueDto value)
         {
+            value = _valueLogic.Update(id, value);
+            return Ok(value);
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Delete a value by it's Id
+        /// </summary>
+        /// <param name="id">The value's Id</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        [Versions(Versions.V2)]
+        public IActionResult Delete(int id)
         {
+            _valueLogic.Delete(id);
+            return NoContent();
         }
     }
 }
