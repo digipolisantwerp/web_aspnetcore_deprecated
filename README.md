@@ -20,14 +20,23 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
 - [Installation](#installation)
 - [ActionFilters](#actionfilters)
   - [ValidateModelState](#validatemodelstate)
-- [Version Endpoint](#version-endpoint)
+  - [Endpoint versioning](#endpoint-versioning)
+- [Application version endpoint](#application-version-endpoint)
+- [MVC Extensions](#mvc-extensions)
 - [Swagger extensions](#swagger-extensions)
-- [Exception handling](#exception-handling)
-  - [Http status code mappings](#http-status-code-mappings)
+  - [Formatting Swagger responses](#formatting-swagger-responses)
+  - [Exclude certain responses from Swagger](#exclude-certain-responses-from-swagger)
+- [Global exception handling](#global-exception-handling)
+  - [Mapping exceptions to responses](#mapping-exceptions-to-responses)
   - [Usage](#usage)
   - [Logging](#logging)
+  - [Using the API extensions](#using-the-api-extensions)
+  - [Paging](#paging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
+**Attention:** We are still in the process of updating the documentation and a more detailed version
+will follow in the days to come.
 
 ## Installation
 
