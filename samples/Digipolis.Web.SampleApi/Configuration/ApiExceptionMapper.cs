@@ -11,6 +11,12 @@ namespace Digipolis.Web.SampleApi.Configuration
     {
         protected override void Configure()
         {
+            CreateMap<UnauthorizedAccessException>((error, ex) =>
+            {
+                error.Title = "Access denied.";
+                error.Code = "UNAUTH001";
+                error.Status = (int)HttpStatusCode.Forbidden;
+            });
         }
 
         protected override void CreateDefaultMap(Error error, Exception exception)

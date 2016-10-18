@@ -11,6 +11,9 @@ using Digipolis.Web;
 using Digipolis.Web.SampleApi.Configuration;
 using Digipolis.Web.Startup;
 using Swashbuckle.Swagger.Model;
+using AutoMapper;
+using Digipolis.Web.SampleApi.Data;
+using Digipolis.Web.SampleApi.Logic;
 
 namespace Digipolis.Web.SampleApi
 {
@@ -61,6 +64,13 @@ namespace Digipolis.Web.SampleApi
                 //Add version through configuration class
                 new Version2()});
             });
+
+            //Register Dependencies for example project
+            services.AddScoped<IValueRepository, ValueRepository>();
+            services.AddScoped<IValueLogic, ValueLogic>();
+
+            //Add AutoMapper
+            services.AddAutoMapper();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

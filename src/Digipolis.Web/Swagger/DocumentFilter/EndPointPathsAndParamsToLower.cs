@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Swashbuckle.Swagger.Model;
 using Swashbuckle.SwaggerGen.Generator;
@@ -34,6 +35,10 @@ namespace Digipolis.Web.Swagger
         private IList<IParameter> handleParameters(IList<IParameter> parameters)
         {
             if (parameters == null) return null;
+            foreach (var item in parameters.OfType<NonBodyParameter>().Where(x=> x.In.Equals("path", StringComparison.OrdinalIgnoreCase)))
+            {
+                item.Name = item.Name.ToLower();
+            }
 
             foreach (var item in parameters.OfType<BodyParameter>())
             {
