@@ -25,17 +25,17 @@ namespace Digipolis.Web.UnitTests.Api.Filters
             Assert.True(true);
         }
 
-        [Fact]
-        public void OnActionExecutingInValid()
-        {
-            var validAttr = new ValidateModelStateAttribute();
-            var aec = MockHelpers.ActionExecutingContext(x =>
-            {
-                x.Object.ModelState.AddModelError("test", "");
-            }
-            );
-            Assert.Throws<ValidationException>(()=> validAttr.OnActionExecuting(aec));
-        }
+        //[Fact]
+        //public void OnActionExecutingInValid()
+        //{
+        //    var validAttr = new ValidateModelStateAttribute();
+        //    var aec = MockHelpers.ActionExecutingContext(x =>
+        //    {
+        //        x.Object.ModelState.AddModelError("test", "");
+        //    }
+        //    );
+        //    Assert.Throws<ValidationException>(()=> validAttr.OnActionExecuting(aec));
+        //}
 
         [Fact]
         public async Task OnActionExecutingAsyncValid()
