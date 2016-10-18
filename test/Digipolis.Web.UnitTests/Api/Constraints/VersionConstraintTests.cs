@@ -74,16 +74,16 @@ namespace Digipolis.Web.UnitTests.Api.Constraints
             Assert.True(versions.Accept(acc));
         }
 
-        [Fact]
-        public void AcceptTrueWhenNoOptionsSet()
-        {
-            var acc = MockHelpers.HttpContext(ctx =>
-            {
-                ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => null);
-            }).ActionConstraintContext();
+        //[Fact]
+        //public void AcceptTrueWhenNoOptionsSet()
+        //{
+        //    var acc = MockHelpers.HttpContext(ctx =>
+        //    {
+        //        ctx.Setup(x => x.RequestServices.GetService(typeof(IOptions<ApiExtensionOptions>))).Returns<object>(x => null);
+        //    }).ActionConstraintContext();
 
-            var versions = new VersionConstraint(new string[] { "v1" });
-            Assert.True(versions.Accept(acc));
-        }
+        //    var versions = new VersionConstraint(new string[] { "v1" });
+        //    Assert.True(versions.Accept(acc));
+        //}
     }
 }
