@@ -14,7 +14,7 @@ using Digipolis.Web.Swagger;
 
 namespace Digipolis.Web.SampleApi.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]", Name = "kevin")]
     [Authorize]
     public class ValuesController : Controller
     {
@@ -38,6 +38,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         {
             int total;
             var values = _valueLogic.GetAll(queryOptions, out total);
+            //var result = queryOptions.ToPagedResult(values, total, "kevin", new { test = 0 });
             var result = queryOptions.ToPagedResult(values, total, "Get", "Values", new { test = 0 });
             return Ok(result);
         }
