@@ -7,6 +7,7 @@ using System.Linq;
 using Digipolis.Web.Api;
 using Digipolis.Web.Swagger;
 using Microsoft.AspNetCore.Builder;
+using Swashbuckle.SwaggerGen.Generator;
 
 namespace Digipolis.Web
 {
@@ -19,7 +20,22 @@ namespace Digipolis.Web
         /// <param name="services"></param>
         /// <param name="setupAction"></param>
         /// <returns></returns>
-        public static IServiceCollection ConfigureSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefinitions>, new()
+        public static IServiceCollection ConfigureSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) 
+            where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefaults>, new()
+        {
+            return services.ConfigureSwaggerGen<TSwaggerSettings, SwaggerResponseDefaults>();
+        }
+
+        /// <summary>
+        /// Add and configure Swagger completly to your need by inheriting from <see cref="SwaggerSettings{TResponseGuidelines}"/>
+        /// </summary>
+        /// <typeparam name="TSwaggerSettings"></typeparam>
+        /// <typeparam name="TSwaggerResponseDefinitions"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="setupAction"></param>
+        public static IServiceCollection ConfigureSwaggerGen<TSwaggerSettings, TSwaggerResponseDefinitions>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null)
+            where TSwaggerSettings : SwaggerSettings<TSwaggerResponseDefinitions>, new()
+            where TSwaggerResponseDefinitions : SwaggerResponseDefinitions
         {
             var settings = new TSwaggerSettings();
             services.Configure<SwaggerGenOptions>(settings.Configure);
@@ -33,10 +49,25 @@ namespace Digipolis.Web
         /// <typeparam name="TSwaggerSettings"></typeparam>
         /// <param name="services"></param>
         /// <param name="setupAction"></param>
-        public static void AddSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefinitions>, new()
+        public static void AddSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) 
+            where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefaults>, new()
+        {
+            services.AddSwaggerGen<TSwaggerSettings, SwaggerResponseDefaults>();
+        }
+
+        /// <summary>
+        /// Add and configure Swagger completly to your need by inheriting from <see cref="SwaggerSettings{TResponseGuidelines}"/>
+        /// </summary>
+        /// <typeparam name="TSwaggerSettings"></typeparam>
+        /// <typeparam name="TSwaggerResponseDefinitions"></typeparam>
+        /// <param name="services"></param>
+        /// <param name="setupAction"></param>
+        public static void AddSwaggerGen<TSwaggerSettings, TSwaggerResponseDefinitions>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null)
+            where TSwaggerSettings : SwaggerSettings<TSwaggerResponseDefinitions>, new()
+            where TSwaggerResponseDefinitions : SwaggerResponseDefinitions
         {
             services.AddSwaggerGen();
-            services.ConfigureSwaggerGen<TSwaggerSettings>(setupAction);
+            services.ConfigureSwaggerGen<TSwaggerSettings, TSwaggerResponseDefinitions>(setupAction);
         }
 
         public static void MultipleApiVersions<TInfo>(this SwaggerGenOptions options, IEnumerable<TInfo> apiVersions)
