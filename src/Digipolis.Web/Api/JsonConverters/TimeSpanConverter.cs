@@ -18,9 +18,18 @@ namespace Digipolis.Web.Api.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            if (reader.TokenType == JsonToken.Null) return null;
+            TimeSpan result;
             var value = serializer.Deserialize<string>(reader);
-            return XmlConvert.ToTimeSpan(value);
+            try
+            {
+                if (reader.TokenType == JsonToken.Null) return null;
+                result = XmlConvert.ToTimeSpan(value);
+            }
+            catch (Exception)
+            {
+                if(!TimeSpan.TryParse(value, out result)) return null;
+            }
+            return result;
         }
 
         public override bool CanConvert(Type objectType)
