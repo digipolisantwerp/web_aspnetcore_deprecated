@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.DotNet.InternalAbstractions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Linq;
 
 namespace Digipolis.Web
 {
@@ -71,6 +73,13 @@ namespace Digipolis.Web
             {
                 options.Filters.Insert(0, new ConsumesAttribute("application/json"));
                 options.Filters.Insert(1, new ProducesAttribute("application/json"));
+
+                JsonOutputFormatter jsonFormatter = 
+                    options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
+
+                if (jsonFormatter != null)
+                    jsonFormatter.SupportedMediaTypes.Add("application/hal+json");
+
             });
 
             builder.AddJsonOptions(x =>
