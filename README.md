@@ -324,6 +324,7 @@ Paging has been made easy by using following code example
 
 On the controller endpoint:
 ``` csharp
+[Produces("application/hal+json")]
 public IActionResult Get([FromQuery]PageOptions queryOptions)
 {
     try

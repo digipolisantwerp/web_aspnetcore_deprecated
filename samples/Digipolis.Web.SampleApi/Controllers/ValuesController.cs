@@ -31,6 +31,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         /// <param name="queryOptions">Query options from uri</param>
         /// <returns>An array of value objects</returns>
         [HttpGet()]
+        [Produces("application/hal+json")]
         [ProducesResponseType(typeof(PagedResult<ValueDto>), 200)]
         [AllowAnonymous]
         [Versions(Versions.V1, Versions.V2)]
