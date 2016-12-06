@@ -20,7 +20,7 @@ namespace Digipolis.Web
 {
     public static class MvcBuilderExtensions
     {
-        public static IMvcBuilder AddApiExtensions(this IMvcBuilder builder, IConfigurationSection config = null, Action<ApiExtensionOptions> build = null, Type exception = null)
+        public static IMvcBuilder AddApiExtensions(this IMvcBuilder builder, IConfigurationSection config = null, Action<ApiExtensionOptions> build = null)
         {
             var apiOptions = new ApiExtensionOptions();
 

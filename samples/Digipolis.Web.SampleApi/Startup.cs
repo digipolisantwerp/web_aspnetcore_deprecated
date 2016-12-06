@@ -14,6 +14,9 @@ using Swashbuckle.Swagger.Model;
 using AutoMapper;
 using Digipolis.Web.SampleApi.Data;
 using Digipolis.Web.SampleApi.Logic;
+using Digipolis.Web.Swagger;
+using Swashbuckle.SwaggerGen.Application;
+using Swashbuckle.SwaggerGen.Generator;
 
 namespace Digipolis.Web.SampleApi
 {

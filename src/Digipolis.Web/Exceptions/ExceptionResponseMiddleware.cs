@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using System.Threading.Tasks;
+using Digipolis.Errors.Exceptions;
 using Digipolis.Web.Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +39,7 @@ namespace Digipolis.Web.Exceptions
                 }
                 if (context.Response.StatusCode == (int)HttpStatusCode.NotFound)
                 {
-                    await handler.HandleAsync(context, new UnauthorizedAccessException());
+                    await handler.HandleAsync(context, new NotFoundException());
                 }
             }
             catch (Exception ex)
