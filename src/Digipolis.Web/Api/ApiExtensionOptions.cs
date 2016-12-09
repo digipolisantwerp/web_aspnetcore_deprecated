@@ -20,6 +20,11 @@ namespace Digipolis.Web.Api
         /// </summary>
         public int PageSize { get; set; }
 
+        ///// <summary>
+        ///// BaseUrl used for generation of HAL-urls
+        ///// </summary>
+        //public string BaseUrl { get; set; }
+
         /// <summary>
         /// The route wwhere the version can be requested (default = '/status/version').
         /// </summary>

@@ -18,6 +18,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Digipolis.Web.Api.Models;
 
 namespace Digipolis.Web
 {
@@ -27,16 +29,24 @@ namespace Digipolis.Web
         {
             services.TryAddSingleton<IExceptionMapper, TExceptionMapper>();
             services.TryAddSingleton<IExceptionHandler, ExceptionHandler>();
+
             return services;
         }
 
         public static void UseApiExtensions(this IApplicationBuilder app)
         {
             var settings = app.ApplicationServices.GetService<IOptions<ApiExtensionOptions>>();
+            //var linkProvider = app.ApplicationServices.GetService<ILinkProvider>();
+
+
             var httpContextAccessor = app.ApplicationServices.GetService<IActionContextAccessor>();
 
             if (settings?.Value?.DisableGlobalErrorHandling == false) app.UseMiddleware<ExceptionResponseMiddleware>();
-            if (httpContextAccessor != null) LinkProvider.Configure(httpContextAccessor);
+
+            PageOptionsExtensions.Configure(httpContextAccessor);
+
+
+            //if (httpContextAccessor != null) LinkProvider.Configure(httpContextAccessor,settings?.Value?.BaseUrl);
         }
     }
 }

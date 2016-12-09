@@ -42,6 +42,7 @@ namespace Digipolis.Web.SampleApi
             {
                 //Override settings made by the appsettings.json
                 x.PageSize = 10;
+                x.BaseUrl = "http://MySampleApp.be";
             });
 
             services.AddGlobalErrorHandling<ApiExceptionMapper>();
