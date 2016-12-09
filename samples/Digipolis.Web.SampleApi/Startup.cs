@@ -17,6 +17,7 @@ using Digipolis.Web.SampleApi.Logic;
 using Digipolis.Web.Swagger;
 using Swashbuckle.SwaggerGen.Application;
 using Swashbuckle.SwaggerGen.Generator;
+using Digipolis.Web.UnitTests.Modelbinders;
 
 namespace Digipolis.Web.SampleApi
 {
@@ -38,12 +39,18 @@ namespace Digipolis.Web.SampleApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc().AddVersionEndpoint().AddApiExtensions(Configuration.GetSection("ApiExtensions"), x =>
-            {
-                //Override settings made by the appsettings.json
-                x.PageSize = 10;
-                x.BaseUrl = "http://MySampleApp.be";
-            });
+            services.AddMvc(
+                (o) => 
+                {
+                    o.ModelBinderProviders.Add(new CommaDelimitedArrayModelBinderProvider());
+                })
+                .AddVersionEndpoint()
+                .AddApiExtensions(Configuration.GetSection("ApiExtensions"), x =>
+                {
+                    //Override settings made by the appsettings.json
+                    x.PageSize = 10;
+                    //x.BaseUrl = "http://MySampleApp.be";
+                });
 
             services.AddGlobalErrorHandling<ApiExceptionMapper>();
 
