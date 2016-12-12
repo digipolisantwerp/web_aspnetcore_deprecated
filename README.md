@@ -135,6 +135,25 @@ The versioning framework is added to the project in **ConfigureServices** method
   
   service.AddMvc().AddVersionEndpoint(options => options.Route = "myRoute");      // use custom route 
 ```
+## Modelbinders
+A modelbinder for comma seperated arrays or enumerables is made available.
+Insert it at the start of the modelbinders collection to always try to deserialize arrays or IEnumerables of value types or string using this modelbinder.
+
+``` csharp
+ services.AddMvc(
+                (o) => 
+                {
+                    o.ModelBinderProviders.Insert(0,new CommaDelimitedArrayModelBinderProvider());
+                })
+```
+
+The modelbinder can also be applied to properties individually, but you have to repeat the binding source ([FromQuery] in this example).
+The bindingsource from the parent class is not inherted.
+
+``` csharp
+        [FromQuery][ModelBinder(BinderType = typeof(CommaDelimitedArrayModelBinder))]
+        public string[] Sort { get; set; } = new string[0];
+```
 
 ## MVC Extensions
 These extensions will configure some standards for MVC and the JsonSerializer. It allows you to specify the default pagesize used in paging.
@@ -164,6 +183,8 @@ the configsection accepts below markup:
   }
 }
 ``` 
+
+
 
 ## Swagger extensions
 
@@ -324,6 +345,7 @@ Paging has been made easy by using following code example
 
 On the controller endpoint:
 ``` csharp
+[Produces("application/hal+json")]
 public IActionResult Get([FromQuery]PageOptions queryOptions)
 {
     try

@@ -5,13 +5,41 @@ using System.Threading.Tasks;
 using Digipolis.Web.Api.Tools;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Digipolis.Web.Api.Models
 {
     public static class PageOptionsExtensions
     {
+        private static IActionContextAccessor _actionContextAccessor;
+        private static ILinkProvider _linkProvider;
+
+        private static ILinkProvider GetLinkProvider()
+        {
+            if (_actionContextAccessor == null)
+                throw new TypeInitializationException(nameof(PageOptionsExtensions),new Exception(@"PageOptionsExtensions._actionContextAccessor was not initialized, did you Configure using ""UseApiExtensions"" in Startup?"));
+
+            if (_linkProvider == null)
+                _linkProvider = (ILinkProvider)_actionContextAccessor.ActionContext.HttpContext.RequestServices.GetService(typeof(ILinkProvider));
+
+            return _linkProvider;
+        }
+
+
+        internal static void Configure(IActionContextAccessor actionContextAccessor)
+        {
+            if (actionContextAccessor == null)
+                throw new ArgumentNullException(nameof(actionContextAccessor));
+
+            _actionContextAccessor = actionContextAccessor;
+        }
+
+
         public static PagedResult<T> ToPagedResult<T>(this PageOptions pageOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where T : class, new()
         {
+
             if (string.IsNullOrWhiteSpace(actionName)) throw new ArgumentNullException(nameof(actionName));
             if (string.IsNullOrWhiteSpace(controllerName)) throw new ArgumentNullException(nameof(controllerName));
 
@@ -100,7 +128,7 @@ namespace Digipolis.Web.Api.Models
                 ["PageSize"] = pageOptions.PageSize
             };
 
-            var url = LinkProvider.AbsoluteAction(actionName, controllerName, values);
+            var url = GetLinkProvider().AbsoluteAction(actionName, controllerName, values);
             return new Link(url.ToLowerInvariant());
         }
 
@@ -112,7 +140,7 @@ namespace Digipolis.Web.Api.Models
                 ["PageSize"] = pageOptions.PageSize
             };
 
-            var url = LinkProvider.AbsoluteRoute(routeName, values);
+            var url = GetLinkProvider().AbsoluteRoute(routeName, values);
             return new Link(url.ToLowerInvariant());
         }
 
@@ -125,7 +153,7 @@ namespace Digipolis.Web.Api.Models
                 ["Sort"] = pageSortOptions.Sort
             };
 
-            var url = LinkProvider.AbsoluteAction(actionName, controllerName, values);
+            var url = GetLinkProvider().AbsoluteAction(actionName, controllerName, values);
             return new Link(url.ToLowerInvariant());
         }
 
@@ -138,7 +166,7 @@ namespace Digipolis.Web.Api.Models
                 ["Sort"] = pageSortOptions.Sort
             };
 
-            var url = LinkProvider.AbsoluteRoute(routeName, values);
+            var url = GetLinkProvider().AbsoluteRoute(routeName, values);
             return new Link(url.ToLowerInvariant());
         }
     }

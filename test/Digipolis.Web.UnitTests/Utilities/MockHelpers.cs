@@ -48,6 +48,7 @@ namespace Digipolis.Web.UnitTests.Utilities
             ctx.SetupGet(c => c.Request).Returns(request.Object);
             ctx.SetupGet(c => c.Response).Returns(response.Object);
             ctx.SetupGet(x => x.Features).Returns(features.Object);
+
             httpContext?.Invoke(ctx);
             
             return ctx.Object;

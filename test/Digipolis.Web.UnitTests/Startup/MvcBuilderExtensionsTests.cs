@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Xunit;
+using Microsoft.Extensions.ObjectPool;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace Digipolis.Web.UnitTests.Startup
 {
@@ -56,6 +58,31 @@ namespace Digipolis.Web.UnitTests.Startup
                                         .ToArray();
             Assert.Equal(1, registrations.Count());
             Assert.Equal(ServiceLifetime.Singleton, registrations[0].Lifetime);
+        }
+
+        [Fact]
+        private void JsonOutputFormatterSupportsHAL()
+        {
+            var services = new ServiceCollection();
+            var manager = new ApplicationPartManager();
+            var builder = new MvcBuilder(services, manager);
+
+            services.AddOptions();
+            services.AddSingleton(typeof(ObjectPoolProvider), new DefaultObjectPoolProvider());
+            services
+                .AddLogging()
+                .AddMvcCore()
+                .AddJsonFormatters();
+
+            builder.AddApiExtensions();
+
+            var sp = services.BuildServiceProvider();
+
+            MvcOptions mvcOptions = sp.GetService<IOptions<MvcOptions>>().Value;
+
+            var jsonOutputFormatter = mvcOptions.OutputFormatters.OfType<JsonOutputFormatter>().First();
+
+            Assert.True(jsonOutputFormatter.SupportedMediaTypes.Any(x => x == "application/hal+json"));
         }
 
     }

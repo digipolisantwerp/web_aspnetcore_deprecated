@@ -1,4 +1,7 @@
-﻿namespace Digipolis.Web.Api
+﻿using Digipolis.Web.UnitTests.Modelbinders;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Digipolis.Web.Api
 {
     /// <summary>
     /// Options for sorting and paging Api results

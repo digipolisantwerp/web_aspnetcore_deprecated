@@ -21,3 +21,8 @@
 ## 2.0.3
 
 - fixed namespace in WebAppBuilderExtensions
+
+## 3.0.2
+
+- added support for application/hal+json MIME-type
+- added ModelBuilder for comma serperated arrays

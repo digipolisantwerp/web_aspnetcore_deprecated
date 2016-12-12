@@ -15,6 +15,11 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.DotNet.InternalAbstractions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using System.Linq;
+using Digipolis.Web.Api.Tools;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Digipolis.Web.Api.Models;
 
 namespace Digipolis.Web
 {
@@ -29,6 +34,13 @@ namespace Digipolis.Web
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
+            builder.Services.AddScoped<IUrlHelper>(x =>
+            {
+                var actionContext = x.GetService<IActionContextAccessor>().ActionContext;
+                return new UrlHelper(actionContext);
+            });
+
+            builder.Services.TryAddSingleton<ILinkProvider, LinkProvider>();
             #endregion
 
             #region Register Options
@@ -37,6 +49,7 @@ namespace Digipolis.Web
             if (config != null)
             {
                 builder.Services.Configure<ApiExtensionOptions>(config);
+
                 config.Bind(apiOptions);
             }
             if (build != null)
@@ -71,6 +84,13 @@ namespace Digipolis.Web
             {
                 options.Filters.Insert(0, new ConsumesAttribute("application/json"));
                 options.Filters.Insert(1, new ProducesAttribute("application/json"));
+
+                JsonOutputFormatter jsonFormatter = 
+                    options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
+
+                if (jsonFormatter != null)
+                    jsonFormatter.SupportedMediaTypes.Add("application/hal+json");
+
             });
 
             builder.AddJsonOptions(x =>

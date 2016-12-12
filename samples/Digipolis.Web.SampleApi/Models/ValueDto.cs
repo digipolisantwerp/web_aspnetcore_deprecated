@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Digipolis.Web.UnitTests.Modelbinders;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Digipolis.Web.SampleApi.Models
@@ -33,5 +35,8 @@ namespace Digipolis.Web.SampleApi.Models
         /// Time since creation
         /// </summary>
         public TimeSpan TimeSinceCreation => DateTime.UtcNow.Subtract(CreationDate.ToUniversalTime());
+
+        
+        public string[] StringArray { get; set; }
     }
 }

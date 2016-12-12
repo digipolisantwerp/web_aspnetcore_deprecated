@@ -31,15 +31,16 @@ namespace Digipolis.Web.SampleApi.Controllers
         /// <param name="queryOptions">Query options from uri</param>
         /// <returns>An array of value objects</returns>
         [HttpGet()]
+        [Produces("application/hal+json")]
         [ProducesResponseType(typeof(PagedResult<ValueDto>), 200)]
         [AllowAnonymous]
         [Versions(Versions.V1, Versions.V2)]
-        public IActionResult Get([FromQuery]PageOptions queryOptions)
+        public IActionResult Get([FromQuery]CriteriaDto criteria)
         {
             int total;
-            var values = _valueLogic.GetAll(queryOptions, out total);
+            var values = _valueLogic.GetAll(criteria, out total);
             //var result = queryOptions.ToPagedResult(values, total, "kevin", new { test = 0 });
-            var result = queryOptions.ToPagedResult(values, total, "Get", "Values", new { test = 0 });
+            var result = criteria.ToPagedResult(values, total, "Get", "Values", new { test = 0 });
             return Ok(result);
         }
 
