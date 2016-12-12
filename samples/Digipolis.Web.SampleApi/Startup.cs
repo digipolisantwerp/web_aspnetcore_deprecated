@@ -42,14 +42,13 @@ namespace Digipolis.Web.SampleApi
             services.AddMvc(
                 (o) => 
                 {
-                    o.ModelBinderProviders.Add(new CommaDelimitedArrayModelBinderProvider());
+                    o.ModelBinderProviders.Insert(0,new CommaDelimitedArrayModelBinderProvider());
                 })
                 .AddVersionEndpoint()
                 .AddApiExtensions(Configuration.GetSection("ApiExtensions"), x =>
                 {
                     //Override settings made by the appsettings.json
                     x.PageSize = 10;
-                    //x.BaseUrl = "http://MySampleApp.be";
                 });
 
             services.AddGlobalErrorHandling<ApiExceptionMapper>();

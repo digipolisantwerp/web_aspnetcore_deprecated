@@ -20,28 +20,22 @@ namespace Digipolis.Web.UnitTests.Modelbinders
             }
 
             var modelTypeInfo = context.Metadata.ModelType.GetTypeInfo();
-            if (modelTypeInfo.IsArray)
+            if (TypeIsSupported(modelTypeInfo))
             {
                 var binderType = typeof(CommaDelimitedArrayModelBinder);
                 return (IModelBinder)Activator.CreateInstance(binderType);
             }
 
-            //if (modelTypeInfo.IsGenericType &&
-            //    modelTypeInfo.GetGenericTypeDefinition().GetTypeInfo() == typeof(KeyValuePair<,>).GetTypeInfo())
-            //{
-            //    var typeArguments = modelTypeInfo.GenericTypeArguments;
-
-            //    var keyMetadata = context.MetadataProvider.GetMetadataForType(typeArguments[0]);
-            //    var keyBinder = context.CreateBinder(keyMetadata);
-
-            //    var valueMetadata = context.MetadataProvider.GetMetadataForType(typeArguments[1]);
-            //    var valueBinder = context.CreateBinder(valueMetadata);
-
-            //    var binderType = typeof(KeyValuePairModelBinder<,>).MakeGenericType(typeArguments);
-            //    return (IModelBinder)Activator.CreateInstance(binderType, keyBinder, valueBinder);
-            //}
-
             return null;
+        }
+
+        internal bool TypeIsSupported(TypeInfo modelTypeInfo)
+        {
+            return (modelTypeInfo.IsArray && modelTypeInfo.GetElementType().GetTypeInfo().IsValueType)
+                || (modelTypeInfo.GetInterfaces()
+                    .Any(ti => ti.IsConstructedGenericType
+                     && ti.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                     && (ti.GenericTypeArguments[0].GetTypeInfo().IsValueType || ti.GenericTypeArguments[0] == typeof(string))));
         }
     }
 }

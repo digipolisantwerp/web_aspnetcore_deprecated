@@ -11,13 +11,15 @@ namespace Digipolis.Web.SampleApi.Models
     public class CriteriaDto : PageSortOptions
     {
        
-        public string[] stringArray { get; set; }
+        public string[] StringArray { get; set; }
 
-        public List<string> listArray { get; set; }
+        public List<string> StringList { get; set; }
 
-        public int[] intArray { get; set; }
+        public int[] IntArray { get; set; }
 
-        public List<int> listInt { get; set; }
+        public List<int> IntList { get; set; }
 
-    }
+        public ChildDto[] ComplexArray { get; set; }
+
+}
 }
