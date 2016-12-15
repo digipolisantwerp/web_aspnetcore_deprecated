@@ -6,6 +6,11 @@ using Digipolis.Web.Exceptions;
 using Digipolis.Web.UnitTests.Utilities;
 using Digipolis.Web.UnitTests._TestObjects;
 using Xunit;
+using System.Collections.Generic;
+using Microsoft.Extensions.Options;
+using Digipolis.Web.Api;
+using Moq;
+using System.Linq;
 
 namespace Digipolis.Web.UnitTests.Exceptions
 {
@@ -102,6 +107,44 @@ namespace Digipolis.Web.UnitTests.Exceptions
             var ctx = MockHelpers.HttpContext();
             await handler.HandleAsync(ctx, new AbandonedMutexException());
             Assert.Equal(500, ctx.Response.StatusCode);
+        }
+
+        [Fact]
+        private async Task LogVerboseException()
+        {
+            var loggedMessages = new List<LogMessage>();
+            var logger = new TestLogger<ExceptionHandler>(loggedMessages);
+
+            var handler = MockHelpers.ExceptionHandler(null, authOptions =>
+            {
+                authOptions.SetupGet(o => o.Value).Returns(new ApiExtensionOptions { LogExceptionObject = true });
+            }, logger);
+
+            var ctx = MockHelpers.HttpContext();
+            await handler.HandleAsync(ctx, new InvalidOperationException());
+
+            Assert.Matches(".*\"Exception\":{.+}", loggedMessages[0].Message);
+            Assert.Matches(".*\"ExceptionInfo\":\".*\"", loggedMessages[0].Message);
+        }
+
+        [Fact]
+        private async Task LogOnlyExceptionInfo()
+        {
+            var loggedMessages = new List<LogMessage>();
+            var logger = new TestLogger<ExceptionHandler>(loggedMessages);
+
+            var handler = MockHelpers.ExceptionHandler(null, authOptions =>
+            {
+                authOptions.SetupGet(o => o.Value).Returns(new ApiExtensionOptions { LogExceptionObject = false });
+            }, logger);
+
+            var ctx = MockHelpers.HttpContext();
+            await handler.HandleAsync(ctx, new AbandonedMutexException());
+
+            await handler.HandleAsync(ctx, new InvalidOperationException());
+
+            Assert.DoesNotMatch(".*\"Exception\":{.+}", loggedMessages[0].Message);
+            Assert.Matches(".*\"ExceptionInfo\":\".*\"", loggedMessages[0].Message);
         }
     }
 }

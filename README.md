@@ -22,6 +22,7 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
   - [ValidateModelState](#validatemodelstate)
   - [Endpoint versioning](#endpoint-versioning)
 - [Application version endpoint](#application-version-endpoint)
+- [Modelbinders](#modelbinders)
 - [MVC Extensions](#mvc-extensions)
 - [Swagger extensions](#swagger-extensions)
   - [Formatting Swagger responses](#formatting-swagger-responses)
@@ -30,8 +31,8 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
   - [Mapping exceptions to responses](#mapping-exceptions-to-responses)
   - [Usage](#usage)
   - [Logging](#logging)
-  - [Using the API extensions](#using-the-api-extensions)
-  - [Paging](#paging)
+- [Using the API extensions](#using-the-api-extensions)
+- [Paging](#paging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -322,6 +323,8 @@ The logged message is a json with following structure:
 	"Error" : {
 		//The Error object serialized as Json
 	},
+    "ExceptionInfo" : "Digipolis.Errors.Exceptions.NotFoundException: Not found.
+        at Digipolis.Web.SampleApi.Controllers.ValuesController.ThrowException() ...",
 	"Exception" : {
 		//The exception object serialized as Json
 	}
@@ -329,8 +332,10 @@ The logged message is a json with following structure:
 ```
 
 For exceptions that do not derive from **BaseException** the **Error** property will be empty. 
+The **ExceptionInfo** contains the result of the exception ToString() method.
+The **Exception** property of the logged message is not filled by default. If you also want to log the exception object you can set the **LogExceptionObject** property to true on the **ApiExtensionOptions**.
 
-### Using the API extensions
+## Using the API extensions
 
 To enable the api extensions defined in this toolbox, you need to enable them as high as possible in the pipeline. 
 Only when enabling **Cors** via the **app.UseCors** method, that method must be placed before the **UseApiExtensions** method.
@@ -340,7 +345,7 @@ Call the **UseApiExtensions** method on the **IApplicationBuilder** object in th
     app.UseApiExtensions();
 ``` 
 
-### Paging
+## Paging
 Paging has been made easy by using following code example
 
 On the controller endpoint:

@@ -26,3 +26,4 @@
 
 - added support for application/hal+json MIME-type
 - added ModelBuilder for comma serperated arrays
+- changed exception logging to log exception ToString() by default, exception object logged optionally using settings

@@ -11,5 +11,6 @@ namespace Digipolis.Web.Exceptions
         public Error Error { get; set; }
 
         public Exception Exception { get; set; }
+        public string ExceptionInfo { get; set; }
     }
 }

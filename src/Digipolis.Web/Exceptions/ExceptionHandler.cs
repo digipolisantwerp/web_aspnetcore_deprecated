@@ -70,8 +70,13 @@ namespace Digipolis.Web.Exceptions
             var logMessage = new ExceptionLogMessage
             {
                 Error = error,
-                Exception = exception
+                ExceptionInfo = exception.ToString()
             };
+
+            if ((_apiExtensionOptions.Value?.LogExceptionObject).GetValueOrDefault())
+            {
+                logMessage.Exception = exception;
+            }
 
             var logAsJson = JsonConvert.SerializeObject(logMessage, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
             if (error.Status >= 500 && error.Status <= 599)

@@ -20,6 +20,12 @@ namespace Digipolis.Web.Api
         /// </summary>
         public int PageSize { get; set; }
 
+        /// <summary>
+        /// When set to true, the full exception object is logged as Json in the LogMessage "Exception" property.
+        /// Default = false.
+        /// </summary>
+        public bool LogExceptionObject { get; set; }
+
         ///// <summary>
         ///// BaseUrl used for generation of HAL-urls
         ///// </summary>
