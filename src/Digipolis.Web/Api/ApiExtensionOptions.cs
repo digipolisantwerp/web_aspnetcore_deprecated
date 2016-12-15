@@ -16,6 +16,11 @@ namespace Digipolis.Web.Api
         public bool DisableGlobalErrorHandling { get; set; }
 
         /// <summary>
+        /// Disable the global exception filter. Enabled by dafult.
+        /// </summary>
+        public bool DisableGlobalExceptionFilter { get; set; }
+
+        /// <summary>
         /// Number of pages to show upon retrieving collections
         /// </summary>
         public int PageSize { get; set; }

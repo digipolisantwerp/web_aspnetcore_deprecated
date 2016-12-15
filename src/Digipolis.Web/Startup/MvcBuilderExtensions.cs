@@ -62,7 +62,7 @@ namespace Digipolis.Web
 
             #region Configuration from options
 
-            if (!apiOptions.DisableGlobalErrorHandling)
+            if (!apiOptions.DisableGlobalErrorHandling && !apiOptions.DisableGlobalExceptionFilter)
             {
                 builder.AddMvcOptions(options =>
                 {
