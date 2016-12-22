@@ -17,7 +17,7 @@ using Digipolis.Web.SampleApi.Logic;
 using Digipolis.Web.Swagger;
 using Swashbuckle.SwaggerGen.Application;
 using Swashbuckle.SwaggerGen.Generator;
-using Digipolis.Web.UnitTests.Modelbinders;
+using Digipolis.Web.Modelbinders;
 
 namespace Digipolis.Web.SampleApi
 {

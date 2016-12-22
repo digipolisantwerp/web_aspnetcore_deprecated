@@ -1,4 +1,4 @@
-﻿using Digipolis.Web.UnitTests.Modelbinders;
+﻿using Digipolis.Web.Modelbinders;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Digipolis.Web.Api
