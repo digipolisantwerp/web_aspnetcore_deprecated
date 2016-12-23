@@ -33,8 +33,6 @@ namespace Digipolis.Web.Modelbinders
 
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    //var elementType = bindingContext.ModelType.GetTypeInfo().GetElementType();
-
                     try
                     {
                         var result = ParseArray(value, bindingContext.ModelType);
