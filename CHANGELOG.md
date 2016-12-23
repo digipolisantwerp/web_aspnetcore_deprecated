@@ -1,26 +1,12 @@
 # Web Toolbox
 
-## 1.0.0
+## 3.0.4
 
-- initial version
+- fix for CommaDelimitedModelBinder
 
-## 2.0.0
+## 3.0.3
 
-- Exception handling
-- ValidateModelState
-- Version endpoint
-
-## 2.0.1
-
-- renamed AddVersioning to AddVersionEndpoint
-
-## 2.0.2
-
-- fixed version endpoint error
-
-## 2.0.3
-
-- fixed namespace in WebAppBuilderExtensions
+- added ability to disable the global exception filter
 
 ## 3.0.2
 
@@ -28,6 +14,24 @@
 - added ModelBuilder for comma serperated arrays
 - changed exception logging to log exception ToString() by default, exception object logged optionally using settings
 
-## 3.0.3
+## 2.0.3
 
-- added ability to disable the global exception filter
+- fixed namespace in WebAppBuilderExtensions
+
+## 2.0.2
+
+- fixed version endpoint error
+
+## 2.0.1
+
+- renamed AddVersioning to AddVersionEndpoint
+
+## 2.0.0
+
+- Exception handling
+- ValidateModelState
+- Version endpoint
+
+## 1.0.0
+
+- initial version
