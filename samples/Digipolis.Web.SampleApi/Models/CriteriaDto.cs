@@ -1,5 +1,5 @@
 ﻿using Digipolis.Web.Api;
-using Digipolis.Web.UnitTests.Modelbinders;
+using Digipolis.Web.Modelbinders;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

@@ -1,4 +1,5 @@
-﻿using Digipolis.Web.UnitTests.Utilities;
+﻿using Digipolis.Web.Modelbinders;
+using Digipolis.Web.UnitTests.Utilities;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using System;
@@ -43,6 +44,14 @@ namespace Digipolis.Web.UnitTests.Modelbinders
             var provider = new CommaDelimitedArrayModelBinderProvider();
 
             Assert.True(provider.TypeIsSupported(typeof(DateTime[]).GetTypeInfo()));
+        }
+
+        [Fact]
+        public void ShouldSupportArrayOfString()
+        {
+            var provider = new CommaDelimitedArrayModelBinderProvider();
+
+            Assert.True(provider.TypeIsSupported(typeof(string[]).GetTypeInfo()));
         }
 
         [Fact]

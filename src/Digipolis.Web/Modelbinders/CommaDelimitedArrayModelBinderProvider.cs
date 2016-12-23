@@ -7,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Digipolis.Web.UnitTests.Modelbinders
+namespace Digipolis.Web.Modelbinders
 {
     public class CommaDelimitedArrayModelBinderProvider : IModelBinderProvider
     {
@@ -31,11 +31,13 @@ namespace Digipolis.Web.UnitTests.Modelbinders
 
         internal bool TypeIsSupported(TypeInfo modelTypeInfo)
         {
-            return (modelTypeInfo.IsArray && modelTypeInfo.GetElementType().GetTypeInfo().IsValueType)
+            bool supported = (modelTypeInfo.IsArray && (modelTypeInfo.GetElementType().GetTypeInfo().IsValueType || modelTypeInfo.GetElementType() == typeof(string)))
                 || (modelTypeInfo.GetInterfaces()
                     .Any(ti => ti.IsConstructedGenericType
                      && ti.GetGenericTypeDefinition() == typeof(IEnumerable<>)
                      && (ti.GenericTypeArguments[0].GetTypeInfo().IsValueType || ti.GenericTypeArguments[0] == typeof(string))));
+
+            return supported;
         }
     }
 }
