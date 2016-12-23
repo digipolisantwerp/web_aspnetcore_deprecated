@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace Digipolis.Web.UnitTests.Modelbinders
+namespace Digipolis.Web.Modelbinders
 {
     public class CommaDelimitedArrayModelBinder : IModelBinder
     {
@@ -33,11 +33,9 @@ namespace Digipolis.Web.UnitTests.Modelbinders
 
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    var elementType = bindingContext.ModelType.GetTypeInfo().GetElementType();
-
                     try
                     {
-                        var result = ParseArray(value, elementType);
+                        var result = ParseArray(value, bindingContext.ModelType);
 
                         bindingContext.Model = result;
                         bindingContext.Result = ModelBindingResult.Success(result);
