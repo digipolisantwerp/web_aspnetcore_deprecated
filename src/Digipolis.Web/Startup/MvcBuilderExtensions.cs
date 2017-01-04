@@ -99,7 +99,7 @@ namespace Digipolis.Web
                 x.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 x.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 x.SerializerSettings.Converters.Add(new TimeSpanConverter());
-                x.SerializerSettings.Converters.Add(new PageResultConverter());
+                x.SerializerSettings.Converters.Add(new PagedResultConverter());
                 x.SerializerSettings.Converters.Add(new GuidConverter());
                 x.SerializerSettings.Formatting = Formatting.None;
             });

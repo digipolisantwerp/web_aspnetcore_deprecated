@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Digipolis.Web.Api.JsonConverters
 {
-    internal class GuidConverter : JsonConverter
+    public class GuidConverter : JsonConverter
     {
         public override bool CanRead => true;
         public override bool CanWrite => true;

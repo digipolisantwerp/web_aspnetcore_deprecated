@@ -1,5 +1,10 @@
 # Web Toolbox
 
+## 3.0.5
+
+- Changed JsonConverters from internal to public
+- Added deserialization support to PagedResultConverter
+
 ## 3.0.4
 
 - fix for CommaDelimitedModelBinder
