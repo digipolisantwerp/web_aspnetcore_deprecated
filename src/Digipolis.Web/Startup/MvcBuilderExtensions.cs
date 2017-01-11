@@ -20,6 +20,7 @@ using System.Linq;
 using Digipolis.Web.Api.Tools;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Digipolis.Web.Api.Models;
+using Digipolis.Web.Modelbinders;
 
 namespace Digipolis.Web
 {
@@ -84,6 +85,8 @@ namespace Digipolis.Web
             {
                 options.Filters.Insert(0, new ConsumesAttribute("application/json"));
                 options.Filters.Insert(1, new ProducesAttribute("application/json"));
+
+                options.ModelBinderProviders.Insert(0, new CommaDelimitedArrayModelBinderProvider());
 
                 JsonOutputFormatter jsonFormatter = 
                     options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
