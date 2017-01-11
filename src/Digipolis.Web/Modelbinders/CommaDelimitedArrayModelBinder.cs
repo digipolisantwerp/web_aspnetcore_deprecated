@@ -35,11 +35,6 @@ namespace Digipolis.Web.Modelbinders
                 {
                     try
                     {
-                        if (!value.Contains(","))
-                        {
-
-                        }
-
                         var result = ParseArray(value, bindingContext.ModelType);
 
                         bindingContext.Model = result;
