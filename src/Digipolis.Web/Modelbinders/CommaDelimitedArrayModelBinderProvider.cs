@@ -31,11 +31,10 @@ namespace Digipolis.Web.Modelbinders
 
         internal bool TypeIsSupported(TypeInfo modelTypeInfo)
         {
-            bool supported = (modelTypeInfo.IsArray && (modelTypeInfo.GetElementType().GetTypeInfo().IsValueType || modelTypeInfo.GetElementType() == typeof(string)))
-                || (modelTypeInfo.GetInterfaces()
-                    .Any(ti => ti.IsConstructedGenericType
-                     && ti.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                     && (ti.GenericTypeArguments[0].GetTypeInfo().IsValueType || ti.GenericTypeArguments[0] == typeof(string))));
+            bool supported = modelTypeInfo.IsArray
+                && (modelTypeInfo.GetElementType().GetTypeInfo().IsValueType
+                    || (modelTypeInfo.GetInterfaces().Any(ti => ti.IsConstructedGenericType && ti.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                        && (ti.GenericTypeArguments[0].GetTypeInfo().IsValueType || ti.GenericTypeArguments[0] == typeof(string)))));
 
             return supported;
         }
