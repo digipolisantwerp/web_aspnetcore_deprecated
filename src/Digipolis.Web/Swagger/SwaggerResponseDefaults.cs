@@ -103,7 +103,7 @@ namespace Digipolis.Web.Swagger
                 return;
             }
 
-            if (!context.ApiDescription.ParameterDescriptions.Where(x => !x.Name.Equals("apiVersion") && x.Source.Id.Equals("Path")).Any())
+            if (!context.ApiDescription.ParameterDescriptions.Any(x => !x.Name.Equals("apiVersion") && x.Source.Id.Equals("Path")))
                 return;
 
             operation.Responses.Add("404", new Response

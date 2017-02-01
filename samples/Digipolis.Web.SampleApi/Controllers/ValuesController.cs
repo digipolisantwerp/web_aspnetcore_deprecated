@@ -54,6 +54,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         [ProducesResponseType(typeof(ValueDto), 401)]
         [AllowAnonymous]
         [Versions(Versions.V1, Versions.V2)]
+        [Produces("application/json", "text/csv")]
         public IActionResult Get(int id)
         {
             var value = _valueLogic.GetById(id);

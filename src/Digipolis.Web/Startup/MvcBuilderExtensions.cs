@@ -88,12 +88,9 @@ namespace Digipolis.Web
 
                 options.ModelBinderProviders.Insert(0, new CommaDelimitedArrayModelBinderProvider());
 
-                JsonOutputFormatter jsonFormatter = 
-                    options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
+                JsonOutputFormatter jsonFormatter = options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
 
-                if (jsonFormatter != null)
-                    jsonFormatter.SupportedMediaTypes.Add("application/hal+json");
-
+                jsonFormatter?.SupportedMediaTypes.Add("application/hal+json");
             });
 
             builder.AddJsonOptions(x =>
