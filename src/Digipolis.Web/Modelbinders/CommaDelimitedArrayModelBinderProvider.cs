@@ -19,8 +19,8 @@ namespace Digipolis.Web.Modelbinders
                 throw new ArgumentNullException(nameof(context));
             }
 
-            var modelTypeInfo = context.Metadata.ModelType.GetTypeInfo();
-            if (TypeIsSupported(modelTypeInfo))
+            var modelType = context.Metadata.ModelType;
+            if (TypeIsSupported(modelType))
             {
                 var binderType = typeof(CommaDelimitedArrayModelBinder);
                 return (IModelBinder)Activator.CreateInstance(binderType);
@@ -29,14 +29,10 @@ namespace Digipolis.Web.Modelbinders
             return null;
         }
 
-        internal bool TypeIsSupported(TypeInfo modelTypeInfo)
+        internal bool TypeIsSupported(Type modelType)
         {
-            bool supported = modelTypeInfo.IsArray
-                && (modelTypeInfo.GetElementType().GetTypeInfo().IsValueType
-                    || (modelTypeInfo.GetInterfaces().Any(ti => ti.IsConstructedGenericType && ti.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                        && (ti.GenericTypeArguments[0].GetTypeInfo().IsValueType || ti.GenericTypeArguments[0] == typeof(string)))));
-
-            return supported;
+            var type = modelType.GetElementType() ?? modelType.GetGenericArguments().FirstOrDefault();
+            return type != null && (type.GetTypeInfo().IsValueType || type == typeof(string));
         }
     }
 }
