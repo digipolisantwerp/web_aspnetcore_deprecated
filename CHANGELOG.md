@@ -1,5 +1,12 @@
 # Web Toolbox
 
+## 3.0.6
+
+- Register CommaDelimitedModelBinder automatically
+- Bugfix: CommaDelimitedModelBinder supports enumerations and array but fixed string perceived as array. preventing string from being sent to the api
+- Added proper consumes/produces types in swagger from de consumes/produces attributes on actions
+- Bugfix: Swagger configuration is passed again so additional options are again set during start up
+
 ## 3.0.5
 
 - Changed JsonConverters from internal to public
