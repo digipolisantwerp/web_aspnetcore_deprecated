@@ -57,6 +57,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         [ProducesResponseType(typeof(ValueDto), 401)]
         [AllowAnonymous]
         [Versions(Versions.V1, Versions.V2)]
+        [Produces("application/json", "text/csv")]
         public IActionResult Get(int id)
         {
             var value = _valueLogic.GetById(id);
@@ -106,6 +107,19 @@ namespace Digipolis.Web.SampleApi.Controllers
         {
             _valueLogic.Delete(id);
             return NoContent();
+        }
+
+        /// <summary>
+        /// Thorws an exception
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("exception")]
+        [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
+        public IActionResult ThrowException()
+        {
+            throw new NotFoundException();
+            return Ok();
         }
     }
 }

@@ -20,6 +20,7 @@ using System.Linq;
 using Digipolis.Web.Api.Tools;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Digipolis.Web.Api.Models;
+using Digipolis.Web.Modelbinders;
 
 namespace Digipolis.Web
 {
@@ -62,7 +63,7 @@ namespace Digipolis.Web
 
             #region Configuration from options
 
-            if (!apiOptions.DisableGlobalErrorHandling)
+            if (!apiOptions.DisableGlobalErrorHandling && !apiOptions.DisableGlobalExceptionFilter)
             {
                 builder.AddMvcOptions(options =>
                 {
@@ -85,12 +86,11 @@ namespace Digipolis.Web
                 options.Filters.Insert(0, new ConsumesAttribute("application/json"));
                 options.Filters.Insert(1, new ProducesAttribute("application/json"));
 
-                JsonOutputFormatter jsonFormatter = 
-                    options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
+                options.ModelBinderProviders.Insert(0, new CommaDelimitedArrayModelBinderProvider());
 
-                if (jsonFormatter != null)
-                    jsonFormatter.SupportedMediaTypes.Add("application/hal+json");
+                JsonOutputFormatter jsonFormatter = options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
 
+                jsonFormatter?.SupportedMediaTypes.Add("application/hal+json");
             });
 
             builder.AddJsonOptions(x =>
@@ -99,7 +99,7 @@ namespace Digipolis.Web
                 x.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
                 x.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                 x.SerializerSettings.Converters.Add(new TimeSpanConverter());
-                x.SerializerSettings.Converters.Add(new PageResultConverter());
+                x.SerializerSettings.Converters.Add(new PagedResultConverter());
                 x.SerializerSettings.Converters.Add(new GuidConverter());
                 x.SerializerSettings.Formatting = Formatting.None;
             });

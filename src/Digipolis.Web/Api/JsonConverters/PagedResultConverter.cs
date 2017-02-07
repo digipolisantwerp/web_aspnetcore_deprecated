@@ -5,9 +5,9 @@ using Newtonsoft.Json;
 
 namespace Digipolis.Web.Api.JsonConverters
 {
-    internal class PageResultConverter : JsonConverter
+    public class PagedResultConverter : JsonConverter
     {
-        public override bool CanRead { get; } = false;
+        public override bool CanRead { get; } = true;
 
         public override bool CanWrite { get; } = true;
 
@@ -52,7 +52,10 @@ namespace Digipolis.Web.Api.JsonConverters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            throw new NotImplementedException();
+            var type = objectType?.GetGenericArguments()?[0];
+            var generic = typeof(DeserializationPagedResult<>).MakeGenericType(type);
+            var deserialized = serializer.Deserialize(reader, generic);
+            return deserialized;
         }
 
         public override bool CanConvert(Type objectType)

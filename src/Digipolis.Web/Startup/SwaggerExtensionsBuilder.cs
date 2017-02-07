@@ -23,7 +23,7 @@ namespace Digipolis.Web
         public static IServiceCollection ConfigureSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) 
             where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefaults>, new()
         {
-            return services.ConfigureSwaggerGen<TSwaggerSettings, SwaggerResponseDefaults>();
+            return services.ConfigureSwaggerGen<TSwaggerSettings, SwaggerResponseDefaults>(setupAction);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Digipolis.Web
         public static void AddSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) 
             where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefaults>, new()
         {
-            services.AddSwaggerGen<TSwaggerSettings, SwaggerResponseDefaults>();
+            services.AddSwaggerGen<TSwaggerSettings, SwaggerResponseDefaults>(setupAction);
         }
 
         /// <summary>

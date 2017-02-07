@@ -12,6 +12,7 @@ namespace Digipolis.Web.Swagger
             var xmlPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, PlatformServices.Default.Application.ApplicationName + ".xml");
             if (File.Exists(xmlPath)) options.IncludeXmlComments(xmlPath);
             options.OperationFilter<AddFileUploadParams>();
+            options.OperationFilter<AddConsumeProducesValues>();
             options.DocumentFilter<SetVersionInPaths>();
             options.SchemaFilter<PagedResultSchemaFilter>();
             options.DocumentFilter<EndPointPathsAndParamsToLower>();

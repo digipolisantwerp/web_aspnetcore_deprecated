@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Xunit;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Digipolis.Web.Api.Filters;
 
 namespace Digipolis.Web.UnitTests.Startup
 {
@@ -83,6 +84,64 @@ namespace Digipolis.Web.UnitTests.Startup
             var jsonOutputFormatter = mvcOptions.OutputFormatters.OfType<JsonOutputFormatter>().First();
 
             Assert.True(jsonOutputFormatter.SupportedMediaTypes.Any(x => x == "application/hal+json"));
+        }
+
+
+        [Fact]
+        private void GlobalExceptionFilterIsAdded()
+        {
+            var services = new ServiceCollection();
+            var manager = new ApplicationPartManager();
+            var builder = new MvcBuilder(services, manager);
+
+            services.AddOptions();
+            services.AddSingleton(typeof(ObjectPoolProvider), new DefaultObjectPoolProvider());
+            services
+                .AddLogging()
+                .AddMvcCore()
+                .AddJsonFormatters();
+
+            builder.AddApiExtensions(null, options => { });
+
+            var sp = services.BuildServiceProvider();
+
+            MvcOptions mvcOptions = sp.GetService<IOptions<MvcOptions>>().Value;
+
+            var filter = mvcOptions.Filters.OfType<TypeFilterAttribute>()
+                                           .Where(f => f.ImplementationType == typeof(GlobalExceptionFilter))
+                                           .FirstOrDefault();
+
+            Assert.NotNull(filter);
+        }
+
+        [Fact]
+        private void DisableGlobalExceptionFilter()
+        {
+            var services = new ServiceCollection();
+            var manager = new ApplicationPartManager();
+            var builder = new MvcBuilder(services, manager);
+
+            services.AddOptions();
+            services.AddSingleton(typeof(ObjectPoolProvider), new DefaultObjectPoolProvider());
+            services
+                .AddLogging()
+                .AddMvcCore()
+                .AddJsonFormatters();
+
+            builder.AddApiExtensions(null, options =>
+            {
+                options.DisableGlobalExceptionFilter = true;
+            });
+
+            var sp = services.BuildServiceProvider();
+
+            MvcOptions mvcOptions = sp.GetService<IOptions<MvcOptions>>().Value;
+
+            var filter = mvcOptions.Filters.OfType< TypeFilterAttribute>()
+                                           .Where(f => f.ImplementationType == typeof(GlobalExceptionFilter))
+                                           .FirstOrDefault();
+
+            Assert.Null(filter);
         }
 
     }

@@ -6,14 +6,14 @@ namespace Digipolis.Web.UnitTests.Utilities
 {
     public class TestLogger<T> : ILogger<T>
     {
-        public List<string> LoggedMessages { get; set; }
+        public List<LogMessage> LoggedMessages { get; set; }
 
         public TestLogger()
         {
-            LoggedMessages = new List<string>();
+            LoggedMessages = new List<LogMessage>();
         }
 
-        public TestLogger(List<string> loggedMessages)
+        public TestLogger(List<LogMessage> loggedMessages)
         {
             LoggedMessages = loggedMessages;
         }
@@ -30,12 +30,12 @@ namespace Digipolis.Web.UnitTests.Utilities
 
         public void Log(LogLevel logLevel, int eventId, object state, Exception exception, Func<object, Exception, string> formatter)
         {
-            LoggedMessages.Add($"{logLevel}, {state}");
+            LoggedMessages.Add(new LogMessage { Level = logLevel, Message = state.ToString() });
         }
 
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
-            LoggedMessages.Add($"{logLevel}, {state}");
+            LoggedMessages.Add(new LogMessage { Level = logLevel, Message = state.ToString() });
         }
 
         public static TestLogger<T> CreateLogger()
@@ -43,7 +43,7 @@ namespace Digipolis.Web.UnitTests.Utilities
             return new TestLogger<T>();
         }
 
-        public static TestLogger<T> CreateLogger(List<string> loggedMessages)
+        public static TestLogger<T> CreateLogger(List<LogMessage> loggedMessages)
         {
             return new TestLogger<T>(loggedMessages);
         }
@@ -52,5 +52,11 @@ namespace Digipolis.Web.UnitTests.Utilities
         {
             throw new NotImplementedException();
         }
+    }
+
+    public class LogMessage
+    {
+        public LogLevel Level { get; set; }
+        public string Message { get; set; }
     }
 }

@@ -22,6 +22,7 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
   - [ValidateModelState](#validatemodelstate)
   - [Endpoint versioning](#endpoint-versioning)
 - [Application version endpoint](#application-version-endpoint)
+- [Modelbinders](#modelbinders)
 - [MVC Extensions](#mvc-extensions)
 - [Swagger extensions](#swagger-extensions)
   - [Formatting Swagger responses](#formatting-swagger-responses)
@@ -30,8 +31,9 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
   - [Mapping exceptions to responses](#mapping-exceptions-to-responses)
   - [Usage](#usage)
   - [Logging](#logging)
-  - [Using the API extensions](#using-the-api-extensions)
-  - [Paging](#paging)
+  - [Disabling the global exception filter](#disabling-the-global-exception-filter)
+- [Using the API extensions](#using-the-api-extensions)
+- [Paging](#paging)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -44,11 +46,13 @@ To add the toolbox to a project, you add the package to the project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "3.0.1"
+    "Digipolis.Web":  "3.0.6"
  }
 ``` 
 
 ALWAYS check the latest version [here](https://github.com/digipolisantwerp/web_aspnetcore/blob/master/src/Digipolis.Web/project.json) before adding the above line !
+
+Make sure you have our Nuget feed configured (https://www.myget.org/F/digipolisantwerp/api/v3/index.json).
 
 In Visual Studio you can also use the NuGet Package Manager to do this.      
     
@@ -322,6 +326,8 @@ The logged message is a json with following structure:
 	"Error" : {
 		//The Error object serialized as Json
 	},
+    "ExceptionInfo" : "Digipolis.Errors.Exceptions.NotFoundException: Not found.
+        at Digipolis.Web.SampleApi.Controllers.ValuesController.ThrowException() ...",
 	"Exception" : {
 		//The exception object serialized as Json
 	}
@@ -329,8 +335,17 @@ The logged message is a json with following structure:
 ```
 
 For exceptions that do not derive from **BaseException** the **Error** property will be empty. 
+The **ExceptionInfo** contains the result of the exception ToString() method.
+The **Exception** property of the logged message is not filled by default. If you also want to log the exception object you can set the **LogExceptionObject** property to true on the **ApiExtensionOptions**.
 
-### Using the API extensions
+### Disabling the global exception filter
+
+The exception handling makes use of middleware that handles exceptions and an MVC exception filter.
+The Mvc exception filter handles exceptions that occurs in the Mvc context. The middleware handles all other exceptions that are thrown in the pipeline.
+In some case you might want to disable the Mvc exception filter but want to keep the exception middleware to handle exceptions.
+You can set the **DisableGlobalExceptionFilter** property on the **ApiExtensionOptions** to disable the Mvc exception filter.
+
+## Using the API extensions
 
 To enable the api extensions defined in this toolbox, you need to enable them as high as possible in the pipeline. 
 Only when enabling **Cors** via the **app.UseCors** method, that method must be placed before the **UseApiExtensions** method.
@@ -340,7 +355,7 @@ Call the **UseApiExtensions** method on the **IApplicationBuilder** object in th
     app.UseApiExtensions();
 ``` 
 
-### Paging
+## Paging
 Paging has been made easy by using following code example
 
 On the controller endpoint:

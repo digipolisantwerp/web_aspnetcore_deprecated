@@ -19,7 +19,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var provider = new CommaDelimitedArrayModelBinderProvider();
 
-            Assert.True(provider.TypeIsSupported(typeof(List<int>).GetTypeInfo()));
+            Assert.True(provider.TypeIsSupported(typeof(List<int>)));
         }
 
         [Fact]
@@ -27,7 +27,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var provider = new CommaDelimitedArrayModelBinderProvider();
 
-            Assert.True(provider.TypeIsSupported(typeof(List<string>).GetTypeInfo()));
+            Assert.True(provider.TypeIsSupported(typeof(List<string>)));
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var provider = new CommaDelimitedArrayModelBinderProvider();
 
-            Assert.False(provider.TypeIsSupported(typeof(List<object>).GetTypeInfo()));
+            Assert.False(provider.TypeIsSupported(typeof(List<object>)));
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var provider = new CommaDelimitedArrayModelBinderProvider();
 
-            Assert.True(provider.TypeIsSupported(typeof(DateTime[]).GetTypeInfo()));
+            Assert.True(provider.TypeIsSupported(typeof(DateTime[])));
         }
 
         [Fact]
@@ -51,7 +51,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var provider = new CommaDelimitedArrayModelBinderProvider();
 
-            Assert.True(provider.TypeIsSupported(typeof(string[]).GetTypeInfo()));
+            Assert.True(provider.TypeIsSupported(typeof(string[])));
         }
 
         [Fact]
@@ -59,7 +59,15 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var provider = new CommaDelimitedArrayModelBinderProvider();
 
-            Assert.False(provider.TypeIsSupported(typeof(object).GetTypeInfo()));
+            Assert.False(provider.TypeIsSupported(typeof(object)));
+        }
+
+        [Fact]
+        public void ShouldNotSupportString()
+        {
+            var provider = new CommaDelimitedArrayModelBinderProvider();
+
+            Assert.False(provider.TypeIsSupported(typeof(string)));
         }
     }
 }

@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using Moq;
 using Moq.Protected;
+using Microsoft.Extensions.Logging;
 
 namespace Digipolis.Web.UnitTests.Utilities
 {
@@ -83,9 +84,11 @@ namespace Digipolis.Web.UnitTests.Utilities
             return aec.Object;
         }
 
-        public static ExceptionHandler ExceptionHandler(Action<Mock<IOptions<MvcJsonOptions>>> mvcOptions = null, Action<Mock<IOptions<ApiExtensionOptions>>> apiOptions = null)
+        public static ExceptionHandler ExceptionHandler(Action<Mock<IOptions<MvcJsonOptions>>> mvcOptions = null, Action<Mock<IOptions<ApiExtensionOptions>>> apiOptions = null, ILogger<ExceptionHandler> logger = null)
         {
-            var logger = TestLogger<ExceptionHandler>.CreateLogger();
+            if (logger == null)
+                logger = TestLogger<ExceptionHandler>.CreateLogger();
+
             var mvcjsonOptions = new Mock<IOptions<MvcJsonOptions>>();
             mvcOptions?.Invoke(mvcjsonOptions);
             var apiExtOptions = new Mock<IOptions<ApiExtensionOptions>>();

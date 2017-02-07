@@ -34,7 +34,9 @@ namespace Digipolis.Web.Swagger
             var paramsToRemove = new List<IParameter>();
             foreach (var param in operation.Parameters)
             {
-                paramsToRemove.AddRange(from fileParamName in allFileParamNames where param.Name.StartsWith(fileParamName + ".") select param);
+                paramsToRemove.AddRange(from fileParamName in allFileParamNames
+                    where param.Name.StartsWith(fileParamName + ".")
+                    select param);
             }
             paramsToRemove.ForEach(x => operation.Parameters.Remove(x));
             foreach (var paramName in allFileParamNames)
@@ -48,12 +50,14 @@ namespace Digipolis.Web.Swagger
                 };
                 operation.Parameters.Add(fileParam);
             }
-            foreach (IParameter param in operation.Parameters.Where(x => x.In.Equals("form", StringComparison.CurrentCultureIgnoreCase)))
+            foreach (
+                IParameter param in
+                operation.Parameters.Where(x => x.In.Equals("form", StringComparison.CurrentCultureIgnoreCase)))
             {
                 param.In = "formData";
             }
 
-            operation.Consumes = new List<string>() { "multipart/form-data" };
+            operation.Consumes = new List<string>() {"multipart/form-data"};
         }
     }
 }
