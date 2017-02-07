@@ -26,3 +26,8 @@
 
 - added support for application/hal+json MIME-type
 - added ModelBuilder for comma serperated arrays
+
+## 3.0.6
+
+- HAL Url generation is now based on Request host information.
+- Added support for X-Forwarded-For, X-Forwarded-Host and X-Forwarded-Proto headers.
