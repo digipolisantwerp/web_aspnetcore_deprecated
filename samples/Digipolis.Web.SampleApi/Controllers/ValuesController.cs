@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Digipolis.Web.Api.Models;
 using Digipolis.Web.Swagger;
+using Microsoft.Extensions.Logging;
 
 namespace Digipolis.Web.SampleApi.Controllers
 {
@@ -19,10 +20,12 @@ namespace Digipolis.Web.SampleApi.Controllers
     public class ValuesController : Controller
     {
         private readonly IValueLogic _valueLogic;
+        private readonly ILogger<ValuesController> _logger;
 
-        public ValuesController(IValueLogic valueLogic)
+        public ValuesController(IValueLogic valueLogic, ILogger<ValuesController> logger)
         {
             _valueLogic = valueLogic;
+            _logger = logger;
         }
 
         /// <summary>

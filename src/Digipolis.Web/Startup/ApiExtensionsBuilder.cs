@@ -46,6 +46,12 @@ namespace Digipolis.Web
             PageOptionsExtensions.Configure(httpContextAccessor);
 
 
+            app.UseForwardedHeaders(new ForwardedHeadersOptions()
+            {
+                RequireHeaderSymmetry = true,
+                ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
+            });
+
             //if (httpContextAccessor != null) LinkProvider.Configure(httpContextAccessor,settings?.Value?.BaseUrl);
         }
     }

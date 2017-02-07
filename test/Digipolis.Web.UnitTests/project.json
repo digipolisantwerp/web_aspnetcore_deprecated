@@ -22,7 +22,7 @@
         "System.Diagnostics.TraceSource": "4.0.0-*",
         "Digipolis.Web": "*",
         "Microsoft.AspNetCore.Diagnostics": "1.0.0",
-        "Microsoft.Extensions.Options": "1.0.0",
+        "Microsoft.Extensions.Options": "1.0.1", 
         "Microsoft.Extensions.DependencyInjection": "1.0.0",
         "Microsoft.AspNetCore.Mvc.Core": "1.0.0"
     },
