@@ -1,5 +1,10 @@
 # Web Toolbox
 
+## 3.0.7
+
+- HAL Url generation is now based on Request host information.
+- Added support for X-Forwarded-For, X-Forwarded-Host and X-Forwarded-Proto headers.
+
 ## 3.0.6
 
 - Register CommaDelimitedModelBinder automatically
@@ -46,4 +51,5 @@
 
 ## 1.0.0
 
-- initial version
+- added support for application/hal+json MIME-type
+- added ModelBuilder for comma serperated arrays
