@@ -1,5 +1,5 @@
 {
-  "version": "3.0.6-*",
+  "version": "3.0.7-*",
   "description": "Web related tooling.",
   "authors": [ "digipolis.be" ],
   "packOptions": {
@@ -12,7 +12,7 @@
     "licenseUrl": "http://github.com/digipolisantwerp/web_aspnetcore/LICENSE.txt"
   },
   "dependencies": {
-    "Digipolis.Errors": "3.0.0",
+    "Digipolis.Errors": "4.0.0",
     "Microsoft.AspNetCore.Diagnostics": "1.0.0",
     "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.0",
     "Microsoft.AspNetCore.Http.Abstractions": "1.0.1.0",
