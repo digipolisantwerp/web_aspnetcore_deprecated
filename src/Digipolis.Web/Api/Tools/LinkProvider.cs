@@ -55,8 +55,15 @@ namespace Digipolis.Web.Api.Tools
         {
             var result = GetAbsoluteUrlBuilder();
 
-            result.Path = relativeUrl.Substring(0, relativeUrl.IndexOf('?'));
-            result.Query = relativeUrl.Substring(relativeUrl.IndexOf('?'), relativeUrl.Length - relativeUrl.IndexOf('?'));
+            var indexQ = relativeUrl.IndexOf('?');
+
+            if (indexQ > 0)
+            {
+                result.Path = relativeUrl.Substring(0, indexQ);
+                result.Query = relativeUrl.Substring(indexQ, relativeUrl.Length - indexQ);
+            }
+            else
+                result.Path = relativeUrl;
 
             return result;
         }
