@@ -25,22 +25,19 @@ namespace Digipolis.Web.Api.Tools
 
         public string AbsoluteAction(string actionName, string controllerName, object routeValues = null)
         {
-            var relativeUrl = _urlHelper.Action(actionName, controllerName, routeValues);
-            var builder = GetAbsoluteUrlBuilder();
+            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
 
-            builder.Path = relativeUrl;
+            var relativeUrl =  _urlHelper.Action(actionName, controllerName, routeValues);
 
-            return builder.Uri.AbsoluteUri;
+            return GetFullUrlBuilder(relativeUrl).ToString();
+
         }
 
         public string AbsoluteRoute(string routeName, object routeValues = null)
         {
             var relativeUrl = _urlHelper.RouteUrl(routeName, routeValues);
-            var builder = GetAbsoluteUrlBuilder();
 
-            builder.Path = relativeUrl;
-
-            return relativeUrl;
+            return GetFullUrlBuilder(relativeUrl).ToString();
         }
 
         public UriBuilder GetAbsoluteUrlBuilder()
@@ -52,6 +49,23 @@ namespace Digipolis.Web.Api.Tools
                 builder.Port = request.Host.Port.Value;
 
             return builder;
+        }
+
+        public UriBuilder GetFullUrlBuilder(string relativeUrl)
+        {
+            var result = GetAbsoluteUrlBuilder();
+
+            var indexQ = relativeUrl.IndexOf('?');
+
+            if (indexQ > 0)
+            {
+                result.Path = relativeUrl.Substring(0, indexQ);
+                result.Query = relativeUrl.Substring(indexQ, relativeUrl.Length - indexQ);
+            }
+            else
+                result.Path = relativeUrl;
+
+            return result;
         }
     }
 }
