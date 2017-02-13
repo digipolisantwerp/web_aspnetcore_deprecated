@@ -1,5 +1,8 @@
 # Web Toolbox
 
+## 4.0.1
+
+- Bugfix : HAL querystring "?" was encoded
 
 ## 4.0.0
 
