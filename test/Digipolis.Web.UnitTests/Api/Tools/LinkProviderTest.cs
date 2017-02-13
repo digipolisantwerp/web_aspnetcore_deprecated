@@ -42,6 +42,53 @@ namespace Digipolis.Web.UnitTests.Api.Tools
         }
 
 
+        [Fact]
+        public void GetFullUrlBuilder_BuildsFullUrlWithQueryString()
+        {
+            var actionContext = MockHelpers.ActionContext();
+
+            var actionContextAccessorMock = new Mock<IActionContextAccessor>();
+            actionContextAccessorMock.SetupGet(x => x.ActionContext).Returns(actionContext);
+
+            var host = new HostString("test.be", 99);
+
+            Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Host).Returns(host);
+            Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Scheme).Returns("xyz");
+
+
+            var urlHelper = new Mock<IUrlHelper>().Object;
+
+            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper, new TestApiExtensionOptions(new Web.Api.ApiExtensionOptions()));
+            var fullUrl = linkProvider.GetFullUrlBuilder("/v1/test?q=99&q2=test");
+
+            Assert.Equal("xyz://test.be:99/v1/test?q=99&q2=test", fullUrl.ToString());
+
+        }
+
+        [Fact]
+        public void GetFullUrlBuilder_BuildsFullUrlWithoutQueryString()
+        {
+            var actionContext = MockHelpers.ActionContext();
+
+            var actionContextAccessorMock = new Mock<IActionContextAccessor>();
+            actionContextAccessorMock.SetupGet(x => x.ActionContext).Returns(actionContext);
+
+            var host = new HostString("test.be", 99);
+
+            Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Host).Returns(host);
+            Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Scheme).Returns("xyz");
+
+
+            var urlHelper = new Mock<IUrlHelper>().Object;
+
+            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper, new TestApiExtensionOptions(new Web.Api.ApiExtensionOptions()));
+            var fullUrl = linkProvider.GetFullUrlBuilder("/v1/test");
+
+            Assert.Equal("xyz://test.be:99/v1/test", fullUrl.ToString());
+
+        }
+
+
 
 
 
