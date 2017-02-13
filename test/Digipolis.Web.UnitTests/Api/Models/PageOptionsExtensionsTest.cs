@@ -19,14 +19,6 @@ namespace Digipolis.Web.UnitTests.Api.Models
     public class PageOptionsExtensionsTest
     {
         [Fact]
-        public void ToPagedResultWithoutCallingConfigureThrowsException()
-        {
-            var pageOptions = new PageOptions();
-
-            Assert.Throws<TypeInitializationException>(() => pageOptions.ToPagedResult(new List<Object>(), 0, "test"));
-        }
-
-        [Fact]
         public void ToPagedResultConfiguredReturnsAbsolutePath()
         {
             var accessor = GetActionContextAccessorWithLinkProvider();
