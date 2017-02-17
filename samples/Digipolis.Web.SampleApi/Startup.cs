@@ -39,11 +39,7 @@ namespace Digipolis.Web.SampleApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc(
-                (o) => 
-                {
-                    o.ModelBinderProviders.Insert(0,new CommaDelimitedArrayModelBinderProvider());
-                })
+            services.AddMvc()
                 .AddVersionEndpoint()
                 .AddApiExtensions(Configuration.GetSection("ApiExtensions"), x =>
                 {
