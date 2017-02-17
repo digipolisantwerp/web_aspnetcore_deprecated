@@ -86,7 +86,7 @@ namespace Digipolis.Web
                 options.Filters.Insert(0, new ConsumesAttribute("application/json"));
                 options.Filters.Insert(1, new ProducesAttribute("application/json"));
 
-               // options.ModelBinderProviders.Insert(0, new CommaDelimitedArrayModelBinderProvider());
+                options.ModelBinderProviders.Insert(0, new CommaDelimitedArrayModelBinderProvider());
 
                 JsonOutputFormatter jsonFormatter = options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
 
