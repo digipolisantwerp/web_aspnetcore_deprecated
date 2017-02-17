@@ -1,4 +1,7 @@
 # Web Toolbox
+## 4.0.2
+
+- Bugfix : deserialization of nullable types failed.
 
 ## 4.0.1
 
