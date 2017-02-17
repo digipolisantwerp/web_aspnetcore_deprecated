@@ -69,5 +69,16 @@ namespace Digipolis.Web.UnitTests.Modelbinders
 
             Assert.False(provider.TypeIsSupported(typeof(string)));
         }
+
+        [Theory]
+        [InlineData(typeof(bool?))]
+        [InlineData(typeof(int?))]
+        [InlineData(typeof(DateTime?))]
+        public void ShouldNotSupportNullables(Type testtype)
+        {
+            var provider = new CommaDelimitedArrayModelBinderProvider();
+
+            Assert.False(provider.TypeIsSupported(testtype));
+        }
     }
 }
