@@ -1,4 +1,9 @@
 # Web Toolbox
+
+## 4.0.3
+
+- Bugfix : routevaluedictionary exception when executing concurrent calls
+
 ## 4.0.2
 
 - Bugfix : deserialization of nullable types failed.
