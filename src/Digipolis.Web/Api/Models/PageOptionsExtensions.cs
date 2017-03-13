@@ -14,17 +14,13 @@ namespace Digipolis.Web.Api.Models
     public static class PageOptionsExtensions
     {
         private static IActionContextAccessor _actionContextAccessor;
-        private static ILinkProvider _linkProvider;
 
         private static ILinkProvider GetLinkProvider()
         {
             if (_actionContextAccessor == null)
-                throw new TypeInitializationException(nameof(PageOptionsExtensions),new Exception(@"PageOptionsExtensions._actionContextAccessor was not initialized, did you Configure using ""UseApiExtensions"" in Startup?"));
+                throw new TypeInitializationException(nameof(PageOptionsExtensions), new Exception(@"PageOptionsExtensions._actionContextAccessor was not initialized, did you Configure using ""UseApiExtensions"" in Startup?"));
 
-            if (_linkProvider == null)
-                _linkProvider = (ILinkProvider)_actionContextAccessor.ActionContext.HttpContext.RequestServices.GetService(typeof(ILinkProvider));
-
-            return _linkProvider;
+            return (ILinkProvider)_actionContextAccessor.ActionContext.HttpContext.RequestServices.GetService(typeof(ILinkProvider));
         }
 
 
