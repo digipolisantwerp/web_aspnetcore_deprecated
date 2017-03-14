@@ -10,6 +10,8 @@ namespace Digipolis.Web.SampleApi.Models
 {
     public class CriteriaDto : PageSortOptions
     {
+
+        public bool? TestBool { get; set; }
        
         public string[] StringArray { get; set; }
 

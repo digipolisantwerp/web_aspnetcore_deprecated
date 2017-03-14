@@ -31,6 +31,9 @@ namespace Digipolis.Web.Modelbinders
 
         internal bool TypeIsSupported(Type modelType)
         {
+            if (modelType == typeof(string)) return false;
+            if (!modelType.IsArray && !(modelType.GetTypeInfo().IsGenericType && modelType.GetInterfaces().Any(i => i.GetTypeInfo().IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)))) return false;
+
             var type = modelType.GetElementType() ?? modelType.GetGenericArguments().FirstOrDefault();
             return type != null && (type.GetTypeInfo().IsValueType || type == typeof(string));
         }

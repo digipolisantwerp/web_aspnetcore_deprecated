@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 
 namespace Digipolis.Web.Api.Tools
 {
@@ -20,34 +21,51 @@ namespace Digipolis.Web.Api.Tools
 
             if (urlHelper == null) throw new ArgumentNullException(nameof(urlHelper));
             _urlHelper = urlHelper;
-
-            //if (options?.Value?.BaseUrl != null)
-            //    _baseUri = new Uri(options.Value.BaseUrl);
         }
 
         public string AbsoluteAction(string actionName, string controllerName, object routeValues = null)
         {
-            //string scheme = _httpContextAccessor.ActionContext.HttpContext.Request.Scheme;
-            //var helper = new Microsoft.AspNetCore.Mvc.Routing.UrlHelper(_httpContextAccessor.ActionContext);
-            var relativeUrl = _urlHelper.Action(actionName, controllerName, routeValues);
+            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
 
-            return relativeUrl;
+            var relativeUrl =  _urlHelper.Action(actionName, controllerName, routeValues);
 
-            //if (_baseUri == null) return relativeUrl;
+            return GetFullUrlBuilder(relativeUrl).ToString();
 
-            //Uri uri = new Uri(_baseUri, relativeUrl);
-            //return uri.AbsoluteUri;
         }
 
         public string AbsoluteRoute(string routeName, object routeValues = null)
         {
             var relativeUrl = _urlHelper.RouteUrl(routeName, routeValues);
-            return relativeUrl;
 
-            //if (_baseUri == null) return relativeUrl;
+            return GetFullUrlBuilder(relativeUrl).ToString();
+        }
 
-            //Uri uri = new Uri(_baseUri, relativeUrl);
-            //return uri.AbsoluteUri;
+        public UriBuilder GetAbsoluteUrlBuilder()
+        {
+            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
+            UriBuilder builder = new UriBuilder(request.Scheme, request.Host.Host);
+
+            if (request.Host.Port.HasValue)
+                builder.Port = request.Host.Port.Value;
+
+            return builder;
+        }
+
+        public UriBuilder GetFullUrlBuilder(string relativeUrl)
+        {
+            var result = GetAbsoluteUrlBuilder();
+
+            var indexQ = relativeUrl.IndexOf('?');
+
+            if (indexQ > 0)
+            {
+                result.Path = relativeUrl.Substring(0, indexQ);
+                result.Query = relativeUrl.Substring(indexQ, relativeUrl.Length - indexQ);
+            }
+            else
+                result.Path = relativeUrl;
+
+            return result;
         }
     }
 }
