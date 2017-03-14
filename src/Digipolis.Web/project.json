@@ -1,5 +1,5 @@
 {
-  "version": "3.0.6-*",
+  "version": "4.0.3-*",
   "description": "Web related tooling.",
   "authors": [ "digipolis.be" ],
   "packOptions": {
@@ -12,16 +12,17 @@
     "licenseUrl": "http://github.com/digipolisantwerp/web_aspnetcore/LICENSE.txt"
   },
   "dependencies": {
-    "Digipolis.Errors": "3.0.0",
-    "Microsoft.AspNetCore.Diagnostics": "1.1.0",
-    "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.1.0",
-    "Microsoft.AspNetCore.Http.Abstractions": "1.1.0",
-    "Microsoft.AspNetCore.Mvc.Core": "1.1.0",
-    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.1.0",
-    "Microsoft.Extensions.Logging": "1.1.0",
-    "Microsoft.Extensions.Options": "1.1.0",
-    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.1.0",
-    "NETStandard.Library": "1.6.1",
+    "Digipolis.Errors": "4.0.0",
+    "Microsoft.AspNetCore.Diagnostics": "1.0.0",
+    "Microsoft.AspNetCore.Diagnostics.Abstractions": "1.0.0",
+    "Microsoft.AspNetCore.Http.Abstractions": "1.0.1.0",
+    "Microsoft.AspNetCore.Mvc.Core": "1.0.0",
+    "Microsoft.AspNetCore.Mvc.ViewFeatures": "1.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
+    "Microsoft.Extensions.Logging": "1.0.0",
+    "Microsoft.Extensions.Options": "1.0.1",
+    "Microsoft.AspNetCore.HttpOverrides":  "1.0.1",
+    "NETStandard.Library": "1.6.0",
     "Newtonsoft.Json": "9.0.1",
     "Swashbuckle.SwaggerGen": "6.0.0-beta902"
   },

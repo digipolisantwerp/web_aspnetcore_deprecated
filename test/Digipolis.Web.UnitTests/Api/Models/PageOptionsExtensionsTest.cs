@@ -19,15 +19,7 @@ namespace Digipolis.Web.UnitTests.Api.Models
     public class PageOptionsExtensionsTest
     {
         [Fact]
-        public void ToPagedResultWithoutCallingConfigureThrowsException()
-        {
-            var pageOptions = new PageOptions();
-
-            Assert.Throws<TypeInitializationException>(() => pageOptions.ToPagedResult(new List<Object>(), 0, "test"));
-        }
-
-        [Fact]
-        public void ToPagedResultConfiguredReturnsRelativePath()
+        public void ToPagedResultConfiguredReturnsAbsolutePath()
         {
             var accessor = GetActionContextAccessorWithLinkProvider();
 
@@ -36,7 +28,7 @@ namespace Digipolis.Web.UnitTests.Api.Models
             var pageOptions = new PageOptions();
             var result = pageOptions.ToPagedResult(new List<Object>(), 0, "test", new object[] { });
 
-            Assert.Equal("/test",result.Links.First.Href);
+            Assert.Equal("xhs://myhost.be:999/test", result.Links.First.Href);
         }
 
 
@@ -44,13 +36,18 @@ namespace Digipolis.Web.UnitTests.Api.Models
         {
             Mock<IServiceProvider> serviceProvider = new Mock<IServiceProvider>();
             Mock<IActionContextAccessor> accessor = new Mock<IActionContextAccessor>();
+
             var actionContext = MockHelpers.ActionContext();
 
             var httpContextMock = Mock.Get(actionContext.HttpContext);
 
             httpContextMock.SetupGet((h) => h.RequestServices).Returns(serviceProvider.Object);
 
+
             actionContext.HttpContext.RequestServices = serviceProvider.Object;
+
+            actionContext.HttpContext.Request.Host = new Microsoft.AspNetCore.Http.HostString("myhost.be",999);
+            actionContext.HttpContext.Request.Scheme = "XHS";
 
             var apiExtOptions = new Mock<IOptions<ApiExtensionOptions>>();
             var urlHelper = new Mock<IUrlHelper>();

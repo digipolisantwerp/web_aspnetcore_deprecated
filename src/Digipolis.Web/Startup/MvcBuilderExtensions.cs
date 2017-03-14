@@ -37,7 +37,7 @@ namespace Digipolis.Web
                 return new UrlHelper(actionContext);
             });
 
-            builder.Services.TryAddSingleton<ILinkProvider, LinkProvider>();
+            builder.Services.AddScoped<ILinkProvider, LinkProvider>();
             #endregion
 
             #region Register Options

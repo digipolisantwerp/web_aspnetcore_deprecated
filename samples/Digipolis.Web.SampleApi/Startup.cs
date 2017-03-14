@@ -27,7 +27,7 @@ namespace Digipolis.Web.SampleApi
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddEnvironmentVariables();
             Configuration = builder.Build();
@@ -39,11 +39,7 @@ namespace Digipolis.Web.SampleApi
         public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
-            services.AddMvc(
-                (o) => 
-                {
-                    o.ModelBinderProviders.Insert(0,new CommaDelimitedArrayModelBinderProvider());
-                })
+            services.AddMvc()
                 .AddVersionEndpoint()
                 .AddApiExtensions(Configuration.GetSection("ApiExtensions"), x =>
                 {
