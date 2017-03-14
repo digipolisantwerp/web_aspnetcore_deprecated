@@ -47,8 +47,6 @@ namespace Digipolis.Web.SampleApi
                     x.PageSize = 10;
                 });
 
-            services.AddGlobalErrorHandling<ApiExceptionMapper>();
-
             // Add Swagger extensions
             services.AddSwaggerGen<ApiExtensionSwaggerSettings>(x =>
             {
@@ -77,6 +75,8 @@ namespace Digipolis.Web.SampleApi
 
             //Add AutoMapper
             services.AddAutoMapper();
+
+            services.AddGlobalErrorHandling<ApiExceptionMapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -85,10 +85,10 @@ namespace Digipolis.Web.SampleApi
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
+            app.UseMvc();
+
             // Enable Api Extensions
             app.UseApiExtensions();
-
-            app.UseMvc();
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
             app.UseSwagger();

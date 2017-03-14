@@ -1,10 +1,8 @@
 ﻿using System;
-using Digipolis.Errors;
 using Digipolis.Web.Api;
 using Digipolis.Web.Api.Conventions;
 using Digipolis.Web.Api.Filters;
 using Digipolis.Web.Api.JsonConverters;
-using Digipolis.Web.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -12,14 +10,12 @@ using Microsoft.Extensions.Options;
 using Digipolis.Web.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.DotNet.InternalAbstractions;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using System.Linq;
 using Digipolis.Web.Api.Tools;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Digipolis.Web.Api.Models;
 using Digipolis.Web.Modelbinders;
 
 namespace Digipolis.Web

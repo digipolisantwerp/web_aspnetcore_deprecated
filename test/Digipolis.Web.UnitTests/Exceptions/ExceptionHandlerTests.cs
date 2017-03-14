@@ -46,68 +46,68 @@ namespace Digipolis.Web.UnitTests.Exceptions
             Assert.Equal(300, ctx.Response.StatusCode);
         }
 
-        [Fact]
-        private void HandleErrorMapping()
-        {
-            var handler = MockHelpers.ExceptionHandler();
-            var ctx = MockHelpers.HttpContext();
-            handler.Handle(ctx, new AggregateException());
-            Assert.Equal(400, ctx.Response.StatusCode);
-        }
+        //[Fact]
+        //private void HandleErrorMapping()
+        //{
+        //    var handler = MockHelpers.ExceptionHandler();
+        //    var ctx = MockHelpers.HttpContext();
+        //    handler.Handle(ctx, new AggregateException());
+        //    Assert.Equal(400, ctx.Response.StatusCode);
+        //}
 
-        [Fact]
-        private void HandleDefaultError()
-        {
-            var handler = MockHelpers.ExceptionHandler();
-            var ctx = MockHelpers.HttpContext();
-            handler.Handle(ctx, new Exception());
-            Assert.Equal(500, ctx.Response.StatusCode);
-        }
+        //[Fact]
+        //private void HandleDefaultError()
+        //{
+        //    var handler = MockHelpers.ExceptionHandler();
+        //    var ctx = MockHelpers.HttpContext();
+        //    handler.Handle(ctx, new Exception());
+        //    Assert.Equal(500, ctx.Response.StatusCode);
+        //}
 
-        [Fact]
-        private void HandleNoErrorMappingEqualsDefaultError()
-        {
-            var handler = MockHelpers.ExceptionHandler();
-            var ctx = MockHelpers.HttpContext();
-            handler.Handle(ctx, new AbandonedMutexException());
-            Assert.Equal(500, ctx.Response.StatusCode);
-        }
+        //[Fact]
+        //private void HandleNoErrorMappingEqualsDefaultError()
+        //{
+        //    var handler = MockHelpers.ExceptionHandler();
+        //    var ctx = MockHelpers.HttpContext();
+        //    handler.Handle(ctx, new AbandonedMutexException());
+        //    Assert.Equal(500, ctx.Response.StatusCode);
+        //}
 
-        [Fact]
-        private async Task HandleAsyncErrorStatusCodeOnlyMapping()
-        {
-            var handler = MockHelpers.ExceptionHandler();
-            var ctx = MockHelpers.HttpContext();
-            await handler.HandleAsync(ctx, new ArgumentNullException());
-            Assert.Equal(300, ctx.Response.StatusCode);
-        }
+        //[Fact]
+        //private async Task HandleAsyncErrorStatusCodeOnlyMapping()
+        //{
+        //    var handler = MockHelpers.ExceptionHandler();
+        //    var ctx = MockHelpers.HttpContext();
+        //    await handler.HandleAsync(ctx, new ArgumentNullException());
+        //    Assert.Equal(300, ctx.Response.StatusCode);
+        //}
 
-        [Fact]
-        private async Task HandleAsyncErrorMapping()
-        {
-            var handler = MockHelpers.ExceptionHandler();
-            var ctx = MockHelpers.HttpContext();
-            await handler.HandleAsync(ctx, new AggregateException());
-            Assert.Equal(400, ctx.Response.StatusCode);
-        }
+        //[Fact]
+        //private async Task HandleAsyncErrorMapping()
+        //{
+        //    var handler = MockHelpers.ExceptionHandler();
+        //    var ctx = MockHelpers.HttpContext();
+        //    await handler.HandleAsync(ctx, new AggregateException());
+        //    Assert.Equal(400, ctx.Response.StatusCode);
+        //}
 
-        [Fact]
-        private async Task HandleAsyncDefaultError()
-        {
-            var handler = MockHelpers.ExceptionHandler();
-            var ctx = MockHelpers.HttpContext();
-            await handler.HandleAsync(ctx, new Exception());
-            Assert.Equal(500, ctx.Response.StatusCode);
-        }
+        //[Fact]
+        //private async Task HandleAsyncDefaultError()
+        //{
+        //    var handler = MockHelpers.ExceptionHandler();
+        //    var ctx = MockHelpers.HttpContext();
+        //    await handler.HandleAsync(ctx, new Exception());
+        //    Assert.Equal(500, ctx.Response.StatusCode);
+        //}
 
-        [Fact]
-        private async Task HandleAsyncNoErrorMappingEqualsDefaultError()
-        {
-            var handler = MockHelpers.ExceptionHandler();
-            var ctx = MockHelpers.HttpContext();
-            await handler.HandleAsync(ctx, new AbandonedMutexException());
-            Assert.Equal(500, ctx.Response.StatusCode);
-        }
+        //[Fact]
+        //private async Task HandleAsyncNoErrorMappingEqualsDefaultError()
+        //{
+        //    var handler = MockHelpers.ExceptionHandler();
+        //    var ctx = MockHelpers.HttpContext();
+        //    await handler.HandleAsync(ctx, new AbandonedMutexException());
+        //    Assert.Equal(500, ctx.Response.StatusCode);
+        //}
 
         [Fact]
         private async Task LogVerboseException()
