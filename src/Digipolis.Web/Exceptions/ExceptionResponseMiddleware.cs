@@ -32,7 +32,7 @@ namespace Digipolis.Web.Exceptions
 
             try
             {
-                await this._next.Invoke(context);
+                if (!context.Response.HasStarted) { await this._next.Invoke(context); }
                 if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
                 {
                     await handler.HandleAsync(context, new UnauthorizedAccessException());
