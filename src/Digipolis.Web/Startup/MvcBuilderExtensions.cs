@@ -2,7 +2,6 @@
 using Digipolis.Errors;
 using Digipolis.Web.Api;
 using Digipolis.Web.Api.Conventions;
-using Digipolis.Web.Api.Filters;
 using Digipolis.Web.Api.JsonConverters;
 using Digipolis.Web.Exceptions;
 using Microsoft.AspNetCore.Mvc;
@@ -62,14 +61,6 @@ namespace Digipolis.Web
             #endregion
 
             #region Configuration from options
-
-            if (!apiOptions.DisableGlobalErrorHandling && !apiOptions.DisableGlobalExceptionFilter)
-            {
-                builder.AddMvcOptions(options =>
-                {
-                    options.Filters.Add(typeof(GlobalExceptionFilter));
-                });
-            }
 
             if (!apiOptions.DisableVersioning)
             {
