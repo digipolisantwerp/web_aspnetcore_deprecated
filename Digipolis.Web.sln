@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{72AD9D7C-B2D4-FA6B-0D2C-F5CDAFB54165}"
 EndProject
@@ -9,17 +9,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E7BD5333-F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{C6692B10-95E8-4A3A-99D2-970922126B9E}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.Web", "src\Digipolis.Web\Digipolis.Web.xproj", "{5810E06F-5862-474A-AB9C-6E78DEA226D4}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.Web.UnitTests", "test\Digipolis.Web.UnitTests\Digipolis.Web.UnitTests.xproj", "{A1B1392C-D7E2-4567-AD0B-ACBDBE02DBC3}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Digipolis.Web.SampleApi", "samples\Digipolis.Web.SampleApi\Digipolis.Web.SampleApi.xproj", "{3A1752C4-5D78-444A-A910-A38D03A05E5C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6B3CA487-C8C4-4DF6-9ED5-9D2008B09E82}"
 	ProjectSection(SolutionItems) = preProject
 		CHANGELOG.md = CHANGELOG.md
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digipolis.Web", "src\Digipolis.Web\Digipolis.Web.csproj", "{5810E06F-5862-474A-AB9C-6E78DEA226D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digipolis.Web.UnitTests", "test\Digipolis.Web.UnitTests\Digipolis.Web.UnitTests.csproj", "{A1B1392C-D7E2-4567-AD0B-ACBDBE02DBC3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Digipolis.Web.SampleApi", "samples\Digipolis.Web.SampleApi\Digipolis.Web.SampleApi.csproj", "{3A1752C4-5D78-444A-A910-A38D03A05E5C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
