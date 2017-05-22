@@ -42,15 +42,23 @@ will follow in the days to come.
 
 ## Installation
 
-To add the toolbox to a project, you add the package to the project.json :
+To add the toolbox to a project, you add the package to the csproj project file:
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="Digipolis.Web" Version="5.0.0" />
+  </ItemGroup>
+``` 
+
+or if your project still works with project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "4.0.3"
+    "Digipolis.Web":  "5.0.0"
  }
 ``` 
 
-ALWAYS check the latest version [here](https://github.com/digipolisantwerp/web_aspnetcore/blob/master/src/Digipolis.Web/project.json) before adding the above line !
+ALWAYS check the latest version [here](https://github.com/digipolisantwerp/web_aspnetcore/blob/master/src/Digipolis.Web/Digipolis.Web.csproj) before adding the above line !
 
 Make sure you have our Nuget feed configured (https://www.myget.org/F/digipolisantwerp/api/v3/index.json).
 

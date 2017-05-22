@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 5.0.0
+
+- conversion to csproj and MSBuild.
+
 ## 4.0.3
 
 - Bugfix : routevaluedictionary exception when executing concurrent calls
