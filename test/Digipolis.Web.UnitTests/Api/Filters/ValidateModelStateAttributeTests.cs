@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Digipolis.Errors.Exceptions;
 using Digipolis.Web.Api;
-using Digipolis.Web.Api.Filters;
 using Digipolis.Web.UnitTests.Utilities;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.Internal;

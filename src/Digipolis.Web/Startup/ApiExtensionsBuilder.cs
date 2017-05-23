@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Digipolis.Errors;
 using Digipolis.Web.Api;
 using Digipolis.Web.Api.Conventions;
-using Digipolis.Web.Api.Filters;
 using Digipolis.Web.Api.JsonConverters;
 using Digipolis.Web.Api.Tools;
 using Digipolis.Web.Exceptions;

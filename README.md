@@ -31,7 +31,6 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
   - [Mapping exceptions to responses](#mapping-exceptions-to-responses)
   - [Usage](#usage)
   - [Logging](#logging)
-  - [Disabling the global exception filter](#disabling-the-global-exception-filter)
 - [Using the API extensions](#using-the-api-extensions)
 - [Paging](#paging)
 
@@ -54,7 +53,7 @@ or if your project still works with project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "5.0.0"
+    "Digipolis.Web":  "6.0.0"
  }
 ``` 
 
@@ -345,13 +344,6 @@ The logged message is a json with following structure:
 For exceptions that do not derive from **BaseException** the **Error** property will be empty. 
 The **ExceptionInfo** contains the result of the exception ToString() method.
 The **Exception** property of the logged message is not filled by default. If you also want to log the exception object you can set the **LogExceptionObject** property to true on the **ApiExtensionOptions**.
-
-### Disabling the global exception filter
-
-The exception handling makes use of middleware that handles exceptions and an MVC exception filter.
-The Mvc exception filter handles exceptions that occurs in the Mvc context. The middleware handles all other exceptions that are thrown in the pipeline.
-In some case you might want to disable the Mvc exception filter but want to keep the exception middleware to handle exceptions.
-You can set the **DisableGlobalExceptionFilter** property on the **ApiExtensionOptions** to disable the Mvc exception filter.
 
 ## Using the API extensions
 

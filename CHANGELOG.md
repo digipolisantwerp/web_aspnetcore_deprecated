@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 6.0.0
+
+- removed global exception filter.
+
 ## 5.0.0
 
 - conversion to csproj and MSBuild.
