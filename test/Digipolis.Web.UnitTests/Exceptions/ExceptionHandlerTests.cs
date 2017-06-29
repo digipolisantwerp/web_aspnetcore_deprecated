@@ -53,6 +53,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
             var ctx = MockHelpers.HttpContext();
             handler.Handle(ctx, new AggregateException());
             Assert.Equal(400, ctx.Response.StatusCode);
+            Assert.Equal("application/problem+json", ctx.Response.ContentType);
         }
 
         [Fact]
@@ -62,6 +63,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
             var ctx = MockHelpers.HttpContext();
             handler.Handle(ctx, new Exception());
             Assert.Equal(500, ctx.Response.StatusCode);
+            Assert.Equal("application/problem+json", ctx.Response.ContentType);
         }
 
         [Fact]
@@ -71,6 +73,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
             var ctx = MockHelpers.HttpContext();
             handler.Handle(ctx, new AbandonedMutexException());
             Assert.Equal(500, ctx.Response.StatusCode);
+            Assert.Equal("application/problem+json", ctx.Response.ContentType);
         }
 
         [Fact]
@@ -89,6 +92,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
             var ctx = MockHelpers.HttpContext();
             await handler.HandleAsync(ctx, new AggregateException());
             Assert.Equal(400, ctx.Response.StatusCode);
+            Assert.Equal("application/problem+json", ctx.Response.ContentType);
         }
 
         [Fact]
@@ -98,6 +102,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
             var ctx = MockHelpers.HttpContext();
             await handler.HandleAsync(ctx, new Exception());
             Assert.Equal(500, ctx.Response.StatusCode);
+            Assert.Equal("application/problem+json", ctx.Response.ContentType);
         }
 
         [Fact]
@@ -107,6 +112,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
             var ctx = MockHelpers.HttpContext();
             await handler.HandleAsync(ctx, new AbandonedMutexException());
             Assert.Equal(500, ctx.Response.StatusCode);
+            Assert.Equal("application/problem+json", ctx.Response.ContentType);
         }
 
         [Fact]
