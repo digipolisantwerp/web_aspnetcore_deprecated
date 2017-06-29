@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 6.1.0
+
+- error response content type changed to application/problem+json
+
 ## 6.0.0
 
 - removed global exception filter.
