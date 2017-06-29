@@ -38,7 +38,7 @@ namespace Digipolis.Web.Exceptions
             if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
             {
                 context.Response.Clear();
-                context.Response.ContentType = "application/json";
+                context.Response.ContentType = "application/problem+json";
                 if (error.Status != default(int)) context.Response.StatusCode = error.Status;
                 var json = JsonConvert.SerializeObject(error, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
                 await context.Response.WriteAsync(json);
@@ -56,7 +56,7 @@ namespace Digipolis.Web.Exceptions
             if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
             {
                 context.Response.Clear();
-                context.Response.ContentType = "application/json";
+                context.Response.ContentType = "application/problem+json";
                 if (error.Status != default(int)) context.Response.StatusCode = error.Status;
                 var json = JsonConvert.SerializeObject(error, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
                 context.Response.WriteAsync(json).Wait();
