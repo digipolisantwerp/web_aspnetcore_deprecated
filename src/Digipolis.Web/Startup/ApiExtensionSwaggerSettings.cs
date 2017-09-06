@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using Digipolis.Web.Swagger;
 using Microsoft.Extensions.PlatformAbstractions;
-using Swashbuckle.SwaggerGen.Application;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Digipolis.Web.Startup
 {

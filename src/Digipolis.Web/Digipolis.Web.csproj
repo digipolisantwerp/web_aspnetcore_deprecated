@@ -12,7 +12,7 @@
     <PackageLicenseUrl>http://github.com/digipolisantwerp/web_aspnetcore/LICENSE.txt</PackageLicenseUrl>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>http://github.com/digipolisantwerp/web_aspnetcore</RepositoryUrl>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion>1.6.1</NetStandardImplicitPackageVersion>
     <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
@@ -31,7 +31,7 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="1.0.2" />
     <PackageReference Include="Microsoft.AspNetCore.HttpOverrides" Version="1.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
-    <PackageReference Include="Swashbuckle.SwaggerGen" Version="6.0.0-beta902" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

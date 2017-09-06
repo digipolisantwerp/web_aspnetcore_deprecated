@@ -1,8 +1,8 @@
 using System;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.Swagger.Model;
-using Swashbuckle.SwaggerGen.Generator;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Digipolis.Web.Swagger
 {
@@ -10,8 +10,8 @@ namespace Digipolis.Web.Swagger
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var produces = context.ApiDescription.GetActionAttributes().OfType<ProducesAttribute>().LastOrDefault();
-            var consumes = context.ApiDescription.GetActionAttributes().OfType<ConsumesAttribute>().LastOrDefault();
+            var produces = context.ApiDescription.ActionAttributes().OfType<ProducesAttribute>().LastOrDefault();
+            var consumes = context.ApiDescription.ActionAttributes().OfType<ConsumesAttribute>().LastOrDefault();
 
             if (produces != null) {
                 foreach (var responseType in produces.ContentTypes)

@@ -4,8 +4,8 @@ using Digipolis.Errors;
 using Digipolis.Web.Api;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.Swagger.Model;
-using Swashbuckle.SwaggerGen.Generator;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Digipolis.Web.Swagger
 {
@@ -121,5 +121,7 @@ namespace Digipolis.Web.Swagger
             operation.Summary = "Get the version of the application";
             operation.Produces.Add("application/json");
         }
+
+       
     }
 }

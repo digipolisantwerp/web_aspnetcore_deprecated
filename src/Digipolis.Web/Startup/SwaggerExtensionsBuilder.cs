@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.Swagger.Model;
-using Swashbuckle.SwaggerGen.Application;
 using System.Linq;
 using Digipolis.Web.Api;
 using Digipolis.Web.Swagger;
 using Microsoft.AspNetCore.Builder;
-using Swashbuckle.SwaggerGen.Generator;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Digipolis.Web
 {
@@ -66,18 +65,18 @@ namespace Digipolis.Web
             where TSwaggerSettings : SwaggerSettings<TSwaggerResponseDefinitions>, new()
             where TSwaggerResponseDefinitions : SwaggerResponseDefinitions
         {
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(a => { });
             services.ConfigureSwaggerGen<TSwaggerSettings, TSwaggerResponseDefinitions>(setupAction);
         }
 
         public static void MultipleApiVersions<TInfo>(this SwaggerGenOptions options, IEnumerable<TInfo> apiVersions)
             where TInfo : Info
         {
-            options.MultipleApiVersions(apiVersions, (api, version) =>
-            {
-                var versionAttribute = api.ActionDescriptor.ActionConstraints.OfType<VersionsAttribute>().FirstOrDefault();
-                return versionAttribute == null || versionAttribute.AcceptedVersions.Contains(version);
-            });
+            //options.MultipleApiVersions(apiVersions, (api, version) =>
+            //{
+            //    var versionAttribute = api.ActionDescriptor.ActionConstraints.OfType<VersionsAttribute>().FirstOrDefault();
+            //    return versionAttribute == null || versionAttribute.AcceptedVersions.Contains(version);
+            //});
         }
 
         public static IApplicationBuilder UseSwaggerUiRedirect(this IApplicationBuilder app, string url = null)

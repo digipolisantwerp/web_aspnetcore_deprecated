@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using Microsoft.Extensions.PlatformAbstractions;
-using Swashbuckle.SwaggerGen.Application;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Digipolis.Web.Swagger
 {
