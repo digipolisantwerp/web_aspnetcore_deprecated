@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Digipolis.Web.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.DotNet.InternalAbstractions;
@@ -20,6 +19,7 @@ using Digipolis.Web.Api.Tools;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Digipolis.Web.Api.Models;
 using Digipolis.Web.Modelbinders;
+using Digipolis.Web.Monitoring;
 
 namespace Digipolis.Web
 {
@@ -98,17 +98,17 @@ namespace Digipolis.Web
             return builder;
         }
 
-        public static IMvcBuilder AddVersionEndpoint(this IMvcBuilder builder, Action<WebVersioningOptions> setupAction = null)
-        {
-            if (setupAction != null)
-            {
-                builder.Services.Configure(setupAction);
-            }
+        //public static IMvcBuilder AddMonitoringEndpoint(this IMvcBuilder builder, Action<MonitoringOptions> setupAction = null)
+        //{
+        //    if (setupAction != null)
+        //    {
+        //        builder.Services.Configure(setupAction);
+        //    }
 
-            builder.Services.TryAddSingleton<IVersionProvider, WebVersionProvider>();
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, WebVersioningOptionsSetup>());
+        //    //builder.Services.TryAddSingleton<IVersionProvider, WebVersionProvider>();
+        //   builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, MonitoringOptionsSetup>());
 
-            return builder;
-        }
+        //    return builder;
+        //}
     }
 }

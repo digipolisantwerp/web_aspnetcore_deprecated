@@ -15,7 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Digipolis.Web.SampleApi.Controllers
 {
-    [Route("api/[controller]", Name = "kevin")]
+    [Route("[controller]", Name = "Values")]
     [Authorize]
     public class ValuesController : Controller
     {
@@ -119,7 +119,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         public IActionResult ThrowException()
         {
             throw new NotFoundException();
-            return Ok();
+            //return Ok();
         }
     }
 }

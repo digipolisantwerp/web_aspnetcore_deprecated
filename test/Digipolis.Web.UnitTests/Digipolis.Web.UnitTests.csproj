@@ -22,6 +22,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Monitoring\**" />
+    <EmbeddedResource Remove="Monitoring\**" />
+    <None Remove="Monitoring\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="_TestObjects\TestMonitoringOptions.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Digipolis.Web\Digipolis.Web.csproj" />
   </ItemGroup>
 

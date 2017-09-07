@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Swashbuckle.Swagger.Model;
+﻿using Swashbuckle.AspNetCore.Swagger;
 
 namespace Digipolis.Web.SampleApi.Configuration
 {

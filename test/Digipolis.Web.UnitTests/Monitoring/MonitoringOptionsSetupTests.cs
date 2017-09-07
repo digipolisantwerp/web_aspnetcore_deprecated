@@ -2,19 +2,19 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Moq;
-using Digipolis.Web.Versioning;
+using Digipolis.Web.Monitoring;
 using Xunit;
 
 namespace Digipolis.Web.UnitTests.Versioning
 {
-    public class WebVersioningOptionsSetupTests
+    public class MonitoringOptionsSetupTests
     {
         [Fact]
         private void OptionsServicesIsSet()
         {
             var serviceProviderMock = new Mock<IServiceProvider>();
 
-            var optionsSetup = new WebVersioningOptionsSetup(serviceProviderMock.Object);
+            var optionsSetup = new MonitoringOptionsSetup(serviceProviderMock.Object);
 
             Assert.Same(serviceProviderMock.Object, optionsSetup.OptionsServices);
         }
@@ -24,11 +24,11 @@ namespace Digipolis.Web.UnitTests.Versioning
         {
             var serviceProviderMock = new Mock<IServiceProvider>();
 
-            var options = new TestWebVersioningOptions(new WebVersioningOptions() { Route = "myroute" });
-            serviceProviderMock.Setup(svp => svp.GetService(typeof(IOptions<WebVersioningOptions>))).Returns(options);
+            var options = new TestMonitoringOptions(new MonitoringOptions() { Route = "myroute" });
+            serviceProviderMock.Setup(svp => svp.GetService(typeof(IOptions<MonitoringOptions>))).Returns(options);
 
             var mvcOptions = new MvcOptions();
-            var setup = new WebVersioningOptionsSetup(serviceProviderMock.Object);
+            var setup = new MonitoringOptionsSetup(serviceProviderMock.Object);
 
             Assert.Equal(0, mvcOptions.Conventions.Count);
 
