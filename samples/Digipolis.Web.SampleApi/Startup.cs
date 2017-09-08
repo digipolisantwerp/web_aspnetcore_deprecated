@@ -17,6 +17,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using Digipolis.Web.Swagger;
 using Digipolis.Web.Startup;
 using Digipolis.Web.Monitoring;
+using Digipolis.Web.Api;
 
 namespace Digipolis.Web.SampleApi
 {
@@ -48,6 +49,7 @@ namespace Digipolis.Web.SampleApi
 
             services.AddGlobalErrorHandling<ApiExceptionMapper>();
 
+           
 
             // Add Swagger extensions
             services.AddSwaggerGen<ApiExtensionSwaggerSettings>(o =>
@@ -106,6 +108,19 @@ namespace Digipolis.Web.SampleApi
             });
 
             app.UseSwaggerUiRedirect();
+
         }
+
+
+        //private static bool ResolveVersionSupportByRouteConstraint(ApiDescription apiDesc, string targetApiVersion)
+        //{
+        //    var versionConstraint = (apiDesc.Route.Constraints.ContainsKey("apiVersion"))
+        //        ? apiDesc.Route.Constraints["apiVersion"] as RegexRouteConstraint
+        //        : null;
+
+        //    return (versionConstraint == null)
+        //        ? ((targetApiVersion == "v1") ? true : false) // DossierController moet in v1 documentatie komen, maar de route mag niet gewijzigd worden (dus geen apiversion constraint mogelijk)
+        //        : versionConstraint.Pattern.Split('|').Contains(targetApiVersion);
+        //}
     }
 }

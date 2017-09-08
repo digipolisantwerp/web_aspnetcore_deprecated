@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Digipolis.Web.Api.Models;
 using Digipolis.Web.Modelbinders;
 using Digipolis.Web.Monitoring;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Digipolis.Web
 {
@@ -68,6 +69,17 @@ namespace Digipolis.Web
                 {
                     options.Conventions.Insert(0, new RouteConvention(new RouteAttribute("{apiVersion}")));
                 });
+
+                builder.Services.ConfigureSwaggerGen(options =>
+                {
+                    options.DocInclusionPredicate((version, apiDescription) =>
+                    {
+                        var allowedVersions = apiDescription.ActionAttributes().OfType<VersionsAttribute>().FirstOrDefault();
+
+                        return (apiDescription.RelativePath.StartsWith("{apiVersion}/Status/") || (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version)));
+                    });
+                }
+           );
             }
 
             #endregion
@@ -97,18 +109,5 @@ namespace Digipolis.Web
 
             return builder;
         }
-
-        //public static IMvcBuilder AddMonitoringEndpoint(this IMvcBuilder builder, Action<MonitoringOptions> setupAction = null)
-        //{
-        //    if (setupAction != null)
-        //    {
-        //        builder.Services.Configure(setupAction);
-        //    }
-
-        //    //builder.Services.TryAddSingleton<IVersionProvider, WebVersionProvider>();
-        //   builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, MonitoringOptionsSetup>());
-
-        //    return builder;
-        //}
     }
 }

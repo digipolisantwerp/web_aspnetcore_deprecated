@@ -37,6 +37,7 @@ namespace Digipolis.Web
             where TSwaggerResponseDefinitions : SwaggerResponseDefinitions
         {
             var settings = new TSwaggerSettings();
+
             services.Configure<SwaggerGenOptions>(settings.Configure);
             if (setupAction != null) services.ConfigureSwaggerGen(setupAction);
             return services;
@@ -51,6 +52,7 @@ namespace Digipolis.Web
         public static void AddSwaggerGen<TSwaggerSettings>(this IServiceCollection services, Action<SwaggerGenOptions> setupAction = null) 
             where TSwaggerSettings : SwaggerSettings<SwaggerResponseDefaults>, new()
         {
+
             services.AddSwaggerGen<TSwaggerSettings, SwaggerResponseDefaults>(setupAction);
         }
 

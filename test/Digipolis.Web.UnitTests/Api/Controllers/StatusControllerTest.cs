@@ -42,5 +42,19 @@ namespace Digipolis.Web.UnitTests.Api.Controllers
             statusProviderMock.Verify(x => x.GetStatus(),Times.Once());
             Assert.Equal(Status.warning, result.Status);
         }
+
+
+        [Fact]
+        public async Task GetPingReturnsStatusOk()
+        {
+            var logger = new Moq.Mock<ILogger<StatusController>>().Object;
+            var statusProviderMock = new Moq.Mock<IStatusProvider>();
+
+            var controller = new StatusController(statusProviderMock.Object, logger);
+
+            var result = (Monitoring.StatusResponse)(await controller.GetPing() as OkObjectResult).Value;
+
+            Assert.Equal(Status.ok, result.Status);
+        }
     }
 }
