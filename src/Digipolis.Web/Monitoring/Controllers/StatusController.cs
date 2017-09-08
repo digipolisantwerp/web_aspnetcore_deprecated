@@ -18,11 +18,8 @@ namespace Digipolis.Web.Monitoring
 
         public StatusController(IStatusProvider statusProvider, ILogger<StatusController> logger)
         {
-            if (statusProvider == null) throw new ArgumentException( $"StatusController.Ctr parameter {nameof(statusProvider)} cannot be null. Register an IStatusProvider in the DI Container.");
-            if (statusProvider == null) throw new ArgumentException($"StatusController.Ctr parameter {nameof(logger)} cannot be null.");
-
-            _statusreader = statusProvider;
-            _logger = logger;
+            _statusreader = statusProvider ?? throw new ArgumentException( $"StatusController.Ctr parameter {nameof(statusProvider)} cannot be null. Register an IStatusProvider in the DI Container.");
+            _logger = logger ?? throw new ArgumentException($"StatusController.Ctr parameter {nameof(logger)} cannot be null.");
         }
 
         /// <summary>
