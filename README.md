@@ -6,7 +6,6 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
 - Paging with paging response object.
 - Dynamic sorting.
 - Global error handling with configuration of responses returning a standard error model.
-- Application status/monitoring endpoint.
 - Base classes that encapsulate common functionality.
 - Action filters.
 - Swagger extensions.
@@ -133,12 +132,6 @@ NOTE: When versioning is enabled it can be disabled by configuration. in the app
   }
 }
 ``` 
-   
-## Application status endpoint
-
-This framework adds an additional endpoint to the web site where the status of the application can be requested via a GET request.  
-By default, this endpoint is provided at the url **_status/ping_** and **_status/monitoring_**.
-
 
 ## Modelbinders
 A modelbinder for comma seperated arrays or enumerables is made available.

@@ -8,7 +8,6 @@ using Microsoft.Extensions.Options;
 using Xunit;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.AspNetCore.Mvc.Formatters;
-using Digipolis.Web.Monitoring;
 
 namespace Digipolis.Web.UnitTests.Startup
 {

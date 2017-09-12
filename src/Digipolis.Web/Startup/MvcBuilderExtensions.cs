@@ -19,7 +19,6 @@ using Digipolis.Web.Api.Tools;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Digipolis.Web.Api.Models;
 using Digipolis.Web.Modelbinders;
-using Digipolis.Web.Monitoring;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Digipolis.Web
@@ -78,9 +77,9 @@ namespace Digipolis.Web
 
                         return (apiDescription.RelativePath.StartsWith("{apiVersion}/Status/") || (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version)));
                     });
-                }
-           );
+                });
             }
+
 
             #endregion
 

@@ -16,8 +16,9 @@ using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Digipolis.Web.Swagger;
 using Digipolis.Web.Startup;
-using Digipolis.Web.Monitoring;
 using Digipolis.Web.Api;
+using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Digipolis.Web.SampleApi
 {
@@ -44,12 +45,12 @@ namespace Digipolis.Web.SampleApi
                 {
                     //Override settings made by the appsettings.json
                     x.PageSize = 10;
-                    x.DisableVersioning = true;
+                    x.DisableVersioning = false;
                 });
 
             services.AddGlobalErrorHandling<ApiExceptionMapper>();
 
-           
+            services.AddAuthorization();
 
             // Add Swagger extensions
             services.AddSwaggerGen<ApiExtensionSwaggerSettings>(o =>
@@ -79,7 +80,31 @@ namespace Digipolis.Web.SampleApi
             //Add AutoMapper
             services.AddAutoMapper();
 
-            services.AddScoped<IStatusProvider, StatusProvider>();
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("StatusMonitoringPolicy", policy =>
+                {
+                    policy.AuthenticationSchemes = new string[] { "JwtHeaderAuth" };
+                    policy.AddRequirements(new StatusRequirementHandler());
+                });
+            });
+        }
+
+        public class StatusRequirementHandler : AuthorizationHandler<StatusRequirementHandler>, IAuthorizationRequirement
+        {
+            protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, StatusRequirementHandler requirement)
+            {
+                //var roles = new[] { "Admin", "Admin2", "Admin3" };  //Get From DB.
+                //var userIsInRole = roles.Any(role => context.User.IsInRole(role));
+                //if (!userIsInRole)
+                //{
+                //    context.Fail();
+                //}
+
+                context.Succeed(requirement);
+
+                return Task.CompletedTask;
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -90,6 +115,7 @@ namespace Digipolis.Web.SampleApi
 
             // Enable Api Extensions
             app.UseApiExtensions();
+
 
             app.UseMvc();
 
@@ -110,17 +136,5 @@ namespace Digipolis.Web.SampleApi
             app.UseSwaggerUiRedirect();
 
         }
-
-
-        //private static bool ResolveVersionSupportByRouteConstraint(ApiDescription apiDesc, string targetApiVersion)
-        //{
-        //    var versionConstraint = (apiDesc.Route.Constraints.ContainsKey("apiVersion"))
-        //        ? apiDesc.Route.Constraints["apiVersion"] as RegexRouteConstraint
-        //        : null;
-
-        //    return (versionConstraint == null)
-        //        ? ((targetApiVersion == "v1") ? true : false) // DossierController moet in v1 documentatie komen, maar de route mag niet gewijzigd worden (dus geen apiversion constraint mogelijk)
-        //        : versionConstraint.Pattern.Split('|').Contains(targetApiVersion);
-        //}
     }
 }
