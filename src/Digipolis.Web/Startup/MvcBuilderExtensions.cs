@@ -74,8 +74,7 @@ namespace Digipolis.Web
                     options.DocInclusionPredicate((version, apiDescription) =>
                     {
                         var allowedVersions = apiDescription.ActionAttributes().OfType<VersionsAttribute>().FirstOrDefault();
-
-                        return (apiDescription.RelativePath.StartsWith("{apiVersion}/Status/") || (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version)));
+                        return (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version));
                     });
                 });
             }

@@ -20,7 +20,6 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
 - [ActionFilters](#actionfilters)
   - [ValidateModelState](#validatemodelstate)
   - [Endpoint versioning](#endpoint-versioning)
-- [Application status endpoint](#application-status-endpoint)
 - [Modelbinders](#modelbinders)
 - [MVC Extensions](#mvc-extensions)
 - [Swagger extensions](#swagger-extensions)
