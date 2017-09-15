@@ -71,18 +71,6 @@ namespace Digipolis.Web
             services.ConfigureSwaggerGen<TSwaggerSettings, TSwaggerResponseDefinitions>(setupAction);
         }
 
-        //public static void MultipleApiVersions<TInfo>(this SwaggerGenOptions options, IEnumerable<TInfo> apiVersions)
-        //    where TInfo : Info
-        //{
-        //    //options.MultipleApiVersions(apiVersions);
-
-        //    options.MultipleApiVersions(apiVersions, (api, version) =>
-        //    {
-        //        var versionAttribute = api.ActionDescriptor.ActionConstraints.OfType<VersionsAttribute>().FirstOrDefault();
-        //        return versionAttribute == null || versionAttribute.AcceptedVersions.Contains(version);
-        //    });
-        //}
-
         public static IApplicationBuilder UseSwaggerUiRedirect(this IApplicationBuilder app, string url = null)
         {
             if (url == null)

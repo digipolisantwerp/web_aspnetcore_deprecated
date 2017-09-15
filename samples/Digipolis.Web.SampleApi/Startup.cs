@@ -79,32 +79,7 @@ namespace Digipolis.Web.SampleApi
 
             //Add AutoMapper
             services.AddAutoMapper();
-
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("StatusMonitoringPolicy", policy =>
-                {
-                    policy.AuthenticationSchemes = new string[] { "JwtHeaderAuth" };
-                    policy.AddRequirements(new StatusRequirementHandler());
-                });
-            });
-        }
-
-        public class StatusRequirementHandler : AuthorizationHandler<StatusRequirementHandler>, IAuthorizationRequirement
-        {
-            protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, StatusRequirementHandler requirement)
-            {
-                //var roles = new[] { "Admin", "Admin2", "Admin3" };  //Get From DB.
-                //var userIsInRole = roles.Any(role => context.User.IsInRole(role));
-                //if (!userIsInRole)
-                //{
-                //    context.Fail();
-                //}
-
-                context.Succeed(requirement);
-
-                return Task.CompletedTask;
-            }
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
