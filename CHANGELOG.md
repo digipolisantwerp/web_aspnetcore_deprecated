@@ -1,5 +1,11 @@
 # Web Toolbox
 
+## 7.0.0
+
+- Swagger reference update
+- Fixed api versioning
+- Removed version route
+
 ## 6.1.0
 
 - error response content type changed to application/problem+json
