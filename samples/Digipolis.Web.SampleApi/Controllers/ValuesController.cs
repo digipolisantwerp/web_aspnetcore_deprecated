@@ -15,8 +15,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Digipolis.Web.SampleApi.Controllers
 {
-    [Route("api/[controller]", Name = "kevin")]
-    [Authorize]
+    [Route("[controller]", Name = "Values")]
     public class ValuesController : Controller
     {
         private readonly IValueLogic _valueLogic;
@@ -56,7 +55,6 @@ namespace Digipolis.Web.SampleApi.Controllers
         [ProducesResponseType(typeof(ValueDto), 200)]
         [ProducesResponseType(typeof(ValueDto), 401)]
         [AllowAnonymous]
-        [Versions(Versions.V1, Versions.V2)]
         [Produces("application/json", "text/csv")]
         public IActionResult Get(int id)
         {
@@ -119,7 +117,6 @@ namespace Digipolis.Web.SampleApi.Controllers
         public IActionResult ThrowException()
         {
             throw new NotFoundException();
-            return Ok();
         }
     }
 }

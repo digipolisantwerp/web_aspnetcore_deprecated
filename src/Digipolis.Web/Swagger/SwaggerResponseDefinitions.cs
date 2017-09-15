@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Swashbuckle.Swagger.Model;
-using Swashbuckle.SwaggerGen.Generator;
 
 namespace Digipolis.Web.Swagger
 {
@@ -14,16 +14,16 @@ namespace Digipolis.Web.Swagger
 
         protected IEnumerable<Attribute> CombinedAttributes { get; private set; }
 
-        public void Apply(Operation operation, OperationFilterContext context)
+        public void Apply(Operation operation, Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext context)
         {
-            ActionAttributes = context.ApiDescription.GetActionAttributes().OfType<Attribute>();
-            ControllerAttributes = context.ApiDescription.GetControllerAttributes().OfType<Attribute>();
+            ActionAttributes = context.ApiDescription.ActionAttributes().OfType<Attribute>();
+            ControllerAttributes = context.ApiDescription.ActionAttributes().OfType<Attribute>();
             CombinedAttributes = ActionAttributes.Union(ControllerAttributes);
             ConfigureResponses(operation, context);
             ExcludeSwaggerResonse(operation);
         }
 
-        protected abstract void ConfigureResponses(Operation operation, OperationFilterContext context);
+        protected abstract void ConfigureResponses(Operation operation, Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext context);
 
         private void ExcludeSwaggerResonse(Operation operation)
         {

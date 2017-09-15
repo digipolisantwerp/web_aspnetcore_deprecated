@@ -6,7 +6,7 @@ namespace Digipolis.Web
     {
         public class Swagger
         {
-            public const string Url = "swagger/ui";
+            public const string Url = "swagger/index.html";
         }
     }
 }

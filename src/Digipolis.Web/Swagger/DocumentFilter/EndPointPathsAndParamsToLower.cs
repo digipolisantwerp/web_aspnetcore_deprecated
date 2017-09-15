@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Swashbuckle.Swagger.Model;
-using Swashbuckle.SwaggerGen.Generator;
 
 namespace Digipolis.Web.Swagger
 {

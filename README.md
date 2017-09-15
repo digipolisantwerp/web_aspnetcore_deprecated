@@ -6,7 +6,6 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
 - Paging with paging response object.
 - Dynamic sorting.
 - Global error handling with configuration of responses returning a standard error model.
-- Application version endpoint.
 - Base classes that encapsulate common functionality.
 - Action filters.
 - Swagger extensions.
@@ -21,7 +20,6 @@ The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web pr
 - [ActionFilters](#actionfilters)
   - [ValidateModelState](#validatemodelstate)
   - [Endpoint versioning](#endpoint-versioning)
-- [Application version endpoint](#application-version-endpoint)
 - [Modelbinders](#modelbinders)
 - [MVC Extensions](#mvc-extensions)
 - [Swagger extensions](#swagger-extensions)
@@ -45,7 +43,7 @@ To add the toolbox to a project, you add the package to the csproj project file:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Digipolis.Web" Version="6.1.0" />
+    <PackageReference Include="Digipolis.Web" Version="7.0.0" />
   </ItemGroup>
 ``` 
 
@@ -53,7 +51,7 @@ or if your project still works with project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "6.1.0"
+    "Digipolis.Web":  "7.0.0"
  }
 ``` 
 
@@ -133,19 +131,7 @@ NOTE: When versioning is enabled it can be disabled by configuration. in the app
   }
 }
 ``` 
-   
-## Application version endpoint
 
-This framework adds an additional endpoint to the web site where the version number of the application can be requested via a GET request.  
-By default, this endpoint is provided at the url **_status/version_**, but this can be changed to another value during startup.
-
-The versioning framework is added to the project in **ConfigureServices** method of the Startup  class :
-
-``` csharp
-  services.AddMvc().AddVersionEndpoint();           // default route = /status/version
-  
-  service.AddMvc().AddVersionEndpoint(options => options.Route = "myRoute");      // use custom route 
-```
 ## Modelbinders
 A modelbinder for comma seperated arrays or enumerables is made available.
 Insert it at the start of the modelbinders collection to always try to deserialize arrays or IEnumerables of value types or string using this modelbinder.
@@ -218,27 +204,26 @@ app.UseSwaggerUiRedirect("myUrl")
 You can configure some default responses by specifying a class as a generic when registering AddSwaggerGen
 
 ``` csharp 
-// Add Swagger extensions
-services.AddSwaggerGen<ApiExtensionSwaggerSettings>(x =>
-{
-    //Specify Api Versions
-    x.MultipleApiVersions(new[] { new Info
-    {
-        //Add Inline version
-        Version = "v1",
-        Title = "API V1",
-        Description = "Description for V1 of the API",
-        Contact = new Contact { Email = "info@digipolis.be", Name = "Digipolis", Url = "https://www.digipolis.be" },
-        TermsOfService = "https://www.digipolis.be/tos",
-        License = new License
-        {
-            Name = "My License",
-            Url = "https://www.digipolis.be/licensing"
-        },
-    },
-    //Add version through configuration class
-    new Version2()});
-});
+ // Add Swagger extensions
+            services.AddSwaggerGen<ApiExtensionSwaggerSettings>(o =>
+            {
+                o.SwaggerDoc(Versions.V1, new Info
+                {
+                    //Add Inline version
+                    Version = Versions.V1,
+                    Title = "API V1",
+                    Description = "Description for V1 of the API",
+                    Contact = new Contact { Email = "info@digipolis.be", Name = "Digipolis", Url = "https://www.digipolis.be" },
+                    TermsOfService = "https://www.digipolis.be/tos",
+                    License = new License
+                    {
+                        Name = "My License",
+                        Url = "https://www.digipolis.be/licensing"
+                    },
+                });
+
+                o.SwaggerDoc("v2", new Version2());
+            });
 ```
 
 **ApiExtensionSwaggerSettings** is a class that incorperates all guidelines from Digipolis. But this can be

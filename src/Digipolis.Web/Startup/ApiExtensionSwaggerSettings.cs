@@ -1,7 +1,10 @@
 ﻿using System.IO;
 using Digipolis.Web.Swagger;
 using Microsoft.Extensions.PlatformAbstractions;
-using Swashbuckle.SwaggerGen.Application;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Digipolis.Web.Api;
+using System.Linq;
+using Microsoft.Extensions.Options;
 
 namespace Digipolis.Web.Startup
 {
@@ -11,5 +14,7 @@ namespace Digipolis.Web.Startup
         {
             options.DescribeAllEnumsAsStrings();
         }
+
+
     }
 }

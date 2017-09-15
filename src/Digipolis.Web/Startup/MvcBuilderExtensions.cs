@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
-using Digipolis.Web.Versioning;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.DotNet.InternalAbstractions;
@@ -20,6 +19,7 @@ using Digipolis.Web.Api.Tools;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Digipolis.Web.Api.Models;
 using Digipolis.Web.Modelbinders;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Digipolis.Web
 {
@@ -68,7 +68,17 @@ namespace Digipolis.Web
                 {
                     options.Conventions.Insert(0, new RouteConvention(new RouteAttribute("{apiVersion}")));
                 });
+
+                builder.Services.ConfigureSwaggerGen(options =>
+                {
+                    options.DocInclusionPredicate((version, apiDescription) =>
+                    {
+                        var allowedVersions = apiDescription.ActionAttributes().OfType<VersionsAttribute>().FirstOrDefault();
+                        return (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version));
+                    });
+                });
             }
+
 
             #endregion
 
@@ -94,19 +104,6 @@ namespace Digipolis.Web
                 x.SerializerSettings.Converters.Add(new GuidConverter());
                 x.SerializerSettings.Formatting = Formatting.None;
             });
-
-            return builder;
-        }
-
-        public static IMvcBuilder AddVersionEndpoint(this IMvcBuilder builder, Action<WebVersioningOptions> setupAction = null)
-        {
-            if (setupAction != null)
-            {
-                builder.Services.Configure(setupAction);
-            }
-
-            builder.Services.TryAddSingleton<IVersionProvider, WebVersionProvider>();
-            builder.Services.TryAddEnumerable(ServiceDescriptor.Transient<IConfigureOptions<MvcOptions>, WebVersioningOptionsSetup>());
 
             return builder;
         }

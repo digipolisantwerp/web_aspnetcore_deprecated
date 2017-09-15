@@ -4,8 +4,8 @@ using Digipolis.Errors;
 using Digipolis.Web.Api;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Swashbuckle.Swagger.Model;
-using Swashbuckle.SwaggerGen.Generator;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Digipolis.Web.Swagger
 {
@@ -20,7 +20,6 @@ namespace Digipolis.Web.Swagger
             CreatedResponse(operation, context);
             OkResponse(operation, context);
             NotFoundResponse(operation, context);
-            AddReturnSchemaToVersionEndpoint(operation, context);
         }
 
         protected virtual void UnauthorizedResponse(Operation operation, OperationFilterContext context)
@@ -111,15 +110,6 @@ namespace Digipolis.Web.Swagger
                 Description = "Not found",
                 Schema = context.SchemaRegistry.GetOrRegister(typeof(Error))
             });
-        }
-
-        protected virtual void AddReturnSchemaToVersionEndpoint(Operation operation, OperationFilterContext context)
-        {
-            var operationId = context.ApiDescription.RelativePath.Contains("apiVersion") ? "ByApiVersionStatusVersionGet" : "StatusVersionGet";
-            if (!operation.OperationId.Equals(operationId)) return;
-            operation.Responses["200"].Schema = context.SchemaRegistry.GetOrRegister(typeof(AppVersion));
-            operation.Summary = "Get the version of the application";
-            operation.Produces.Add("application/json");
         }
     }
 }
