@@ -1,5 +1,8 @@
 # Web Toolbox
 
+## 8.0.0
+ - Upgrade dependencies for .Net Core 2.0
+
 ## 7.0.0
 
 - Swagger reference update
