@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Digipolis.Web.Api
 {
-    public class PagedResult<T> where T : class, new()
+    public class PagedResult<T> where T : class
     {
         [JsonProperty(PropertyName = "_links")]
         public PagedResultLinks Links { get; set; }
@@ -35,7 +35,7 @@ namespace Digipolis.Web.Api
         }
     }
 
-    internal class DeserializationPagedResult<T> : PagedResult<T> where T : class, new()
+    internal class DeserializationPagedResult<T> : PagedResult<T> where T : class
     {
         [JsonProperty(PropertyName = "_embedded")]
         public Embedded EmbeddedData

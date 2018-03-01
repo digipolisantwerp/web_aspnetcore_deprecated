@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 7.0.1
+
+- PagedResult: removed new() restriction
+
 ## 7.0.0
 
 - Swagger reference update
