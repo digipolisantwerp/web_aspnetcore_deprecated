@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
-using Digipolis.Web.Api;
-using Digipolis.Web.Swagger;
+﻿using Digipolis.Web.Swagger;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using Swashbuckle.AspNetCore.Swagger;
+using System;
 
 namespace Digipolis.Web
 {
