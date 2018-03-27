@@ -1,10 +1,8 @@
 ﻿using Digipolis.Web.Api;
 using Digipolis.Web.Api.JsonConverters;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Digipolis.Web.UnitTests.Api.JsonConverters

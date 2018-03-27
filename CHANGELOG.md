@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 8.0.0
+
+- json serialization: initialized/assigned properties with a value different from null will be serialized; properties (collection, string, ...) with value null won't be serialized
+
 ## 7.0.1
 
 - PagedResult: removed new() restriction

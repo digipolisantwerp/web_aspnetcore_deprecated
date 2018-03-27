@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Description>Web related tooling.</Description>
-    <VersionPrefix>7.0.1</VersionPrefix>
+    <VersionPrefix>8.0.0</VersionPrefix>
     <Authors>digipolis.be</Authors>
     <TargetFramework>netstandard1.6</TargetFramework>
     <AssemblyName>Digipolis.Web</AssemblyName>
@@ -17,6 +17,7 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <AssemblyVersion>8.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

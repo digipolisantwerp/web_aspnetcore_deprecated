@@ -1,6 +1,6 @@
 # Web Toolbox  
 
-The Web Toolbox offers functionality that can be used in ASP.NET Core 1.0 Web projects:
+The Web Toolbox offers functionality that can be used in ASP.NET Core Web projects:
 - The enforcement of configurable API guideline.
 - Versioning of endpoints.
 - Paging with paging response object.
@@ -43,7 +43,7 @@ To add the toolbox to a project, you add the package to the csproj project file:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Digipolis.Web" Version="7.0.1" />
+    <PackageReference Include="Digipolis.Web" Version="8.0.0" />
   </ItemGroup>
 ``` 
 
@@ -51,7 +51,7 @@ or if your project still works with project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "7.0.1"
+    "Digipolis.Web":  "8.0.0"
  }
 ``` 
 

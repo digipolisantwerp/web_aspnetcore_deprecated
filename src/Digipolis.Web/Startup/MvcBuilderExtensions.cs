@@ -1,25 +1,19 @@
-﻿using System;
-using Digipolis.Errors;
-using Digipolis.Web.Api;
+﻿using Digipolis.Web.Api;
 using Digipolis.Web.Api.Conventions;
 using Digipolis.Web.Api.JsonConverters;
-using Digipolis.Web.Exceptions;
+using Digipolis.Web.Api.Tools;
+using Digipolis.Web.Modelbinders;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.DotNet.InternalAbstractions;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using System.Linq;
-using Digipolis.Web.Api.Tools;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Digipolis.Web.Api.Models;
-using Digipolis.Web.Modelbinders;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.Linq;
 
 namespace Digipolis.Web
 {
@@ -96,13 +90,7 @@ namespace Digipolis.Web
 
             builder.AddJsonOptions(x =>
             {
-                x.SerializerSettings.ContractResolver = new BaseContractResolver();
-                x.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
-                x.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                x.SerializerSettings.Converters.Add(new TimeSpanConverter());
-                x.SerializerSettings.Converters.Add(new PagedResultConverter());
-                x.SerializerSettings.Converters.Add(new GuidConverter());
-                x.SerializerSettings.Formatting = Formatting.None;
+                x.SerializerSettings.Initialize();
             });
 
             return builder;
