@@ -33,7 +33,7 @@ namespace Digipolis.Web.Api.Models
         }
 
 
-        public static PagedResult<T> ToPagedResult<T>(this PageOptions pageOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where T : class, new()
+        public static PagedResult<T> ToPagedResult<T>(this PageOptions pageOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where T : class
         {
 
             if (string.IsNullOrWhiteSpace(actionName)) throw new ArgumentNullException(nameof(actionName));
@@ -55,7 +55,7 @@ namespace Digipolis.Web.Api.Models
             return result;
         }
 
-        public static PagedResult<T> ToPagedResult<T>(this PageOptions pageOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where T : class, new()
+        public static PagedResult<T> ToPagedResult<T>(this PageOptions pageOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where T : class
         {
             if (string.IsNullOrWhiteSpace(routeName)) throw new ArgumentNullException(nameof(routeName));
 
@@ -75,7 +75,7 @@ namespace Digipolis.Web.Api.Models
             return result;
         }
 
-        public static PagedResult<T> ToPagedResult<T>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where T : class, new()
+        public static PagedResult<T> ToPagedResult<T>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where T : class
         {
             if (string.IsNullOrWhiteSpace(actionName)) throw new ArgumentNullException(nameof(actionName));
             if (string.IsNullOrWhiteSpace(controllerName)) throw new ArgumentNullException(nameof(controllerName));
@@ -96,7 +96,7 @@ namespace Digipolis.Web.Api.Models
             return result;
         }
 
-        public static PagedResult<T> ToPagedResult<T>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where T : class, new()
+        public static PagedResult<T> ToPagedResult<T>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where T : class
         {
             if (string.IsNullOrWhiteSpace(routeName)) throw new ArgumentNullException(nameof(routeName));
 
