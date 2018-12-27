@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace Digipolis.Web
 {
@@ -67,7 +68,9 @@ namespace Digipolis.Web
                 {
                     options.DocInclusionPredicate((version, apiDescription) =>
                     {
-                        var allowedVersions = apiDescription.ActionAttributes().OfType<VersionsAttribute>().FirstOrDefault();
+                        if (!apiDescription.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
+
+                        var allowedVersions = methodInfo.GetCustomAttributes(true).OfType<VersionsAttribute>().FirstOrDefault();
                         return (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version));
                     });
                 });

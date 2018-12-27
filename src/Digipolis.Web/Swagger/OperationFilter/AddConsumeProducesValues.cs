@@ -10,8 +10,8 @@ namespace Digipolis.Web.Swagger
     {
         public void Apply(Operation operation, OperationFilterContext context)
         {
-            var produces = context.ApiDescription.ActionAttributes().OfType<ProducesAttribute>().LastOrDefault();
-            var consumes = context.ApiDescription.ActionAttributes().OfType<ConsumesAttribute>().LastOrDefault();
+            var produces = context.MethodInfo.GetCustomAttributes(true).OfType<ProducesAttribute>().LastOrDefault();
+            var consumes = context.MethodInfo.GetCustomAttributes(true).OfType<ConsumesAttribute>().LastOrDefault();
 
             if (produces != null) {
                 foreach (var responseType in produces.ContentTypes)

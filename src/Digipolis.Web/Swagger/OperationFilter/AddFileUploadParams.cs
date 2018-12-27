@@ -15,12 +15,12 @@ namespace Digipolis.Web.Swagger
             if (operation.Parameters == null)
                 return;
 
-            var formFileParams = context.ApiDescription.ActionDescriptor.Parameters
+            var formFileParams = context.MethodInfo.GetParameters()
                 .Where(x => x.ParameterType.IsAssignableFrom(typeof(IFormFile)))
                 .Select(x => x.Name)
                 .ToList();
 
-            var formFileSubParams = context.ApiDescription.ActionDescriptor.Parameters
+            var formFileSubParams = context.MethodInfo.GetParameters()
                 .SelectMany(x => x.ParameterType.GetProperties())
                 .Where(x => x.PropertyType.IsAssignableFrom(typeof(IFormFile)))
                 .Select(x => x.Name)

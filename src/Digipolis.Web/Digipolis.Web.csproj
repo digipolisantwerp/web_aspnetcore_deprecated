@@ -9,15 +9,15 @@
     <PackageId>Digipolis.Web</PackageId>
     <PackageTags>Web;Toolbox;HTTP Headers;Versioning;Global Error Handling;Api Guidelines;Swagger Configuration</PackageTags>
     <PackageProjectUrl>http://github.com/digipolisantwerp/web_aspnetcore</PackageProjectUrl>
-    <PackageLicenseUrl>http://github.com/digipolisantwerp/web_aspnetcore/LICENSE.txt</PackageLicenseUrl>
+    <PackageLicense>http://github.com/digipolisantwerp/web_aspnetcore/LICENSE.txt</PackageLicense>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>http://github.com/digipolisantwerp/web_aspnetcore</RepositoryUrl>
     <NetStandardImplicitPackageVersion>2.0.0</NetStandardImplicitPackageVersion>
-    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <AssetTargetFallback>$(AssetTargetFallback);dnxcore50</AssetTargetFallback>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <AssemblyVersion>8.0.0.0</AssemblyVersion>
+    <AssemblyVersion>9.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

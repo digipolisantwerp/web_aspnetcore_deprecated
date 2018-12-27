@@ -16,8 +16,8 @@ namespace Digipolis.Web.Swagger
 
         public void Apply(Operation operation, Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext context)
         {
-            ActionAttributes = context.ApiDescription.ActionAttributes().OfType<Attribute>();
-            ControllerAttributes = context.ApiDescription.ActionAttributes().OfType<Attribute>();
+            ActionAttributes = context.MethodInfo.GetCustomAttributes(true).OfType<Attribute>();
+            ControllerAttributes = context.MethodInfo.GetCustomAttributes(true).OfType<Attribute>();
             CombinedAttributes = ActionAttributes.Union(ControllerAttributes);
             ConfigureResponses(operation, context);
             ExcludeSwaggerResonse(operation);
