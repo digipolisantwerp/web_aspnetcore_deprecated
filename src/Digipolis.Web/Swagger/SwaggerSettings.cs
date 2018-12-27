@@ -1,6 +1,7 @@
-﻿using System.IO;
-using Microsoft.Extensions.PlatformAbstractions;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
+using System;
+using System.IO;
 
 namespace Digipolis.Web.Swagger
 {
@@ -9,13 +10,21 @@ namespace Digipolis.Web.Swagger
         public void Configure(SwaggerGenOptions options)
         {
             options.OperationFilter<TSwaggerResponseDefinitions>();
-            var xmlPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, PlatformServices.Default.Application.ApplicationName + ".xml");
+
+            // determine base path for the application.
+            var basePath = AppContext.BaseDirectory;                       
+            var assemblyName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
+            var fileName = System.IO.Path.GetFileName(assemblyName + ".xml");
+
+            var xmlPath = Path.Combine(basePath, fileName);
             if (File.Exists(xmlPath)) options.IncludeXmlComments(xmlPath);
+
             options.OperationFilter<AddFileUploadParams>();
             options.OperationFilter<AddConsumeProducesValues>();
             options.DocumentFilter<SetVersionInPaths>();
             options.SchemaFilter<PagedResultSchemaFilter>();
             options.DocumentFilter<EndPointPathsAndParamsToLower>();
+
             Configuration(options);
         }
 

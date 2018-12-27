@@ -1,11 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Threading.Tasks;
-using Digipolis.Errors.Exceptions;
+﻿using Digipolis.Errors.Exceptions;
 using Digipolis.Web.Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace Digipolis.Web.Exceptions
 {

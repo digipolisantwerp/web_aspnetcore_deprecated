@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
-using Digipolis.Web.Api.Constraints;
+﻿using Digipolis.Web.Api.Constraints;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using System;
+using System.Linq;
 
 namespace Digipolis.Web.Api
 {

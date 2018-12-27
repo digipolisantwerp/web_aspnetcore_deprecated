@@ -1,13 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Digipolis.Errors;
+using Digipolis.Web.Api;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
-using System.Threading.Tasks;
-using Digipolis.Errors;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Linq;
-using Digipolis.Web.Api;
+using System.Threading.Tasks;
 
 namespace Digipolis.Web.Exceptions
 {

@@ -1,24 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
+using Digipolis.Web.SampleApi.Configuration;
+using Digipolis.Web.SampleApi.Data;
+using Digipolis.Web.SampleApi.Logic;
+using Digipolis.Web.Startup;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Digipolis.Web;
-using Digipolis.Web.SampleApi.Configuration;
-using AutoMapper;
-using Digipolis.Web.SampleApi.Data;
-using Digipolis.Web.SampleApi.Logic;
 using Swashbuckle.AspNetCore.Swagger;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using Digipolis.Web.Swagger;
-using Digipolis.Web.Startup;
-using Digipolis.Web.Api;
-using System.ComponentModel;
-using Microsoft.AspNetCore.Authorization;
+using License = Swashbuckle.AspNetCore.Swagger.License;
 
 namespace Digipolis.Web.SampleApi
 {

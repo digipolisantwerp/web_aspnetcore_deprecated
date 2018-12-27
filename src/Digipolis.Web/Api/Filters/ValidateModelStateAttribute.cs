@@ -1,7 +1,7 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Digipolis.Errors.Exceptions;
+﻿using Digipolis.Errors.Exceptions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Digipolis.Web.Api
 {

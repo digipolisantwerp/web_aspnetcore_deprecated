@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 9.0.0
+
+- upgrade to netstandard2.0
+
 ## 8.0.1
 
 - ToPagedResult<T>: removed new() restriction

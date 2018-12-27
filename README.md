@@ -43,7 +43,7 @@ To add the toolbox to a project, you add the package to the csproj project file:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Digipolis.Web" Version="8.0.1" />
+    <PackageReference Include="Digipolis.Web" Version="9.0.0" />
   </ItemGroup>
 ``` 
 
@@ -51,7 +51,7 @@ or if your project still works with project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "8.0.1"
+    "Digipolis.Web":  "9.0.0"
  }
 ``` 
 

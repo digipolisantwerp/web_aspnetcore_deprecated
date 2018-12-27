@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Digipolis.Web.Api;
-using Digipolis.Web.Api.Constraints;
-using Digipolis.Web.Api.Conventions;
-using Digipolis.Web.UnitTests.Utilities;
-using Digipolis.Web.UnitTests._TestObjects;
+﻿using Digipolis.Web.Api.Conventions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing.Template;
-using Microsoft.Extensions.Options;
 using Moq;
+using System;
+using System.Linq;
+using System.Reflection;
 using Xunit;
 
 namespace Digipolis.Web.UnitTests.Api.Conventions
