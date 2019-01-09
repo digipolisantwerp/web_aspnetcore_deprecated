@@ -50,7 +50,7 @@ namespace Digipolis.Web.Api.Models
             result.Links.Last = GenerateLink(pageOptions, result.Page.TotalPages, actionName, controllerName, routeValues);
 
             if (pageOptions.Page - 1 > 0) result.Links.Previous = GenerateLink(pageOptions, pageOptions.Page - 1, actionName, controllerName, routeValues);
-            if (pageOptions.Page + 1 < result.Page.TotalPages) result.Links.Next = GenerateLink(pageOptions, pageOptions.Page + 1, actionName, controllerName, routeValues);
+            if (pageOptions.Page + 1 <= result.Page.TotalPages) result.Links.Next = GenerateLink(pageOptions, pageOptions.Page + 1, actionName, controllerName, routeValues);
 
             return result;
         }
@@ -70,7 +70,7 @@ namespace Digipolis.Web.Api.Models
             result.Links.Last = GenerateLink(pageOptions, result.Page.TotalPages, routeName, routeValues);
 
             if (pageOptions.Page - 1 > 0) result.Links.Previous = GenerateLink(pageOptions, pageOptions.Page - 1, routeName, routeValues);
-            if (pageOptions.Page + 1 < result.Page.TotalPages) result.Links.Next = GenerateLink(pageOptions, pageOptions.Page + 1, routeName, routeValues);
+            if (pageOptions.Page + 1 <= result.Page.TotalPages) result.Links.Next = GenerateLink(pageOptions, pageOptions.Page + 1, routeName, routeValues);
 
             return result;
         }
@@ -91,7 +91,7 @@ namespace Digipolis.Web.Api.Models
             result.Links.Last = GenerateLink(pageSortOptions, result.Page.TotalPages, actionName, controllerName, routeValues);
 
             if (pageSortOptions.Page - 1 > 0) result.Links.Previous = GenerateLink(pageSortOptions, pageSortOptions.Page - 1, actionName, controllerName, routeValues);
-            if (pageSortOptions.Page + 1 < result.Page.TotalPages) result.Links.Next = GenerateLink(pageSortOptions, pageSortOptions.Page + 1, actionName, controllerName, routeValues);
+            if (pageSortOptions.Page + 1 <= result.Page.TotalPages) result.Links.Next = GenerateLink(pageSortOptions, pageSortOptions.Page + 1, actionName, controllerName, routeValues);
 
             return result;
         }
@@ -111,7 +111,7 @@ namespace Digipolis.Web.Api.Models
             result.Links.Last = GenerateLink(pageSortOptions, result.Page.TotalPages, routeName, routeValues);
 
             if (pageSortOptions.Page - 1 > 0) result.Links.Previous = GenerateLink(pageSortOptions, pageSortOptions.Page - 1, routeName, routeValues);
-            if (pageSortOptions.Page + 1 < result.Page.TotalPages) result.Links.Next = GenerateLink(pageSortOptions, pageSortOptions.Page + 1, routeName, routeValues);
+            if (pageSortOptions.Page + 1 <= result.Page.TotalPages) result.Links.Next = GenerateLink(pageSortOptions, pageSortOptions.Page + 1, routeName, routeValues);
 
             return result;
         }

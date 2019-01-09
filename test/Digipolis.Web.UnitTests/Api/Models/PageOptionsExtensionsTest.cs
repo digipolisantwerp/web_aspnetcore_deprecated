@@ -31,6 +31,94 @@ namespace Digipolis.Web.UnitTests.Api.Models
             Assert.Equal("xhs://myhost.be:999/test", result.Links.First.Href);
         }
 
+        [Fact]
+        public void ToPagedResultFirstPageHasNoPreviousLink()
+        {
+            var accessor = GetActionContextAccessorWithLinkProvider();
+
+            PageOptionsExtensions.Configure(accessor.Object);
+
+            var pageOptions = new PageOptions() { Page = 1, PageSize = 10 };
+            var result = pageOptions.ToPagedResult(new List<Object>(), 30, "test", new object[] { });
+
+            Assert.Null(result.Links.Previous);
+        }
+
+        [Fact]
+        public void ToPagedResultFirstPageHasFirstAndNextAndLastLink()
+        {
+            var accessor = GetActionContextAccessorWithLinkProvider();
+
+            PageOptionsExtensions.Configure(accessor.Object);
+
+            var pageOptions = new PageOptions() { Page = 1, PageSize = 10 };
+            var result = pageOptions.ToPagedResult(new List<Object>(), 40, "test", new object[] { });
+
+            Assert.NotNull(result.Links.First);
+            Assert.NotNull(result.Links.Next);
+            Assert.NotNull(result.Links.Last);
+        }
+
+        [Fact]
+        public void ToPagedResultMiddlePageHasFirstAndNextAndPreviousAndLastLink()
+        {
+            var accessor = GetActionContextAccessorWithLinkProvider();
+
+            PageOptionsExtensions.Configure(accessor.Object);
+
+            var pageOptions = new PageOptions() { Page = 2, PageSize = 10 };
+            var result = pageOptions.ToPagedResult(new List<Object>(), 40, "test", new object[] { });
+
+            Assert.NotNull(result.Links.First);
+            Assert.NotNull(result.Links.Previous);
+            Assert.NotNull(result.Links.Next);
+            Assert.NotNull(result.Links.Last);
+        }
+
+
+        [Fact]
+        public void ToPagedResultSecondToLastPageHasFirstAndNextAndPreviousAndLastLink()
+        {
+            var accessor = GetActionContextAccessorWithLinkProvider();
+
+            PageOptionsExtensions.Configure(accessor.Object);
+
+            var pageOptions = new PageOptions() { Page = 3, PageSize = 10 };
+            var result = pageOptions.ToPagedResult(new List<Object>(), 40, "test", new object[] { });
+
+            Assert.NotNull(result.Links.First);
+            Assert.NotNull(result.Links.Previous);
+            Assert.NotNull(result.Links.Next);
+            Assert.NotNull(result.Links.Last);
+        }
+
+        [Fact]
+        public void ToPagedResultLastPageHasFirstAndPreviousAndLastLink()
+        {
+            var accessor = GetActionContextAccessorWithLinkProvider();
+
+            PageOptionsExtensions.Configure(accessor.Object);
+
+            var pageOptions = new PageOptions() { Page = 4, PageSize = 10 };
+            var result = pageOptions.ToPagedResult(new List<Object>(), 40, "test", new object[] { });
+
+            Assert.NotNull(result.Links.First);
+            Assert.NotNull(result.Links.Previous);
+            Assert.NotNull(result.Links.Last);
+        }
+
+        [Fact]
+        public void ToPagedResultLastPageHasHasNextLink()
+        {
+            var accessor = GetActionContextAccessorWithLinkProvider();
+
+            PageOptionsExtensions.Configure(accessor.Object);
+
+            var pageOptions = new PageOptions() { Page = 4, PageSize = 10 };
+            var result = pageOptions.ToPagedResult(new List<Object>(), 40, "test", new object[] { });
+
+            Assert.Null(result.Links.Next);
+        }
 
         private Mock<IActionContextAccessor> GetActionContextAccessorWithLinkProvider()
         {
