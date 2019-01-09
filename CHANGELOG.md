@@ -2,7 +2,7 @@
 
 ## 9.0.1
 
-- Bugfix: pagetoption second to last past now has next page reference
+- Bugfix: pageOptions second to last page now has next page reference
 - Added default value property to page options so they show up on swagger
 
 ## 9.0.0
