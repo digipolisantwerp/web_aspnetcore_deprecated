@@ -1,5 +1,10 @@
 # Web Toolbox
 
+## 9.0.1
+
+- Bugfix: pagetoption second to last past now has next page reference
+- Added default value property to page options so they show up on swagger
+
 ## 9.0.0
 
 - upgrade to netstandard2.0
