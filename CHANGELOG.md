@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 9.0.2
+
+- Bugfix: SwaggerResponseDefinitions - retrieve the controller attributes from declaring Type and not from  the method
+
 ## 9.0.1
 
 - Bugfix: pageOptions second to last page now has next page reference
