@@ -28,8 +28,8 @@ namespace Digipolis.Web.UnitTests.Api.JsonConverters
             Assert.Equal(1, deserialized.Page.Size);
             Assert.Equal(25, deserialized.Page.TotalElements);
             Assert.Equal(3, deserialized.Page.TotalPages);
-            Assert.NotNull(deserialized.Data);
-            Assert.Equal("someText", deserialized.Data.First().Text);
+            Assert.NotNull(deserialized.Embedded);
+            Assert.Equal("someText", deserialized.Embedded.First().Text);
         }
 
         public class DummyType
