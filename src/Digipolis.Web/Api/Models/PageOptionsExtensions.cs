@@ -166,7 +166,7 @@ namespace Digipolis.Web.Api.Models
             return new Link(url.ToLowerInvariant());
         }
 
-        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageOptions pageOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where EmbeddedT : Embedded<T> where T : class
+        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageOptions pageOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where EmbeddedT : Embedded<T>, new() where T : class
         {
 
             if (string.IsNullOrWhiteSpace(actionName)) throw new ArgumentNullException(nameof(actionName));
@@ -188,7 +188,7 @@ namespace Digipolis.Web.Api.Models
             return result;
         }
 
-        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageOptions pageOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where EmbeddedT : Embedded<T> where T : class 
+        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageOptions pageOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where EmbeddedT : Embedded<T>, new() where T : class 
         {
             if (string.IsNullOrWhiteSpace(routeName)) throw new ArgumentNullException(nameof(routeName));
 
@@ -208,7 +208,7 @@ namespace Digipolis.Web.Api.Models
             return result;
         }
 
-        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where EmbeddedT : Embedded<T> where T : class
+        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string actionName, string controllerName, object routeValues = null) where EmbeddedT : Embedded<T>, new() where T : class
         {
             if (string.IsNullOrWhiteSpace(actionName)) throw new ArgumentNullException(nameof(actionName));
             if (string.IsNullOrWhiteSpace(controllerName)) throw new ArgumentNullException(nameof(controllerName));
@@ -229,7 +229,7 @@ namespace Digipolis.Web.Api.Models
             return result;
         }
 
-        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where EmbeddedT : Embedded<T> where T : class
+        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total, string routeName, object routeValues = null) where EmbeddedT : Embedded<T>, new() where T : class
         {
             if (string.IsNullOrWhiteSpace(routeName)) throw new ArgumentNullException(nameof(routeName));
 

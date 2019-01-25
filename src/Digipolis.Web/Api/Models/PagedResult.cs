@@ -49,11 +49,11 @@ namespace Digipolis.Web.Api
     /// <typeparam name="EmbeddedT">The type of the mbedded t.</typeparam>
     public class PagedResult<T, EmbeddedT> : PagedResult<T>
         where T : class
-        where EmbeddedT : Embedded<T>
+        where EmbeddedT : Embedded<T>, new()
     {
         public PagedResult(int page, int pageSize, int totalElements, IEnumerable<T> data)
         {
-            Embedded = (EmbeddedT)new Embedded<T>(data ?? new List<T>());
+            Embedded = new EmbeddedT { ResourceList = data ?? new List<T>()};
             Page = new Page
             {
                 Number = page,

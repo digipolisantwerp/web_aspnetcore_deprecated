@@ -367,10 +367,6 @@ Inherit Embedded<T> to get correct resourceList name:
 ``` csharp
 public class EmbeddedValue : Embedded<Value>
 {
-    public EmbeddedValue(IEnumerable<Value> data)
-    {
-        ResourceList = data;
-    }
     [JsonProperty("values")]
     public override IEnumerable<Value> ResourceList { get; set; }
 }
