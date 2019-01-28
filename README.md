@@ -43,7 +43,7 @@ To add the toolbox to a project, you add the package to the csproj project file:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Digipolis.Web" Version="9.0.2" />
+    <PackageReference Include="Digipolis.Web" Version="9.0.3" />
   </ItemGroup>
 ``` 
 
@@ -51,7 +51,7 @@ or if your project still works with project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "9.0.2"
+    "Digipolis.Web":  "9.0.3"
  }
 ``` 
 
@@ -352,7 +352,7 @@ public IActionResult Get([FromQuery]PageOptions queryOptions)
     {
         int total;
         var values = _valueLogic.GetAll(queryOptions, out total);
-        var result = queryOptions.ToPagedResult(values, total, "Get", "Values", new { });
+        var result = queryOptions.ToPagedResult<Value, EmbeddedValue>(values, total, "Get", "Values", new { });
         return Ok(result);
 
     }
@@ -360,5 +360,14 @@ public IActionResult Get([FromQuery]PageOptions queryOptions)
     {
         return StatusCode((int)HttpStatusCode.InternalServerError);
     }
+}
+``` 
+
+Inherit Embedded<T> to get correct resourceList name:
+``` csharp
+public class EmbeddedValue : Embedded<Value>
+{
+    [JsonProperty("values")]
+    public override IEnumerable<Value> ResourceList { get; set; }
 }
 ``` 

@@ -22,7 +22,6 @@ namespace Digipolis.Web.Swagger
             options.OperationFilter<AddFileUploadParams>();
             options.OperationFilter<AddConsumeProducesValues>();
             options.DocumentFilter<SetVersionInPaths>();
-            options.SchemaFilter<PagedResultSchemaFilter>();
             options.DocumentFilter<EndPointPathsAndParamsToLower>();
 
             Configuration(options);

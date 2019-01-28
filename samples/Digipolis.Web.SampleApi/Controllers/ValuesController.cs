@@ -30,6 +30,9 @@ namespace Digipolis.Web.SampleApi.Controllers
         /// <summary>
         /// Get all values 
         /// </summary>
+        /// <remarks>
+        /// This endpoint demostrates the use of the old <see cref="PagedResult{T}"/> and it's resulting json.
+        /// </remarks>
         /// <param name="queryOptions">Query options from uri</param>
         /// <returns>An array of value objects</returns>
         [HttpGet()]
@@ -46,6 +49,27 @@ namespace Digipolis.Web.SampleApi.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Get all values 
+        /// </summary>
+        /// <remarks>
+        /// This endpoint demostrates the use of the new <see cref="PagedResult{T, EmbeddedT}"/> and it's resulting json.
+        /// </remarks>
+        /// <param name="queryOptions">Query options from uri</param>
+        /// <returns>An array of value objects</returns>
+        [HttpGet("new")]
+        [ProducesResponseType(typeof(PagedResult<ValueDto, EmbeddedValueDto>), 200)]
+        [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
+        [Produces("application/hal+json")]
+        public IActionResult GetNew([FromQuery]CriteriaDto criteria)
+        {
+            int total;
+            var values = _valueLogic.GetAll(criteria, out total);
+            //var result = queryOptions.ToPagedResult(values, total, "kevin", new { test = 0 });
+            var result = criteria.ToPagedResult<ValueDto, EmbeddedValueDto>(values, total, "Get", "Values", new { test = 0 });
+            return Ok(result);
+        }
         /// <summary>
         /// Get a value by id
         /// </summary>

@@ -61,7 +61,7 @@ namespace Digipolis.Web.SampleApi
                     },
                 });
 
-                o.SwaggerDoc("v2", new Version2());
+                o.SwaggerDoc(Versions.V2, new Version2());
             });
 
             //Register Dependencies for example project

@@ -1,17 +1,23 @@
-﻿using System;
-using System.Collections;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json;
 
 namespace Digipolis.Web.Api
 {
+
+    /// <summary>
+    /// Using this PagedResult, serialization will generate a json string with a property named 'resourceList' on the _embedded HAL object,
+    /// provided for backwards compatibility.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class PagedResult<T> where T : class
     {
         [JsonProperty(PropertyName = "_links")]
         public PagedResultLinks Links { get; set; }
 
-        public IEnumerable<T> Data { get; set; }
+        [JsonProperty("_embedded")]
+        public Embedded<T> Embedded { get; set; }
 
         [JsonProperty(PropertyName = "_page")]
         public Page Page { get; set; }
@@ -23,7 +29,7 @@ namespace Digipolis.Web.Api
 
         public PagedResult(int page, int pageSize, int totalElements, IEnumerable<T> data)
         {
-            Data = data ?? new List<T>();
+            Embedded = new Embedded<T>(data ?? new List<T>());
             Page = new Page
             {
                 Number = page,
@@ -35,31 +41,49 @@ namespace Digipolis.Web.Api
         }
     }
 
-    internal class DeserializationPagedResult<T> : PagedResult<T> where T : class
+    /// <summary>
+    /// Using this PagedResult, serialization will generate a json string where the _embedded HAL object an object will have a property with a name 
+    /// that can be set with the JsonPropertyAttribute on the overridden ResourceList property of the inherited <see cref="Embedded{T}"/> that used as EmbeddedT.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="EmbeddedT">The type of the mbedded t.</typeparam>
+    public class PagedResult<T, EmbeddedT> : PagedResult<T>
+        where T : class
+        where EmbeddedT : Embedded<T>, new()
     {
-        [JsonProperty(PropertyName = "_embedded")]
-        public Embedded EmbeddedData
+        public PagedResult(int page, int pageSize, int totalElements, IEnumerable<T> data)
         {
-            set
+            Embedded = new EmbeddedT { ResourceList = data ?? new List<T>()};
+            Page = new Page
             {
-                Data = value?.ResourceList;
-            }
+                Number = page,
+                Size = data.Count(),
+                TotalElements = totalElements,
+                TotalPages = (int)Math.Ceiling((double)totalElements / (double)pageSize)
+            };
+            Links = new PagedResultLinks();
         }
 
-        public DeserializationPagedResult()
-        {
-
-        }
-
-        public DeserializationPagedResult(int page, int pageSize, int totalElements, IEnumerable<T> data)
-            : base(page, pageSize, totalElements, data)
-        {
-
-        }
-
-        public class Embedded
-        {
-            public IEnumerable<T> ResourceList { get; set; }
-        }
+        [JsonProperty("_embedded")]
+        public new EmbeddedT Embedded { get; set; }
     }
+
+
+    /// <summary>
+    /// Inherit from this class, providing a type for T, to use as EmbeddedT for <see cref="PagedResult{T, EmbeddedT}"/>,
+    /// override the ResourceList property and set the json propertyName with the JsonPropertyAttribute on the ResourceList property in the inherited class.
+    /// If this class is not inherited, use <see cref="PagedResult{T}"/> for backwards compatibility.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    public class Embedded<T>
+    {
+        public Embedded() { }
+        public Embedded(IEnumerable<T> data)
+        {
+            ResourceList = data;
+        }
+        [JsonProperty("resourceList")]
+        public virtual IEnumerable<T> ResourceList { get; set; }
+    }
+
 }
