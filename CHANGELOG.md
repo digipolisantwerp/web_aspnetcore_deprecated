@@ -10,6 +10,9 @@
 - Removed StringExtensions: ToCamelCase only used for camelcasing bodyparameter names (and contained private extension methods); 
 	now all parameter names are corrected in consistent way in 1 pass.
 - Updated EndPointPathsAndParamsToLower to reflect this.
+- Added new ToPagedResult<T, EmbeddedT> to PageOptionsExtensions, with less parameters => values from ActionContextDescriptor.
+- Updated GenerateLink to include all query parameters, not just the Page(Sort)Options.
+- Updated unit tests.
 
 ## 9.0.2
 

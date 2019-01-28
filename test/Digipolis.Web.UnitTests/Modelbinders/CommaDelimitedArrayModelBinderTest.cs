@@ -89,7 +89,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            Assert.Throws(typeof(NotSupportedException),() => binder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(ulong)));
+            Assert.Throws<NotSupportedException>(() => binder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(ulong)));
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            Assert.Throws(typeof(NotSupportedException), () => binder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(List<object>)));
+            Assert.Throws<NotSupportedException>(() => binder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(List<object>)));
         }
 
     }
