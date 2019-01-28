@@ -67,9 +67,9 @@ namespace Digipolis.Web.UnitTests.Swagger
 
             await middleware.Invoke(httpContext);
 
-            Assert.Equal(httpContext.Response.StatusCode, 302);
+            Assert.Equal(StatusCodes.Status302Found, httpContext.Response.StatusCode);
             Assert.Equal(1, httpContext.Response.Headers.Count);
-            Assert.Equal(1, httpContext.Response.Headers["location"].Count);
+            Assert.Single(httpContext.Response.Headers["location"]);
             Assert.Equal("myUrl", httpContext.Response.Headers["location"].ToArray().First());
         }
 
@@ -84,7 +84,7 @@ namespace Digipolis.Web.UnitTests.Swagger
 
             await middleware.Invoke(httpContext);
 
-            Assert.Equal(httpContext.Response.StatusCode, 200);
+            Assert.Equal(StatusCodes.Status200OK, httpContext.Response.StatusCode);
             Assert.Equal(0, httpContext.Response.Headers.Count);
         }
 

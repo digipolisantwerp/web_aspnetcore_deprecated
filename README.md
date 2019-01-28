@@ -352,7 +352,7 @@ public IActionResult Get([FromQuery]PageOptions queryOptions)
     {
         int total;
         var values = _valueLogic.GetAll(queryOptions, out total);
-        var result = queryOptions.ToPagedResult<Value, EmbeddedValue>(values, total, "Get", "Values", new { });
+        var result = queryOptions.ToPagedResult<Value, EmbeddedValue>(values, total);
         return Ok(result);
 
     }

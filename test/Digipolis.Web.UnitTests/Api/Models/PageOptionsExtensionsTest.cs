@@ -2,7 +2,7 @@
 using Digipolis.Web.Api.Models;
 using Digipolis.Web.Api.Tools;
 using Digipolis.Web.UnitTests.Utilities;
-using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -10,8 +10,6 @@ using Microsoft.Extensions.Options;
 using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Digipolis.Web.UnitTests.Api.Models
@@ -131,11 +129,12 @@ namespace Digipolis.Web.UnitTests.Api.Models
 
             httpContextMock.SetupGet((h) => h.RequestServices).Returns(serviceProvider.Object);
 
-
             actionContext.HttpContext.RequestServices = serviceProvider.Object;
 
-            actionContext.HttpContext.Request.Host = new Microsoft.AspNetCore.Http.HostString("myhost.be",999);
+            actionContext.HttpContext.Request.Host = new Microsoft.AspNetCore.Http.HostString("myhost.be", 999);
             actionContext.HttpContext.Request.Scheme = "XHS";
+            actionContext.HttpContext.Request.Query = new QueryCollection();
+            actionContext.RouteData = new Microsoft.AspNetCore.Routing.RouteData();
 
             var apiExtOptions = new Mock<IOptions<ApiExtensionOptions>>();
             var urlHelper = new Mock<IUrlHelper>();
@@ -150,6 +149,5 @@ namespace Digipolis.Web.UnitTests.Api.Models
 
             return accessor;
         }
-
     }
 }

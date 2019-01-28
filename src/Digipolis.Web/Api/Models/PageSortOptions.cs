@@ -1,7 +1,4 @@
-﻿using Digipolis.Web.Modelbinders;
-using Microsoft.AspNetCore.Mvc;
-
-namespace Digipolis.Web.Api
+﻿namespace Digipolis.Web.Api
 {
     /// <summary>
     /// Options for sorting and paging Api results
@@ -13,5 +10,6 @@ namespace Digipolis.Web.Api
         /// Default sorting is ascending, for descending add a -(minus) sign before the field.
         /// </summary>
         public string[] Sort { get; set; } = new string[0];
+
     }
 }

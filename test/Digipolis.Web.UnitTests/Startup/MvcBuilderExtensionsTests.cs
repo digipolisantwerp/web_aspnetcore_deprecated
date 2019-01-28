@@ -35,7 +35,7 @@ namespace Digipolis.Web.UnitTests.Startup
 
             var jsonOutputFormatter = mvcOptions.OutputFormatters.OfType<JsonOutputFormatter>().First();
 
-            Assert.True(jsonOutputFormatter.SupportedMediaTypes.Any(x => x == "application/hal+json"));
+            Assert.Contains(jsonOutputFormatter.SupportedMediaTypes, x => x == "application/hal+json");
         }
     }
 }
