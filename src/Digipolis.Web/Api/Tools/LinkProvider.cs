@@ -63,7 +63,7 @@ namespace Digipolis.Web.Api.Tools
         {
             HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
             RequestHeaders headers = new RequestHeaders(request.Headers);
-            var host = headers.Host.HasValue ? headers.Host.Value: request.Host.Value;
+            var host = headers.Host.HasValue ? headers.Host.Host: request.Host.Value;
             var port = headers.Host.Port ?? 80;
             UriBuilder builder = new UriBuilder(request.Scheme, host, port);
             return builder;
