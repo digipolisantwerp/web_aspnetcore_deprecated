@@ -1,6 +1,6 @@
 # Web Toolbox
 
-## 9.0.3
+## 9.1.0
 
 - Removed unnecessary DeserializationPagedResult, JsonConvertor and ISchemaFilter: the same result can be achieved with simple inheritance.
 - PagedResult<T> changed to use inheritance, kept for backwards compatibility.

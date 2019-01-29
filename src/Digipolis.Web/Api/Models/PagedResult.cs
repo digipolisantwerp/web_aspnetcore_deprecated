@@ -29,6 +29,7 @@ namespace Digipolis.Web.Api
 
         public PagedResult(int page, int pageSize, int totalElements, IEnumerable<T> data)
         {
+            Links = new PagedResultLinks();
             Embedded = new Embedded<T>(data ?? new List<T>());
             Page = new Page
             {
@@ -37,7 +38,6 @@ namespace Digipolis.Web.Api
                 TotalElements = totalElements,
                 TotalPages = (int)Math.Ceiling((double)totalElements / (double)pageSize)
             };
-            Links = new PagedResultLinks();
         }
     }
 
@@ -53,15 +53,15 @@ namespace Digipolis.Web.Api
     {
         public PagedResult(int page, int pageSize, int totalElements, IEnumerable<T> data)
         {
-            Embedded = new EmbeddedT { ResourceList = data ?? new List<T>()};
+            Links = new PagedResultLinks();
+            Embedded = new EmbeddedT { ResourceList = data ?? new List<T>() };
             Page = new Page
             {
                 Number = page,
-                Size = data.Count(),
+                Size = data?.Count() ?? 0,
                 TotalElements = totalElements,
                 TotalPages = (int)Math.Ceiling((double)totalElements / (double)pageSize)
             };
-            Links = new PagedResultLinks();
         }
 
         [JsonProperty("_embedded")]

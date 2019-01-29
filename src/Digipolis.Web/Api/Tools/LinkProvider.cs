@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
+using Microsoft.AspNetCore.Http.Headers;
 
 namespace Digipolis.Web.Api.Tools
 {
@@ -39,18 +41,7 @@ namespace Digipolis.Web.Api.Tools
 
             return GetFullUrlBuilder(relativeUrl).ToString();
         }
-
-        public UriBuilder GetAbsoluteUrlBuilder()
-        {
-            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
-            UriBuilder builder = new UriBuilder(request.Scheme, request.Host.Host);
-
-            if (request.Host.Port.HasValue)
-                builder.Port = request.Host.Port.Value;
-
-            return builder;
-        }
-
+        
         public UriBuilder GetFullUrlBuilder(string relativeUrl)
         {
             var result = GetAbsoluteUrlBuilder();
@@ -66,6 +57,16 @@ namespace Digipolis.Web.Api.Tools
                 result.Path = relativeUrl;
 
             return result;
+        }
+
+        public UriBuilder GetAbsoluteUrlBuilder()
+        {
+            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
+            RequestHeaders headers = new RequestHeaders(request.Headers);
+            var host = headers.Host.HasValue ? headers.Host.Host: request.Host.Value;
+            var port = headers.Host.Port ?? 80;
+            UriBuilder builder = new UriBuilder(request.Scheme, host, port);
+            return builder;
         }
     }
 }
