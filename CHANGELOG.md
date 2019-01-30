@@ -1,5 +1,19 @@
 # Web Toolbox
 
+## 9.1.0
+
+- Removed unnecessary DeserializationPagedResult, JsonConvertor and ISchemaFilter: the same result can be achieved with simple inheritance.
+- PagedResult<T> changed to use inheritance, kept for backwards compatibility.
+- Added new PagedResult<T, EmbeddedT> and Embedded<T> for correct HAL property name.
+- Added new action to ValuesController demonstrate the difference between the two PagedResults. 
+- Added EmbeddeValueDto to demonstrate the use of EmbeddedT.
+- Removed StringExtensions: ToCamelCase only used for camelcasing bodyparameter names (and contained private extension methods); 
+	now all parameter names are corrected in consistent way in 1 pass.
+- Updated EndPointPathsAndParamsToLower to reflect this.
+- Added new ToPagedResult<T, EmbeddedT> to PageOptionsExtensions, with less parameters => values from ActionContextDescriptor.
+- Updated GenerateLink to include all query parameters, not just the Page(Sort)Options.
+- Updated unit tests.
+
 ## 9.0.2
 
 - Bugfix: SwaggerResponseDefinitions - retrieve the controller attributes from declaring Type and not from  the method

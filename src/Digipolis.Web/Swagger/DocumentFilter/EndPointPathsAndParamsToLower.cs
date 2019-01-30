@@ -22,6 +22,7 @@ namespace Digipolis.Web.Swagger
         private PathItem HandlePath(PathItem value)
         {
             value.Parameters = handleParameters(value.Parameters);
+
             if (value.Get != null) value.Get.Parameters = handleParameters(value.Get.Parameters);
             if (value.Post != null) value.Post.Parameters = handleParameters(value.Post.Parameters);
             if (value.Put != null) value.Put.Parameters = handleParameters(value.Put.Parameters);
@@ -35,18 +36,11 @@ namespace Digipolis.Web.Swagger
         private IList<IParameter> handleParameters(IList<IParameter> parameters)
         {
             if (parameters == null) return null;
-            foreach (var item in parameters.OfType<NonBodyParameter>().Where(x=> x.In.Equals("path", StringComparison.OrdinalIgnoreCase)))
+            foreach (var item in parameters.Where(x => new[]{ "query", "path", "body"}.Contains(x.In)))
             {
-                item.Name = item.Name.ToLower();
-            }
-
-            foreach (var item in parameters.OfType<BodyParameter>())
-            {
-                item.Name = item.Name.ToCamelCase();
+                item.Name = item.Name?.ToLowerInvariant();
             }
             return parameters;
-        }
-
-        
+        }        
     }
 }

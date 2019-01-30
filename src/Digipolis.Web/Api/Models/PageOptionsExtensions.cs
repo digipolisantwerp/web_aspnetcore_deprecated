@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Digipolis.Web.Api.Tools;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Http;
+﻿using Digipolis.Web.Api.Tools;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
+using System;
+using System.Collections.Generic;
 
 namespace Digipolis.Web.Api.Models
 {
@@ -118,52 +114,106 @@ namespace Digipolis.Web.Api.Models
 
         internal static Link GenerateLink(PageOptions pageOptions, int page, string actionName, string controllerName, object routeValues = null)
         {
-            var values = new RouteValueDictionary(routeValues)
+            var values = new RouteValueDictionary(routeValues);
+            var query = _actionContextAccessor.ActionContext.HttpContext.Request.Query;
+            foreach (var item in query)
             {
-                ["Page"] = page,
-                ["PageSize"] = pageOptions.PageSize
-            };
-
+                values[item.Key.ToLowerInvariant()] = item.Value;
+            }
+            values["page"] = page;
+            values["pagesize"] = pageOptions.PageSize;
             var url = GetLinkProvider().AbsoluteAction(actionName, controllerName, values);
             return new Link(url.ToLowerInvariant());
         }
 
         internal static Link GenerateLink(PageOptions pageOptions, int page, string routeName, object routeValues = null)
         {
-            var values = new RouteValueDictionary(routeValues)
+            var values = new RouteValueDictionary(routeValues);
+            var query = _actionContextAccessor.ActionContext.HttpContext.Request.Query;
+            foreach (var item in query)
             {
-                ["Page"] = page,
-                ["PageSize"] = pageOptions.PageSize
-            };
-
+                values[item.Key.ToLowerInvariant()] = item.Value;
+            }
+            values["page"] = page;
+            values["pagesize"] = pageOptions.PageSize;
             var url = GetLinkProvider().AbsoluteRoute(routeName, values);
             return new Link(url.ToLowerInvariant());
         }
 
-        internal static Link GenerateLink(PageSortOptions pageSortOptions, int page, string actionName, string controllerName, object routeValues = null)
-        {
-            var values = new RouteValueDictionary(routeValues)
+        internal static Link GenerateLink(this PageSortOptions pageSortOptions, int page, string actionName, string controllerName, object routeValues = null)
+        {           
+            var values = new RouteValueDictionary(routeValues);
+            var query = _actionContextAccessor.ActionContext.HttpContext.Request.Query;
+            foreach (var item in query)
             {
-                ["Page"] = page,
-                ["PageSize"] = pageSortOptions.PageSize,
-                ["Sort"] = pageSortOptions.Sort
-            };
-
+                values[item.Key.ToLowerInvariant()] = item.Value;
+            }
+            values["page"] = page;
+            values["pageSize"] = pageSortOptions.PageSize;
+            values["sort"] = pageSortOptions.Sort;
             var url = GetLinkProvider().AbsoluteAction(actionName, controllerName, values);
             return new Link(url.ToLowerInvariant());
         }
 
-        internal static Link GenerateLink(PageSortOptions pageSortOptions, int page, string routeName, object routeValues = null)
+        internal static Link GenerateLink(this PageSortOptions pageSortOptions, int page, string routeName, object routeValues = null)
         {
-            var values = new RouteValueDictionary(routeValues)
+            var values = new RouteValueDictionary(routeValues);
+            var query = _actionContextAccessor.ActionContext.HttpContext.Request.Query;
+            foreach (var item in query)
             {
-                ["Page"] = page,
-                ["PageSize"] = pageSortOptions.PageSize,
-                ["Sort"] = pageSortOptions.Sort
-            };
-
+                values[item.Key.ToLowerInvariant()] = item.Value;
+            }
+            values["page"] = page;
+            values["pageSize"] = pageSortOptions.PageSize;
+            values["sort"] = pageSortOptions.Sort;
             var url = GetLinkProvider().AbsoluteRoute(routeName, values);
             return new Link(url.ToLowerInvariant());
+        }
+
+        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageOptions pageOptions, IEnumerable<T> data, int total) where EmbeddedT : Embedded<T>, new() where T : class
+        {
+            var descriptor = (ControllerActionDescriptor)_actionContextAccessor.ActionContext.ActionDescriptor;
+            var actionName = descriptor.ActionName;
+            var controllerName = descriptor.ControllerName;
+            var routeValues = _actionContextAccessor.ActionContext.RouteData.Values;
+
+            var result = new PagedResult<T, EmbeddedT>(pageOptions.Page, pageOptions.PageSize, total, data)
+            {
+                Links =
+                {
+                    First = GenerateLink(pageOptions, 1, actionName, controllerName, routeValues),
+                    Self = GenerateLink(pageOptions, pageOptions.Page, actionName, controllerName, routeValues)
+                }
+            };
+            result.Links.Last = GenerateLink(pageOptions, result.Page.TotalPages, actionName, controllerName, routeValues);
+
+            if (pageOptions.Page - 1 > 0) result.Links.Previous = GenerateLink(pageOptions, pageOptions.Page - 1, actionName, controllerName, routeValues);
+            if (pageOptions.Page + 1 <= result.Page.TotalPages) result.Links.Next = GenerateLink(pageOptions, pageOptions.Page + 1, actionName, controllerName, routeValues);
+
+            return result;
+        }
+
+        public static PagedResult<T, EmbeddedT> ToPagedResult<T, EmbeddedT>(this PageSortOptions pageSortOptions, IEnumerable<T> data, int total) where EmbeddedT : Embedded<T>, new() where T : class
+        {
+            var descriptor = (ControllerActionDescriptor)_actionContextAccessor.ActionContext.ActionDescriptor;
+            var actionName = descriptor.ActionName;
+            var controllerName = descriptor.ControllerName;
+            var routeValues = _actionContextAccessor.ActionContext.RouteData.Values;
+
+            var result = new PagedResult<T, EmbeddedT>(pageSortOptions.Page, pageSortOptions.PageSize, total, data)
+            {
+                Links =
+                    {
+                        First = GenerateLink(pageSortOptions, 1, actionName, controllerName, routeValues),
+                        Self = GenerateLink(pageSortOptions, pageSortOptions.Page, actionName, controllerName, routeValues)
+                    }
+            };
+            result.Links.Last = GenerateLink(pageSortOptions, result.Page.TotalPages, actionName, controllerName, routeValues);
+
+            if (pageSortOptions.Page - 1 > 0) result.Links.Previous = GenerateLink(pageSortOptions, pageSortOptions.Page - 1, actionName, controllerName, routeValues);
+            if (pageSortOptions.Page + 1 <= result.Page.TotalPages) result.Links.Next = GenerateLink(pageSortOptions, pageSortOptions.Page + 1, actionName, controllerName, routeValues);
+
+            return result;
         }
     }
 }

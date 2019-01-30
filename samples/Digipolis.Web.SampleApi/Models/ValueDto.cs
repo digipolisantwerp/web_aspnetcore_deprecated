@@ -1,6 +1,7 @@
-﻿using Digipolis.Web.Modelbinders;
-using Microsoft.AspNetCore.Mvc;
+﻿using Digipolis.Web.Api;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Digipolis.Web.SampleApi.Models
