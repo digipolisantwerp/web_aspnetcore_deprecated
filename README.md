@@ -43,7 +43,7 @@ To add the toolbox to a project, you add the package to the csproj project file:
 
 ```xml
   <ItemGroup>
-    <PackageReference Include="Digipolis.Web" Version="9.1.0" />
+    <PackageReference Include="Digipolis.Web" Version="9.2.0" />
   </ItemGroup>
 ``` 
 
@@ -51,7 +51,7 @@ or if your project still works with project.json :
 
 ``` json 
 "dependencies": {
-    "Digipolis.Web":  "9.1.0"
+    "Digipolis.Web":  "9.2.0"
  }
 ``` 
 
@@ -341,7 +341,10 @@ Call the **UseApiExtensions** method on the **IApplicationBuilder** object in th
 ``` 
 
 ## Paging
-Paging has been made easy by using following code example
+Paging has been made easy by using following code example. 
+
+PageOptions can apply two paging strategies: withCount or noCount. When "NoCount" has been chosen, the paged result in HAL format 
+will not have a last link and TotalElements/TotalPages will be set to null because they are unknown.
 
 On the controller endpoint:
 ``` csharp

@@ -2,11 +2,13 @@
 using Digipolis.Web.Api.Models;
 using Digipolis.Web.Api.Tools;
 using Digipolis.Web.UnitTests.Utilities;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -19,13 +21,16 @@ namespace Digipolis.Web.UnitTests.Api.Models
         [Fact]
         public void ToPagedResultConfiguredReturnsAbsolutePath()
         {
+            // arrange
             var accessor = GetActionContextAccessorWithLinkProvider();
 
             PageOptionsExtensions.Configure(accessor.Object);
 
+            // act
             var pageOptions = new PageOptions();
             var result = pageOptions.ToPagedResult(new List<Object>(), 0, "test", new object[] { });
 
+            // assert
             Assert.Equal("xhs://myhost.be:999/test", result.Links.First.Href);
         }
 
@@ -135,6 +140,10 @@ namespace Digipolis.Web.UnitTests.Api.Models
             actionContext.HttpContext.Request.Scheme = "XHS";
             actionContext.HttpContext.Request.Query = new QueryCollection();
             actionContext.RouteData = new Microsoft.AspNetCore.Routing.RouteData();
+                        
+            var headerDictionary = new HeaderDictionary();
+            headerDictionary.Add(new KeyValuePair<string, StringValues>("Host", new StringValues("myhost.be:999")));
+            Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Headers).Returns(headerDictionary);
 
             var apiExtOptions = new Mock<IOptions<ApiExtensionOptions>>();
             var urlHelper = new Mock<IUrlHelper>();

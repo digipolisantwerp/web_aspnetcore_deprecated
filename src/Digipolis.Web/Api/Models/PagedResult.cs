@@ -51,7 +51,7 @@ namespace Digipolis.Web.Api
         where T : class
         where EmbeddedT : Embedded<T>, new()
     {
-        public PagedResult(int page, int pageSize, int totalElements, IEnumerable<T> data)
+        public PagedResult(int page, int pageSize, int? totalElements, IEnumerable<T> data)
         {
             Links = new PagedResultLinks();
             Embedded = new EmbeddedT { ResourceList = data ?? new List<T>() };

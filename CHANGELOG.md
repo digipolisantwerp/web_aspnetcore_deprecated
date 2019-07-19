@@ -1,5 +1,11 @@
 # Web Toolbox
 
+## 9.2.0
+
+- added PagingStrategy property to PageOptions and refactoring extension methods "ToPagedResult" to take strategy into account
+- refactoring extension methods "ToPagedResult" for PageSortOptions to reuse extension methods of parent class PageOptions
+- update unit tests
+
 ## 9.1.0
 
 - Removed unnecessary DeserializationPagedResult, JsonConvertor and ISchemaFilter: the same result can be achieved with simple inheritance.

@@ -18,5 +18,11 @@ namespace Digipolis.Web.Api
         /// </summary>
         [DefaultValue(10)]
         public int PageSize { get; set; } = 10;
+
+        /// <summary>
+        /// Paging strategy: nocount or withcount
+        /// </summary>
+        [DefaultValue(PagingStrategy.WithCount)]
+        public PagingStrategy PagingStrategy { get; set; } = PagingStrategy.WithCount;
     }
 }
