@@ -34,14 +34,13 @@ namespace Digipolis.Web.SampleApi.Controllers
         /// This endpoint demostrates the use of the old <see cref="PagedResult{T}"/> and it's resulting json.
         /// </remarks>
         /// <returns>An array of value objects</returns>
-        [HttpGet()]
+        [HttpGet]
         [ProducesResponseType(typeof(PagedResult<ValueDto>), 200)]
         [AllowAnonymous]
         [Produces("application/hal+json")]
         public IActionResult Get([FromQuery]CriteriaDto criteria)
         {
-            int total;
-            var values = _valueLogic.GetAll(criteria, out total);
+            var values = _valueLogic.GetAll(criteria, out var total);
             var result = criteria.ToPagedResult(values, total, ControllerContext.ActionDescriptor.ActionName, ControllerContext.ActionDescriptor.ControllerName);
             return Ok(result);
         }
@@ -71,6 +70,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         [ValidateModelState]
         [ProducesResponseType(typeof(ValueDto), 201)]
         [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
         public IActionResult Post([FromBody, Required] ValueDto value)
         {
             value = _valueLogic.Add(value);
@@ -85,6 +85,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         [ValidateModelState]
+        [Versions(Versions.V1, Versions.V2)]
         [ExcludeSwaggerResonse((int)HttpStatusCode.NotFound)]
         public IActionResult Put(int id, [FromBody, Required] ValueDto value)
         {
@@ -98,6 +99,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         /// <param name="id">The value's Id</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Versions(Versions.V2)]
         public IActionResult Delete(int id)
         {
             _valueLogic.Delete(id);
@@ -110,6 +112,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         /// <returns></returns>
         [HttpGet("exception")]
         [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
         public IActionResult ThrowException()
         {
             throw new NotFoundException();

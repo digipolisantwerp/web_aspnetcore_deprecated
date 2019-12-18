@@ -22,7 +22,7 @@ namespace Digipolis.Web.Swagger
             options.OperationFilter<AddFileUploadParams>();
             options.OperationFilter<AddConsumeProducesValues>();
             // options.OperationFilter<ValidRefUri>();
-            // options.DocumentFilter<SetVersionInPaths>();
+            options.DocumentFilter<SetVersionInPaths>();
             options.DocumentFilter<EndPointPathsAndParamsToLower>();
 
             Configuration(options);
