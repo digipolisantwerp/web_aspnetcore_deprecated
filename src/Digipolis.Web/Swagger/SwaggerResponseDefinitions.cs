@@ -3,6 +3,7 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.OpenApi.Models;
 
 namespace Digipolis.Web.Swagger
 {
@@ -14,7 +15,7 @@ namespace Digipolis.Web.Swagger
 
         protected IEnumerable<Attribute> CombinedAttributes { get; private set; }
 
-        public void Apply(Operation operation, Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext context)
+        public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             ActionAttributes = context.MethodInfo.GetCustomAttributes(true).OfType<Attribute>();
             ControllerAttributes = context.MethodInfo.DeclaringType.GetCustomAttributes(true).OfType<Attribute>();
@@ -23,9 +24,9 @@ namespace Digipolis.Web.Swagger
             ExcludeSwaggerResonse(operation);
         }
 
-        protected abstract void ConfigureResponses(Operation operation, Swashbuckle.AspNetCore.SwaggerGen.OperationFilterContext context);
+        protected abstract void ConfigureResponses(OpenApiOperation operation, OperationFilterContext context);
 
-        private void ExcludeSwaggerResonse(Operation operation)
+        private void ExcludeSwaggerResonse(OpenApiOperation operation)
         {
             var excludes = CombinedAttributes.OfType<ExcludeSwaggerResonseAttribute>();
             if (!excludes.Any()) return;

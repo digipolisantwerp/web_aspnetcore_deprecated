@@ -1,11 +1,11 @@
-﻿using Digipolis.Errors.Exceptions;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Digipolis.Errors.Exceptions;
 using Digipolis.Web.Api;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace Digipolis.Web.Exceptions
 {
@@ -15,8 +15,7 @@ namespace Digipolis.Web.Exceptions
 
         public ExceptionResponseMiddleware(RequestDelegate next)
         {
-            if (next == null) throw new ArgumentNullException(nameof(next), $"{nameof(next)} cannot be null.");
-            this._next = next;
+            _next = next ?? throw new ArgumentNullException(nameof(next), $"{nameof(next)} cannot be null.");
         }
 
         public async Task Invoke(HttpContext context)
@@ -26,13 +25,13 @@ namespace Digipolis.Web.Exceptions
 
             if (handler == null || options?.Value?.DisableGlobalErrorHandling == true)
             {
-                await this._next.Invoke(context);
+                await _next.Invoke(context);
                 return;
             }
 
             try
             {
-                await this._next.Invoke(context);
+                await _next.Invoke(context);
                 if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
                 {
                     await handler.HandleAsync(context, new UnauthorizedAccessException());

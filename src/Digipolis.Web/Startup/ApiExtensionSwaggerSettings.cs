@@ -1,5 +1,4 @@
 ﻿using Digipolis.Web.Swagger;
-using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Digipolis.Web.Startup
@@ -8,7 +7,6 @@ namespace Digipolis.Web.Startup
     {
         protected override void Configuration(SwaggerGenOptions options)
         {
-            options.DescribeAllEnumsAsStrings();
         }
     }
 }

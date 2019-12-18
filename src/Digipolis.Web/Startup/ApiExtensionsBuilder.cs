@@ -23,8 +23,6 @@ namespace Digipolis.Web
         public static void UseApiExtensions(this IApplicationBuilder app)
         {
             var settings = app.ApplicationServices.GetService<IOptions<ApiExtensionOptions>>();
-            //var linkProvider = app.ApplicationServices.GetService<ILinkProvider>();
-
 
             var httpContextAccessor = app.ApplicationServices.GetService<IActionContextAccessor>();
 
@@ -38,8 +36,6 @@ namespace Digipolis.Web
                 RequireHeaderSymmetry = true,
                 ForwardedHeaders = Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedHost | Microsoft.AspNetCore.HttpOverrides.ForwardedHeaders.XForwardedProto
             });
-
-            //if (httpContextAccessor != null) LinkProvider.Configure(httpContextAccessor,settings?.Value?.BaseUrl);
         }
     }
 }

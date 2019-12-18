@@ -19,14 +19,14 @@ namespace Digipolis.Web.UnitTests.Exceptions
         [Fact]
         private void CtorMapperNullException()
         {
-           Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(null, null, null, null));
+           Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(null, null, null));
         }
 
         [Fact]
         private void CtorLoggerNullException()
         {
             var mapper = new ExceptionMapperTest();
-            Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(mapper, null, null, null));
+            Assert.Throws<ArgumentNullException>(() => new ExceptionHandler(mapper, null, null));
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace Digipolis.Web.UnitTests.Exceptions
         {
             var mapper = new ExceptionMapperTest();
             var logger = new TestLogger<ExceptionHandler>();
-            Assert.NotNull(new ExceptionHandler(mapper, logger, null, null));
+            Assert.NotNull(new ExceptionHandler(mapper, logger, null));
         }
 
         [Fact]

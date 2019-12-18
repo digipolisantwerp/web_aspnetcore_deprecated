@@ -1,13 +1,12 @@
-﻿using Digipolis.Errors;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Digipolis.Errors;
 using Digipolis.Web.Api;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Digipolis.Web.Exceptions
 {
@@ -15,23 +14,18 @@ namespace Digipolis.Web.Exceptions
     {
         private readonly IExceptionMapper _mapper;
         private readonly ILogger<ExceptionHandler> _logger;
-        private readonly IOptions<MvcJsonOptions> _options;
         private readonly IOptions<ApiExtensionOptions> _apiExtensionOptions;
 
-        public ExceptionHandler(IExceptionMapper mapper, ILogger<ExceptionHandler> logger, IOptions<MvcJsonOptions> options, IOptions<ApiExtensionOptions> apiExtensionOptions)
+        public ExceptionHandler(IExceptionMapper mapper, ILogger<ExceptionHandler> logger, IOptions<ApiExtensionOptions> apiExtensionOptions)
         {
-            if(mapper == null) throw new ArgumentNullException(nameof(mapper));
-            if(logger == null) throw new ArgumentNullException(nameof(logger));
-
-            _mapper = mapper;
-            _logger = logger;
-            _options = options;
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _apiExtensionOptions = apiExtensionOptions;
         }
 
         public async Task HandleAsync(HttpContext context, Exception ex)
         {
-            if(_apiExtensionOptions?.Value?.DisableGlobalErrorHandling == true) return;
+            if (_apiExtensionOptions?.Value?.DisableGlobalErrorHandling == true) return;
 
             var error = _mapper?.Resolve(ex);
             if (error == null) return;
@@ -39,11 +33,12 @@ namespace Digipolis.Web.Exceptions
             {
                 context.Response.Clear();
                 context.Response.ContentType = "application/problem+json";
-                if (error.Status != default(int)) context.Response.StatusCode = error.Status;
-                var json = JsonConvert.SerializeObject(error, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
+                if (error.Status != default) context.Response.StatusCode = error.Status;
+                var json = JsonConvert.SerializeObject(error);
                 await context.Response.WriteAsync(json);
             }
-            else if (error.Status != default(int)) context.Response.StatusCode = error.Status;
+            else if (error.Status != default) context.Response.StatusCode = error.Status;
+
             LogException(error, ex);
         }
 
@@ -57,11 +52,12 @@ namespace Digipolis.Web.Exceptions
             {
                 context.Response.Clear();
                 context.Response.ContentType = "application/problem+json";
-                if (error.Status != default(int)) context.Response.StatusCode = error.Status;
-                var json = JsonConvert.SerializeObject(error, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
+                if (error.Status != default) context.Response.StatusCode = error.Status;
+                var json = JsonConvert.SerializeObject(error);
                 context.Response.WriteAsync(json).Wait();
             }
-            else if (error.Status != default(int)) context.Response.StatusCode = error.Status;
+            else if (error.Status != default) context.Response.StatusCode = error.Status;
+
             LogException(error, ex);
         }
 
@@ -78,7 +74,7 @@ namespace Digipolis.Web.Exceptions
                 logMessage.Exception = exception;
             }
 
-            var logAsJson = JsonConvert.SerializeObject(logMessage, _options?.Value?.SerializerSettings ?? new JsonSerializerSettings());
+            var logAsJson = JsonConvert.SerializeObject(logMessage);
             if (error.Status >= 500 && error.Status <= 599)
                 _logger?.LogError(logAsJson);
             else if (error.Status >= 400 && error.Status <= 499)
