@@ -16,7 +16,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Newtonsoft.Json.Serialization;
 
 namespace Digipolis.Web.SampleApi
 {
@@ -69,7 +68,7 @@ namespace Digipolis.Web.SampleApi
                         Url = new Uri("https://www.digipolis.be/licensing")
                     }
                 });
-                o.SwaggerDoc(Versions.V2, new OpenApiInfo());
+                o.SwaggerDoc(Versions.V2, new Version2());
             });
 
             //Register Dependencies for example project

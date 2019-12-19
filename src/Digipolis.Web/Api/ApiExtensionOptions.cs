@@ -25,15 +25,5 @@ namespace Digipolis.Web.Api
         /// Default = false.
         /// </summary>
         public bool LogExceptionObject { get; set; }
-
-        ///// <summary>
-        ///// BaseUrl used for generation of HAL-urls
-        ///// </summary>
-        //public string BaseUrl { get; set; }
-
-        /// <summary>
-        /// The route wwhere the version can be requested (default = '/status/version').
-        /// </summary>
-        //public string Route { get; set; } = "/status/version";
     }
 }

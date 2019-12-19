@@ -38,10 +38,30 @@ namespace Digipolis.Web.SampleApi.Controllers
         [ProducesResponseType(typeof(PagedResult<ValueDto>), 200)]
         [AllowAnonymous]
         [Produces("application/hal+json")]
+        [Versions(Versions.V1, Versions.V2)]
         public IActionResult Get([FromQuery]CriteriaDto criteria)
         {
             var values = _valueLogic.GetAll(criteria, out var total);
             var result = criteria.ToPagedResult(values, total, ControllerContext.ActionDescriptor.ActionName, ControllerContext.ActionDescriptor.ControllerName);
+            return Ok(result);
+        }
+        
+        /// <summary>
+        /// Get all values 
+        /// </summary>
+        /// <remarks>
+        /// This endpoint demostrates the use of the new <see cref="PagedResult{T, EmbeddedT}"/> and it's resulting json.
+        /// </remarks>
+        /// <param name="criteria">Query options from uri</param>
+        /// <returns>An array of value objects</returns>
+        [HttpGet("new")]
+        [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
+        [Produces("application/hal+json")]
+        public IActionResult GetNew([FromQuery]CriteriaDto criteria)
+        {
+            var values = _valueLogic.GetAll(criteria, out var total);
+            var result = criteria.ToPagedResult<ValueDto, EmbeddedValueDto>(values, total);
             return Ok(result);
         }
         
@@ -54,6 +74,7 @@ namespace Digipolis.Web.SampleApi.Controllers
         [ProducesResponseType(typeof(ValueDto), 200)]
         [ProducesResponseType(typeof(ValueDto), 401)]
         [AllowAnonymous]
+        [Versions(Versions.V1, Versions.V2)]
         [Produces("application/json", "text/csv")]
         public IActionResult Get(int id)
         {
