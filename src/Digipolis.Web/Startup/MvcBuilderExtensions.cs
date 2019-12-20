@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using System;
 using System.Linq;
 using Digipolis.Web.Api.Conventions;
+using Digipolis.Web.Modelbinders;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -67,12 +68,19 @@ namespace Digipolis.Web
                         if (!apiDescription.TryGetMethodInfo(out var methodInfo)) return false;
 
                         var allowedVersions = methodInfo.GetCustomAttributes(true).OfType<VersionsAttribute>().FirstOrDefault();
-                        return (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version));
+                        return allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version);
                     });
                 });
             }
 
             #endregion
+
+            builder.AddMvcOptions(options =>
+            {
+                options.Filters.Insert(0, new ConsumesAttribute("application/json"));
+                options.Filters.Insert(1, new ProducesAttribute("application/json"));
+                options.ModelBinderProviders.Insert(0, new CommaDelimitedArrayModelBinderProvider());
+            });
 
             return builder;
         }

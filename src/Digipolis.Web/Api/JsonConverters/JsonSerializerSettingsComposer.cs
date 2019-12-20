@@ -20,6 +20,8 @@ namespace Digipolis.Web.Api.JsonConverters
             settings.Converters.Add(new GuidConverter());
             settings.Converters.Add(new StringEnumConverter());
             settings.Formatting = Formatting.None;
+
+            settingsAction?.Invoke(settings);
         }
     }
 }
