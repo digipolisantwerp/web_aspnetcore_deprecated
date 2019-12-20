@@ -1,23 +1,27 @@
-﻿using Swashbuckle.AspNetCore.Swagger;
+using System;
+using Microsoft.OpenApi.Models;
 
 namespace Digipolis.Web.SampleApi.Configuration
 {
     /// <summary>
     /// Contains all information for V2 of the API
     /// </summary>
-    public class Version2 : Info
+    public class Version2 : OpenApiInfo
     {
+        /// <summary>
+        ///     Constructs OpenApiInfo object for version 2 of the API
+        /// </summary>
         public Version2()
         {
-            this.Version = Versions.V2;
-            this.Title = "API V2";
-            this.Description = "Description for V2 of the API";
-            this.Contact = new Contact { Email = "info@digipolis.be", Name = "Digipolis", Url = "https://www.digipolis.be" };
-            this.TermsOfService = "https://www.digipolis.be/tos";
-            this.License = new License
+            Version = Versions.V2;
+            Title = "API V2";
+            Description = "Description for V2 of the API";
+            Contact = new OpenApiContact {Email = "info@digipolis.be", Name = "Digipolis", Url = new Uri("https://www.digipolis.be")};
+            TermsOfService = new Uri("https://www.digipolis.be/tos");
+            License = new OpenApiLicense
             {
                 Name = "My License",
-                Url = "https://www.digipolis.be/licensing"
+                Url = new Uri("https://www.digipolis.be/licensing")
             };
         }
     }

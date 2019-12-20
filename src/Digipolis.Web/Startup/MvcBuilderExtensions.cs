@@ -1,20 +1,17 @@
 ﻿using Digipolis.Web.Api;
-using Digipolis.Web.Api.Conventions;
-using Digipolis.Web.Api.JsonConverters;
 using Digipolis.Web.Api.Tools;
-using Digipolis.Web.Modelbinders;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
-using System.Reflection;
+using Digipolis.Web.Api.Conventions;
+using Digipolis.Web.Modelbinders;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Digipolis.Web
 {
@@ -29,27 +26,30 @@ namespace Digipolis.Web
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             builder.Services.TryAddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-            builder.Services.AddScoped<IUrlHelper>(x =>
+            builder.Services.AddScoped(sp =>
             {
-                var actionContext = x.GetService<IActionContextAccessor>().ActionContext;
-                return new UrlHelper(actionContext);
+                var ac = sp.GetRequiredService<IActionContextAccessor>().ActionContext;
+                var f = sp.GetRequiredService<IUrlHelperFactory>();
+                return f.GetUrlHelper(ac);
             });
 
             builder.Services.AddScoped<ILinkProvider, LinkProvider>();
+
             #endregion
 
             #region Register Options
 
             if (config != null && build != null) builder.Services.Configure<ApiExtensionOptions>(x => { });
+
             if (config != null)
             {
                 builder.Services.Configure<ApiExtensionOptions>(config);
-
                 config.Bind(apiOptions);
             }
+
             if (build != null)
             {
-                builder.Services.Configure<ApiExtensionOptions>(build);
+                builder.Services.Configure(build);
                 build(apiOptions);
             }
 
@@ -59,23 +59,19 @@ namespace Digipolis.Web
 
             if (!apiOptions.DisableVersioning)
             {
-                builder.AddMvcOptions(options =>
-                {
-                    options.Conventions.Insert(0, new RouteConvention(new RouteAttribute("{apiVersion}")));
-                });
+                builder.AddMvcOptions(options => { options.Conventions.Insert(0, new RouteConvention(new RouteAttribute("{apiVersion}"))); });
 
                 builder.Services.ConfigureSwaggerGen(options =>
                 {
                     options.DocInclusionPredicate((version, apiDescription) =>
                     {
-                        if (!apiDescription.TryGetMethodInfo(out MethodInfo methodInfo)) return false;
+                        if (!apiDescription.TryGetMethodInfo(out var methodInfo)) return false;
 
                         var allowedVersions = methodInfo.GetCustomAttributes(true).OfType<VersionsAttribute>().FirstOrDefault();
-                        return (allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version));
+                        return allowedVersions != null && allowedVersions.AcceptedVersions.Contains(version);
                     });
                 });
             }
-
 
             #endregion
 
@@ -83,17 +79,7 @@ namespace Digipolis.Web
             {
                 options.Filters.Insert(0, new ConsumesAttribute("application/json"));
                 options.Filters.Insert(1, new ProducesAttribute("application/json"));
-
                 options.ModelBinderProviders.Insert(0, new CommaDelimitedArrayModelBinderProvider());
-
-                JsonOutputFormatter jsonFormatter = options.OutputFormatters.OfType<JsonOutputFormatter>().FirstOrDefault();
-
-                jsonFormatter?.SupportedMediaTypes.Add("application/hal+json");
-            });
-
-            builder.AddJsonOptions(x =>
-            {
-                x.SerializerSettings.Initialize();
             });
 
             return builder;

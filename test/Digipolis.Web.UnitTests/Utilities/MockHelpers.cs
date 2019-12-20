@@ -94,7 +94,7 @@ namespace Digipolis.Web.UnitTests.Utilities
             var apiExtOptions = new Mock<IOptions<ApiExtensionOptions>>();
             apiOptions?.Invoke(apiExtOptions);
             var mapper = new ExceptionMapperTest();
-            return new ExceptionHandler(mapper, logger, mvcjsonOptions.Object, apiExtOptions.Object);
+            return new ExceptionHandler(mapper, logger, apiExtOptions.Object);
         }
     }
 }

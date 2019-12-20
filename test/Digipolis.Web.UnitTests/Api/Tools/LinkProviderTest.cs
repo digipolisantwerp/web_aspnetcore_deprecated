@@ -1,5 +1,4 @@
 ﻿using Digipolis.Web.Api.Tools;
-using Digipolis.Web.UnitTests._TestObjects;
 using Digipolis.Web.UnitTests.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +26,13 @@ namespace Digipolis.Web.UnitTests.Api.Tools
             Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Host).Returns(host);
             Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Scheme).Returns("xyz");
 
-            var headerDictionary = new HeaderDictionary();
-            headerDictionary.Add(new KeyValuePair<string, StringValues>("Host", new StringValues("test.be:99")));
+            var headerDictionary = new HeaderDictionary {new KeyValuePair<string, StringValues>("Host", new StringValues("test.be:99"))};
             Mock.Get(actionContext.HttpContext.Request).SetupGet(x => x.Headers).Returns(headerDictionary);
 
             var urlHelper = new Mock<IUrlHelper>().Object;
 
             // act
-            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper, new TestApiExtensionOptions(new Web.Api.ApiExtensionOptions()));
+            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper);
             var absoluteUrl = linkProvider.GetAbsoluteUrlBuilder();
 
             // assert
@@ -62,7 +60,7 @@ namespace Digipolis.Web.UnitTests.Api.Tools
             var urlHelper = new Mock<IUrlHelper>().Object;
 
             // act
-            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper, new TestApiExtensionOptions(new Web.Api.ApiExtensionOptions()));
+            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper);
             var fullUrl = linkProvider.GetFullUrlBuilder("/v1/test?q=99&q2=test");
 
             // assert
@@ -90,7 +88,7 @@ namespace Digipolis.Web.UnitTests.Api.Tools
             var urlHelper = new Mock<IUrlHelper>().Object;
 
             // act
-            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper, new TestApiExtensionOptions(new Web.Api.ApiExtensionOptions()));
+            var linkProvider = new LinkProvider(actionContextAccessorMock.Object, urlHelper);
             var fullUrl = linkProvider.GetFullUrlBuilder("/v1/test");
 
             // assert

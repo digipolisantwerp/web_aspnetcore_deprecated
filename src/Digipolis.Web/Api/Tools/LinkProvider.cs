@@ -1,47 +1,34 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
-using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Http.Headers;
 
 namespace Digipolis.Web.Api.Tools
 {
     public class LinkProvider : ILinkProvider
     {
-        private IActionContextAccessor _httpContextAccessor;
-        //private Uri _baseUri;
-        private IUrlHelper _urlHelper;
+        private readonly IActionContextAccessor _httpContextAccessor;
+        private readonly IUrlHelper _urlHelper;
 
 
-        public LinkProvider(IActionContextAccessor httpContextAccessor, IUrlHelper urlHelper, IOptions<ApiExtensionOptions> options)
+        public LinkProvider(IActionContextAccessor httpContextAccessor, IUrlHelper urlHelper)
         {
-            if (httpContextAccessor == null) throw new ArgumentNullException(nameof(httpContextAccessor));
-            _httpContextAccessor = httpContextAccessor;
-
-            if (urlHelper == null) throw new ArgumentNullException(nameof(urlHelper));
-            _urlHelper = urlHelper;
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+            _urlHelper = urlHelper ?? throw new ArgumentNullException(nameof(urlHelper));
         }
 
         public string AbsoluteAction(string actionName, string controllerName, object routeValues = null)
         {
-            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
-
-            var relativeUrl =  _urlHelper.Action(actionName, controllerName, routeValues);
-
+            var relativeUrl = _urlHelper.Action(actionName, controllerName, routeValues);
             return GetFullUrlBuilder(relativeUrl).ToString();
-
         }
 
         public string AbsoluteRoute(string routeName, object routeValues = null)
         {
             var relativeUrl = _urlHelper.RouteUrl(routeName, routeValues);
-
             return GetFullUrlBuilder(relativeUrl).ToString();
         }
-        
+
         public UriBuilder GetFullUrlBuilder(string relativeUrl)
         {
             var result = GetAbsoluteUrlBuilder();
@@ -61,11 +48,11 @@ namespace Digipolis.Web.Api.Tools
 
         public UriBuilder GetAbsoluteUrlBuilder()
         {
-            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
-            RequestHeaders headers = new RequestHeaders(request.Headers);
-            var host = headers.Host.HasValue ? headers.Host.Host: request.Host.Value;
+            var request = _httpContextAccessor.ActionContext.HttpContext.Request;
+            var headers = new RequestHeaders(request.Headers);
+            var host = headers.Host.HasValue ? headers.Host.Host : request.Host.Value;
             var port = headers.Host.Port ?? 80;
-            UriBuilder builder = new UriBuilder(request.Scheme, host, port);
+            var builder = new UriBuilder(request.Scheme, host, port);
             return builder;
         }
     }

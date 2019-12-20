@@ -20,7 +20,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            var result = binder.ParseArray("1,2,3", typeof(int[]));
+            var result = CommaDelimitedArrayModelBinder.ParseArray("1,2,3", typeof(int[]));
 
             Assert.NotNull(result);
             Assert.True(result is int[]);
@@ -38,7 +38,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            var result = binder.ParseArray("1,two,3", typeof(string[]));
+            var result = CommaDelimitedArrayModelBinder.ParseArray("1,two,3", typeof(string[]));
 
             Assert.NotNull(result);
             Assert.True(result is string[]);
@@ -56,7 +56,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            var result = binder.ParseArray("1,two,3", typeof(List<string>));
+            var result = CommaDelimitedArrayModelBinder.ParseArray("1,two,3", typeof(List<string>));
 
             Assert.NotNull(result);
             Assert.True(result is List<string>);
@@ -74,7 +74,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            var result = binder.ParseArray("2016-01-01,1981-10-26,2012-12-21", typeof(List<DateTime>));
+            var result = CommaDelimitedArrayModelBinder.ParseArray("2016-01-01,1981-10-26,2012-12-21", typeof(List<DateTime>));
 
             Assert.NotNull(result);
             Assert.True(result is List<DateTime>);
@@ -89,7 +89,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            Assert.Throws<NotSupportedException>(() => binder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(ulong)));
+            Assert.Throws<NotSupportedException>(() => CommaDelimitedArrayModelBinder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(ulong)));
         }
 
         [Fact]
@@ -97,7 +97,7 @@ namespace Digipolis.Web.UnitTests.Modelbinders
         {
             var binder = new CommaDelimitedArrayModelBinder();
 
-            Assert.Throws<NotSupportedException>(() => binder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(List<object>)));
+            Assert.Throws<NotSupportedException>(() => CommaDelimitedArrayModelBinder.ParseArray("coords(12.4,12.2),454564.454,C#", typeof(List<object>)));
         }
 
     }

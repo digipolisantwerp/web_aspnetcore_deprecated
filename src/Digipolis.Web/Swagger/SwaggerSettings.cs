@@ -12,16 +12,16 @@ namespace Digipolis.Web.Swagger
             options.OperationFilter<TSwaggerResponseDefinitions>();
 
             // determine base path for the application.
-            var basePath = AppContext.BaseDirectory;                       
-            var assemblyName = System.Reflection.Assembly.GetEntryAssembly().GetName().Name;
-            var fileName = System.IO.Path.GetFileName(assemblyName + ".xml");
+            var basePath = AppContext.BaseDirectory;
+            var assemblyName = System.Reflection.Assembly.GetEntryAssembly()?.GetName().Name;
+            var fileName = Path.GetFileName($"{assemblyName}.xml");
 
             var xmlPath = Path.Combine(basePath, fileName);
             if (File.Exists(xmlPath)) options.IncludeXmlComments(xmlPath);
 
             options.OperationFilter<AddFileUploadParams>();
             options.OperationFilter<AddConsumeProducesValues>();
-            options.OperationFilter<ValidRefUri>();
+            // options.OperationFilter<ValidRefUri>();
             options.DocumentFilter<SetVersionInPaths>();
             options.DocumentFilter<EndPointPathsAndParamsToLower>();
 

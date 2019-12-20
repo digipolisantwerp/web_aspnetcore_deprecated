@@ -2,7 +2,7 @@
 
 namespace Digipolis.Web.Routing
 {
-    class Routes
+    internal class Routes
     {
         internal const string VersionController = "status/version";
     }

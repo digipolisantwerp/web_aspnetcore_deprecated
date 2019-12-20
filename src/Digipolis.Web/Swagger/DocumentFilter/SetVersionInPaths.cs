@@ -2,39 +2,42 @@
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System;
 using System.Linq;
+using System.Text.RegularExpressions;
+using Microsoft.OpenApi.Models;
 
 namespace Digipolis.Web.Swagger
 {
     internal class SetVersionInPaths : IDocumentFilter
     {
-        public void Apply(SwaggerDocument swaggerDoc, DocumentFilterContext context)
+        public void Apply(OpenApiDocument swaggerDoc, DocumentFilterContext context)
         {
-            swaggerDoc.Paths = swaggerDoc.Paths.ToDictionary(
-                entry => entry.Key.Replace("{apiVersion}", swaggerDoc.Info.Version).Replace("{apiversion}", swaggerDoc.Info.Version),
-                entry =>
+            var originalPaths = swaggerDoc.Paths;
+            var newPaths = new OpenApiPaths();
+
+            foreach (var path in originalPaths)
+            {
+                var key = path.Key.Replace("{apiVersion}", swaggerDoc.Info.Version).Replace("{apiversion}", swaggerDoc.Info.Version);
+                var pathItem = path.Value;
+
+                foreach (var op in pathItem.Operations)
                 {
-                    var pathItem = entry.Value;
-                    RemoveVersionParamFrom(pathItem.Get);
-                    RemoveVersionParamFrom(pathItem.Put);
-                    RemoveVersionParamFrom(pathItem.Post);
-                    RemoveVersionParamFrom(pathItem.Delete);
-                    RemoveVersionParamFrom(pathItem.Options);
-                    RemoveVersionParamFrom(pathItem.Head);
-                    RemoveVersionParamFrom(pathItem.Patch);
-                    return pathItem;
-                });
+                    RemoveVersionParamFrom(op.Value);
+                }
+
+                newPaths.Add(key, pathItem);
+            }
+
+            swaggerDoc.Paths = newPaths;
         }
 
-        private void RemoveVersionParamFrom(Operation operation)
+        private static void RemoveVersionParamFrom(OpenApiOperation operation)
         {
-            if (operation == null || operation.Parameters == null) return;
+            var versionParam = operation?.Parameters?.FirstOrDefault(param => param.Name.Equals("apiVersion", StringComparison.CurrentCultureIgnoreCase));
 
-            var versionParam = operation.Parameters.FirstOrDefault(param => param.Name.Equals("apiVersion", StringComparison.CurrentCultureIgnoreCase));
-            if (versionParam == null) return;
+            if (versionParam == null)
+                return;
 
             operation.Parameters.Remove(versionParam);
         }
     }
-
-
 }

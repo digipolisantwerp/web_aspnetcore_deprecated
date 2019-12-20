@@ -16,11 +16,6 @@ namespace Digipolis.Web.Modelbinders
         {
             if (bindingContext.ModelMetadata.IsEnumerableType)
             {
-                if (bindingContext == null)
-                {
-                    throw new ArgumentNullException(nameof(bindingContext));
-                }
-
                 var valueProviderResult = bindingContext.ValueProvider.GetValue(bindingContext.ModelName);
                 if (valueProviderResult == ValueProviderResult.None)
                 {
@@ -39,7 +34,6 @@ namespace Digipolis.Web.Modelbinders
 
                         bindingContext.Model = result;
                         bindingContext.Result = ModelBindingResult.Success(result);
-
                     }
                     catch (Exception exception)
                     {
@@ -64,7 +58,7 @@ namespace Digipolis.Web.Modelbinders
             return Task.CompletedTask;
         }
 
-        internal object ParseArray(string arrayString, Type collectionType)
+        internal static object ParseArray(string arrayString, Type collectionType)
         {
             if (collectionType.IsArray && (collectionType.GetElementType() == typeof(string) || collectionType.GetElementType().GetTypeInfo().IsValueType))
             {
@@ -72,28 +66,30 @@ namespace Digipolis.Web.Modelbinders
 
                 var converter = TypeDescriptor.GetConverter(elementType);
 
-                var values = arrayString.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-                            .Select(x => converter.ConvertFromString(x.Trim()))
-                            .ToArray();
+                var values = arrayString.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => converter.ConvertFromString(x.Trim()))
+                    .ToArray();
 
                 var typedValues = Array.CreateInstance(elementType, values.Length);
                 values.CopyTo(typedValues, 0);
 
                 return typedValues;
             }
-            else if (collectionType.GetInterfaces()
-                    .Any(ti => ti.IsConstructedGenericType
-                     && ti.GetGenericTypeDefinition() == typeof(IEnumerable<>)
-                     && (ti.GenericTypeArguments[0] == typeof(string) || ti.GenericTypeArguments[0].GetTypeInfo().IsValueType)))
+            else
             {
+                if (!collectionType.GetInterfaces()
+                    .Any(ti => ti.IsConstructedGenericType
+                               && ti.GetGenericTypeDefinition() == typeof(IEnumerable<>)
+                               && (ti.GenericTypeArguments[0] == typeof(string) || ti.GenericTypeArguments[0].GetTypeInfo().IsValueType)))
+                    throw new NotSupportedException($"Parsing of comma seperated array to {collectionType.FullName} is not supported.");
                 var elementType = collectionType.GenericTypeArguments[0];
                 var converter = TypeDescriptor.GetConverter(elementType);
 
-                var values = arrayString.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
-                            .Select(x => converter.ConvertFromString(x.Trim()))
-                            .ToArray();
+                var values = arrayString.Split(new[] {","}, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => converter.ConvertFromString(x.Trim()))
+                    .ToArray();
 
-                var list = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType));
+                var list = (IList) Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType));
 
                 foreach (var el in values)
                 {
@@ -101,10 +97,6 @@ namespace Digipolis.Web.Modelbinders
                 }
 
                 return list;
-            }
-            else
-            {
-                throw new NotSupportedException($"Parsing of comma seperated array to {collectionType.FullName} is not supported.");
             }
         }
     }

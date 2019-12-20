@@ -152,7 +152,7 @@ namespace Digipolis.Web.UnitTests.Api.Models
 
             accessor.SetupGet((o) => o.ActionContext).Returns(actionContext);
 
-            var linkProvider = new LinkProvider(accessor.Object, urlHelper.Object, apiExtOptions.Object);
+            var linkProvider = new LinkProvider(accessor.Object, urlHelper.Object);
 
             serviceProvider.Setup((x) => x.GetService(typeof(ILinkProvider))).Returns(linkProvider);
 

@@ -1,21 +1,27 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using AutoMapper;
+using Digipolis.Web.Api.JsonConverters;
+using Digipolis.Web.Api.Tools;
 using Digipolis.Web.SampleApi.Configuration;
 using Digipolis.Web.SampleApi.Data;
 using Digipolis.Web.SampleApi.Logic;
 using Digipolis.Web.Startup;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Swashbuckle.AspNetCore.Swagger;
-using License = Swashbuckle.AspNetCore.Swagger.License;
+using Microsoft.OpenApi.Models;
 
 namespace Digipolis.Web.SampleApi
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IHostEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -32,6 +38,7 @@ namespace Digipolis.Web.SampleApi
         {
             // Add framework services.
             services.AddMvc()
+                .AddNewtonsoftJson(options => options.SerializerSettings.Initialize()) // set default Digipolis json serializer settings
                 .AddApiExtensions(Configuration.GetSection("ApiExtensions"), x =>
                 {
                     //Override settings made by the appsettings.json
@@ -46,21 +53,21 @@ namespace Digipolis.Web.SampleApi
             // Add Swagger extensions
             services.AddSwaggerGen<ApiExtensionSwaggerSettings>(o =>
             {
-                o.SwaggerDoc(Versions.V1, new Info
+                Array.ForEach(AppDomain.CurrentDomain.ReflectionOnlyGetAssemblies().GetXmlDocPaths(), doc => o.IncludeXmlComments(doc));
+
+                o.SwaggerDoc(Versions.V1, new OpenApiInfo
                 {
                     //Add Inline version
                     Version = Versions.V1,
                     Title = "API V1",
                     Description = "Description for V1 of the API",
-                    Contact = new Contact { Email = "info@digipolis.be", Name = "Digipolis", Url = "https://www.digipolis.be" },
-                    TermsOfService = "https://www.digipolis.be/tos",
-                    License = new License
+                    Contact = new OpenApiContact {Email = "info@digipolis.be", Name = "Digipolis", Url = new Uri("https://www.digipolis.be")},
+                    License = new OpenApiLicense
                     {
                         Name = "My License",
-                        Url = "https://www.digipolis.be/licensing"
-                    },
+                        Url = new Uri("https://www.digipolis.be/licensing")
+                    }
                 });
-
                 o.SwaggerDoc(Versions.V2, new Version2());
             });
 
@@ -68,29 +75,27 @@ namespace Digipolis.Web.SampleApi
             services.AddScoped<IValueRepository, ValueRepository>();
             services.AddScoped<IValueLogic, ValueLogic>();
 
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConsole(x => Configuration.GetSection("logging"));
+                loggingBuilder.AddDebug();
+            });
+
             //Add AutoMapper
-            services.AddAutoMapper();
-           
+            services.AddAutoMapper(typeof(Startup));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
-
             // Enable Api Extensions
             app.UseApiExtensions();
 
-
-            app.UseMvc();
+            app.UseRouting();
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             // Enable middleware to serve generated Swagger as a JSON endpoint
-            app.UseSwagger(c =>
-            {
-                c.RouteTemplate = "docs/{documentName}/swagger.json";
-                c.PreSerializeFilters.Add((swagger, httpReq) => swagger.Host = httpReq.Host.Value);
-            });
+            app.UseSwagger(c => { c.RouteTemplate = "docs/{documentName}/swagger.json"; });
 
             // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
             app.UseSwaggerUI(options =>
@@ -100,7 +105,6 @@ namespace Digipolis.Web.SampleApi
             });
 
             app.UseSwaggerUiRedirect();
-
         }
     }
 }
