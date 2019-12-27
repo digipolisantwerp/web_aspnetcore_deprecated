@@ -12,7 +12,6 @@ namespace Digipolis.Web.Api.Tools
     public class LinkProvider : ILinkProvider
     {
         private IActionContextAccessor _httpContextAccessor;
-        //private Uri _baseUri;
         private IUrlHelper _urlHelper;
 
 
@@ -27,12 +26,9 @@ namespace Digipolis.Web.Api.Tools
 
         public string AbsoluteAction(string actionName, string controllerName, object routeValues = null)
         {
-            HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
-
             var relativeUrl =  _urlHelper.Action(actionName, controllerName, routeValues);
 
             return GetFullUrlBuilder(relativeUrl).ToString();
-
         }
 
         public string AbsoluteRoute(string routeName, object routeValues = null)
@@ -64,9 +60,16 @@ namespace Digipolis.Web.Api.Tools
             HttpRequest request = _httpContextAccessor.ActionContext.HttpContext.Request;
             RequestHeaders headers = new RequestHeaders(request.Headers);
             var host = headers.Host.HasValue ? headers.Host.Host: request.Host.Value;
-            var port = headers.Host.Port ?? 80;
-            UriBuilder builder = new UriBuilder(request.Scheme, host, port);
-            return builder;
+            //var port = headers.Host.Port ?? 80;
+
+            if (headers.Host.Port.HasValue)
+            {
+                return new UriBuilder(request.Scheme, host, headers.Host.Port.Value);
+            }
+            else
+            {
+                return new UriBuilder(request.Scheme, host);
+            }
         }
     }
 }

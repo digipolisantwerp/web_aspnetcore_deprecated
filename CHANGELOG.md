@@ -1,5 +1,8 @@
 # Web Toolbox
 
+## 9.2.1
+- when no port is found in request-url, no default port is used when building paged result links (previously port 80 was added by default)
+
 ## 9.2.0
 
 - added PagingStrategy property to PageOptions and refactoring extension methods "ToPagedResult" to take strategy into account
