@@ -93,7 +93,7 @@ In case of an invalid ModelState a response with http status 400 (bad Request) i
   "Title": "Validation failed",
   "Status": 400,
   "Code": "UNVAL001"
-  "ExtraParameters": [
+  "ExtraInfo": [
     { "FirstName": [ "The field FirstName must be a string or array type with a minimum length of '2'." ] },
     { "LastName": [ "The LastName field is required." ] },
     { "Email": [ "The Email field is not a valid e-mail address." ] }

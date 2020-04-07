@@ -35,7 +35,7 @@ namespace Digipolis.Web.Exceptions
 
             var error = _mapper?.Resolve(ex);
             if (error == null) return;
-            if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
+            if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraInfo?.Any() == true)
             {
                 context.Response.Clear();
                 context.Response.ContentType = "application/problem+json";
@@ -53,7 +53,7 @@ namespace Digipolis.Web.Exceptions
 
             var error = _mapper?.Resolve(ex);
             if (error == null) return;
-            if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraParameters?.Any() == true)
+            if (!string.IsNullOrWhiteSpace(error.Title) || !string.IsNullOrWhiteSpace(error.Code) || error.Type != null || error.ExtraInfo?.Any() == true)
             {
                 context.Response.Clear();
                 context.Response.ContentType = "application/problem+json";

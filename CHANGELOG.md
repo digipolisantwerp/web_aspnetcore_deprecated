@@ -1,5 +1,9 @@
 # Web Toolbox
 
+## 10.0.0
+- This version is compatible with the Digipolis toolbox errors_aspnetcore v5.3.0-maintenance.
+- The Digipolis toolbox errors_aspnetcore changed because of new API design guidelines: property ExtraInfo should be used instead of ExtraParameters in the Error model.
+
 ## 9.2.1
 - when no port is found in request-url, no default port is used when building paged result links (previously port 80 was added by default)
 
